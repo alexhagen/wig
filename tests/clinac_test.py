@@ -63,6 +63,7 @@ clinac = new source(type='p', spectrum=[(0, 0.0100, 0.0220, 0.0364, 0.0537,
                                          0.1411, 0.1104, 0.0662, 0.0311,
                                          0.0233, 0.0012, 0.0000)],
                     shape=('circle', 5), dir='z-')
+scene.source((clinac))
 
 # Now to add a few tally volumes
 det1 = new tally(cell=bulb1)
