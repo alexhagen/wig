@@ -1,9 +1,10 @@
 import numpy as np
+import textwrap
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6'):
-        self.comment = comment
-        print "Initialized file with comment \"%s\"." % (comment)
+        self.comment = ' '.join(comment.split())
+        print "Initialized file with comment \"%s\"." % (self.comment)
         self.filename = filename
         print "Will be written to %s.inp." % (filename)
         if flavor is '6':
@@ -16,12 +17,39 @@ class mcnp_companion:
         self.intro_block = ''
         self.geo_block = ''
         self.cell_block = ''
-        self.data_block = ''
+        self.matl_block = ''
+        # now write the intro file
+
+        self.intro_block += self.comment
+
+    def run(self, remote, sys):
+        with open(self.filename + '.inp', 'w') as f:
+            # wrap fill and print to the file
+            intro = textwrap.TextWrapper(initial_indent='c ',
+                                         subsequent_indent='c ', width=80)
+            f.write(self.filename + "\n")
+            f.write(intro.fill(self.intro_block))
+            f.write("\n")
+            # write the cells block
+            f.write("c " + " Cells ".center(78, '-') + "\n")
+            f.write("\n")
+            # write the geometry block
+            f.write("c " + " Geometry ".center(78, '-') + "\n")
+            f.write(self.geo_block)
+            f.write("\n")
+            # write the data block
+            f.write("c " + " Data ".center(78, '-') + "\n")
+            f.write("c " + " Materials ".center(78, '-') + "\n")
+            f.write(self.matl_block)
+            f.write("\n")
+
 
     def geo(self, geos=None):
         # initialize a counter
         self.geo_num = 10
         for geo in geos:
+            # print the comment
+            self.geo_block += "%s\n" % (geo.comment)
             # print the number
             self.geo_block += "%d    " % (self.geo_num)
             # print the geo string
@@ -33,15 +61,18 @@ class mcnp_companion:
 
     def cell(self, cells=None):
         # work on this algorithm
+        pass
 
     def matl(self, matls=None):
         # initialize a counter
         self.matl_num = 1
         for matl in matls:
+            # print the comment
+            self.matl_block += "%s\n" % (matl.comment)
             # print the matl number
-            self.data_block += "m%d     " % (self.matl_num)
+            self.matl_block += "m%d " % (self.matl_num)
             # print the matl string
-            self.data_block += "%s\n" % (matl.string)
+            self.matl_block += "%s\n" % (matl.string)
             # set that number to the geometry object
             matl.num = self.matl_num
             # increment matl num

@@ -1,45 +1,57 @@
 import sys
-import mcnp_companion
+sys.path.append('/Users/ahagen/code/mcnp_companion')
+from mcnp_companion import mcnp_companion as mcnpc
+from mcnp_companion import geo as mcnpg
+from mcnp_companion import matl as mcnpm
 
 # First, we initialize our scene and tell it that we'll use MCNPX
-scene = mcnp_companion(filename='clinac_no_target_h2', flavor='x',
-                       comment='''A photon source from bremsstrahlung onto
-                                  material surrounding the clinac to determine
-                                  the photoneutron output''')
+scene = mcnpc.mcnp_companion(filename='clinac_no_target_h2',
+                                      flavor='x',
+                                      comment='''A photon source from
+                                                 bremsstrahlung onto material
+                                                 surrounding the clinac to
+                                                 determine the photoneutron
+                                                 output''')
+
 
 # Geometry
-geo = new geo()
 # Add the cement floor
-floor = geo.rpp(c=(0, 0, -115), l=(200, 200, 30), id='concrete-floor')
-subfloor = geo.rpp(c=(0, 0, -180), l=(200, 200, 100),id='dirt-subfloor')
+floor = mcnpg.geo().rpp(c=(0, 0, -115), l=(200, 200, 30), id='concrete-floor')
+subfloor = mcnpg.geo().rpp(c=(0, 0, -180), l=(200, 200, 100), id='dirt-subfloor')
 # Add some tally volumes
-bulb0 = geo.rcc(c=(0, 0, 0), r=1.4, lz=2.8, id='bulb-0')
-bulb52 = geo.rcc(c=(52, 0, 0), r=1.4, lz=2.8, id='bulb-52')
-bulb132 = geo.rcc(c=(132, 0, 0), r=1.4, lz=2.8, id='bulb-132')
+bulb0 = mcnpg.geo().rcc(c=(0, 0, 0), r=1.4, lz=2.8, id='bulb-0')
+bulb52 = mcnpg.geo().rcc(c=(52, 0, 0), r=1.4, lz=2.8, id='bulb-52')
+bulb132 = mcnpg.geo().rcc(c=(132, 0, 0), r=1.4, lz=2.8, id='bulb-132')
 # Add the universe sphere
-uni = geo.sph(c=(0, 0, 0), r=2E3, id='universe')
+uni = mcnpg.geo().sph(c=(0, 0, 0), r=2E3, id='universe')
 # Register this to the scene
-scene.geo(geo)
+scene.geo([floor, subfloor, bulb0, bulb52, bulb132, uni])
+
 
 # Materials - inflate the number of H2
-concrete = new matl(rho=2.30, atom_perc=[('H-2', 0.304245), ('C-12', 0.002870),
-                                         ('O-16', 0.498628),
-                                         ('Na-23', 0.009179), ('Mg', 0.000717),
-                                         ('Al-27', 0.010261), ('Si', 0.150505),
-                                         ('K', 0.007114), ('Ca', 0.014882),
-                                         ('Fe', 0.001599)], id='concrete')
+concrete = mcnpm.matl(rho=2.30, atom_perc=[('H-2', 0.304245),
+                                           ('C-12', 0.002870),
+                                           ('O-16', 0.498628),
+                                           ('Na-23', 0.009179),
+                                           ('Mg', 0.000717),
+                                           ('Al-27', 0.010261),
+                                           ('Si', 0.150505),
+                                           ('K', 0.007114),
+                                           ('Ca', 0.014882),
+                                           ('Fe', 0.001599)], id='concrete')
 # Soil from Miller and Turk 1951 - found in Wielopolski 2005
-dirt = new matl(rho=1.0, mass_perc=[('H-2', 2.81), ('C-12', 14.43),
-                                    ('N-17', 0.001), ('O-16', 49.64),
-                                    ('Na-23', 0.82), ('Al-27', 8.93),
-                                    ('Si', 21.32), ('K', 0.56), ('Ca', 0.54),
-                                    ('Fe', 0.96)], id='dirt')
-air = new matl(rho=0.001205, atom_perc=[('H-2', 0.000151), ('N-17', 0.784437),
-                                        ('O-16', 0.210750), ('Ar', 0.004671)],
-               id='air')
+dirt = mcnpm.matl(rho=1.0, mass_perc=[('H-2', 2.81), ('C-12', 14.43),
+                                      ('N-17', 0.001), ('O-16', 49.64),
+                                      ('Na-23', 0.82), ('Al-27', 8.93),
+                                      ('Si', 21.32), ('K', 0.56), ('Ca', 0.54),
+                                      ('Fe', 0.96)], id='dirt')
+air = mcnpm.matl(rho=0.001205, atom_perc=[('H-2', 0.000151),
+                                          ('N-17', 0.784437),
+                                          ('O-16', 0.210750),
+                                          ('Ar', 0.004671)], id='air')
 # Register these to the scene
-scene.matl((conrete, dirt, air))
-
+scene.matl((concrete, dirt, air))
+'''
 # Cells
 concrete_cell = new cell(floor, conrete)
 dirt_cell = new cell(subfloor, dirt)
@@ -77,6 +89,7 @@ scene.physics(ctme=30)
 
 # Render the scene so you can see that you're doing it correctly
 scene.render('clinac_no_target_h2')
+'''
 
 # And, finally, run!
 scene.run(remote='ssh://ahagen@mars-ubuntu.dynu.com', sys='linux')
