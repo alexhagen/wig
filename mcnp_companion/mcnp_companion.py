@@ -18,6 +18,8 @@ class mcnp_companion:
         self.geo_block = ''
         self.cell_block = ''
         self.matl_block = ''
+        self.phys_block = ''
+        self.tally_block = ''
         # now write the intro file
 
         self.intro_block += self.comment
@@ -39,6 +41,10 @@ class mcnp_companion:
             f.write("\n")
             # write the data block
             f.write("c " + " Data ".center(78, '-') + "\n")
+            f.write("c " + " Physics ".center(78, '-') + "\n")
+            f.write(self.phys_block)
+            f.write("c " + " Tallies ".center(78, '-') + "\n")
+            f.write(self.tally_block)
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(self.matl_block)
             f.write("\n")
@@ -77,6 +83,33 @@ class mcnp_companion:
             matl.num = self.matl_num
             # increment matl num
             self.matl_num += 1
+
+    def phys(self, phys=None):
+        # print the comment
+        self.phys_block += "%s\n" % (phys.comment)
+        # print the physics string
+        self.phys_block += "%s\n" % (phys.string)
+        # remove the last character (the new line)
+        self.phys_block = self.phys_block[:-1]
+
+    def tally(self, tallies=None):
+        # initialize a counter
+        self.tally_nums = {"1": 1, "4": 1}
+        for tally in tallies:
+            # print the comment
+            self.tally_block += "fc%d%d %s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card, tally.comment)
+            # print the tally type card
+            self.tally_block += "f%d%d%s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card, tally.string)
+            # print the tally energy card
+            self.tally_block += "e%d%d %s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card,
+                 tally.energy_string)
+            # set that number to the geometry object
+            tally.num = self.tally_nums[str(tally.card)]
+            # increment matl num
+            self.tally_nums[str(tally.card)] += 1
 
     def source(self, sources=None):
         for source in sources:

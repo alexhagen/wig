@@ -3,6 +3,8 @@ sys.path.append('/Users/ahagen/code/mcnp_companion')
 from mcnp_companion import mcnp_companion as mcnpc
 from mcnp_companion import geo as mcnpg
 from mcnp_companion import matl as mcnpm
+from mcnp_companion import phys as mcnpp
+from mcnp_companion import tally as mcnpt
 
 # First, we initialize our scene and tell it that we'll use MCNPX
 scene = mcnpc.mcnp_companion(filename='clinac_no_target_h2',
@@ -51,6 +53,20 @@ air = mcnpm.matl(rho=0.001205, atom_perc=[('H-2', 0.000151),
                                           ('Ar', 0.004671)], id='air')
 # Register these to the scene
 scene.matl((concrete, dirt, air))
+
+# Add some typical neutron physics - this will automatically fill
+physics = mcnpp.phys(particles=["n", "p"], ctme=30)
+scene.phys(physics)
+
+# Now to add a few tally volumes
+det1 = mcnpt.tally(card=4, comment='bulb at center', cell=bulb0, particle='n')
+det2 = mcnpt.tally(card=4, comment='bulb at 52cm from axis', cell=bulb52,
+                   particle='n')
+det3 = mcnpt.tally(card=4, comment='bulb at 132cm from axis', cell=bulb132,
+                   particle='n')
+# floor_source = new tally(surface=(floor, 'z+'))
+scene.tally((det1, det2, det3))
+
 '''
 # Cells
 concrete_cell = new cell(floor, conrete)
@@ -76,16 +92,6 @@ clinac = new source(type='p', spectrum=[(0, 0.0100, 0.0220, 0.0364, 0.0537,
                                          0.0233, 0.0012, 0.0000)],
                     shape=('circle', 5), dir='z-')
 scene.source((clinac))
-
-# Now to add a few tally volumes
-det1 = new tally(cell=bulb1)
-det2 = new tally(cell=bulb2)
-det3 = new tally(cell=bulb3)
-floor_source = new tally(surface=(floor, 'z+'))
-scene.tally((det1, det2, det3, floor_source))
-
-# Add some typical neutron physics - this will automatically fill
-scene.physics(ctme=30)
 
 # Render the scene so you can see that you're doing it correctly
 scene.render('clinac_no_target_h2')
