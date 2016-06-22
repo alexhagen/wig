@@ -5,16 +5,14 @@ from mcnp_companion import geo as mcnpg
 from mcnp_companion import matl as mcnpm
 from mcnp_companion import phys as mcnpp
 from mcnp_companion import tally as mcnpt
+from mcnp_companion import source as mcnps
 
 # First, we initialize our scene and tell it that we'll use MCNPX
 scene = mcnpc.mcnp_companion(filename='clinac_no_target_h2',
-                                      flavor='x',
-                                      comment='''A photon source from
-                                                 bremsstrahlung onto material
-                                                 surrounding the clinac to
-                                                 determine the photoneutron
-                                                 output''')
-
+                             flavor='x',
+                             comment='''A photon source from bremsstrahlung
+                                        onto material surrounding the clinac to
+                                        determine the photoneutron output''')
 
 # Geometry
 # Add the cement floor
@@ -67,6 +65,23 @@ det3 = mcnpt.tally(card=4, comment='bulb at 132cm from axis', cell=bulb132,
 # floor_source = new tally(surface=(floor, 'z+'))
 scene.tally((det1, det2, det3))
 
+# A photon bremsstrahlung source
+clinac = mcnps.source(type='p', spectrum=[(0, 0.0100, 0.0220, 0.0364, 0.0537,
+                                           0.0744, 0.0993, 0.1292, 0.1650,
+                                           0.2080, 0.2596, 0.3215, 0.3958,
+                                           0.4850, 0.5920, 0.7204, 0.8744,
+                                           1.0593, 1.2812, 1.5474, 1.8669,
+                                           2.2503, 2.7103, 3.2624, 3.9248,
+                                           4.7198, 5.6738, 6.0000),
+                                          (0, 0.1818, 0.2675, 0.3567, 0.4601,
+                                           0.5852, 0.7305, 0.8737, 0.9878,
+                                           1.1246, 1.4328, 1.4745, 1.3132,
+                                           1.0466, 0.8419, 0.6704, 0.5284,
+                                           0.4190, 0.3395, 0.2614, 0.1890,
+                                           0.1411, 0.1104, 0.0662, 0.0311,
+                                           0.0233, 0.0012, 0.0000)],
+                      shape=('circle', 5), dir='z-')
+scene.source((clinac))
 '''
 # Cells
 concrete_cell = new cell(floor, conrete)
@@ -75,23 +90,7 @@ air_cell = new cell((bulb0, bulb52, bulb132, uni), air)
 # register the cells to the scene
 scene.cells((concrete_cell, dirt_cell, air_cell))
 
-# A photon bremsstrahlung source
-clinac = new source(type='p', spectrum=[(0, 0.0100, 0.0220, 0.0364, 0.0537,
-                                         0.0744, 0.0993, 0.1292, 0.1650,
-                                         0.2080, 0.2596, 0.3215, 0.3958,
-                                         0.4850, 0.5920, 0.7204, 0.8744,
-                                         1.0593, 1.2812, 1.5474, 1.8669,
-                                         2.2503, 2.7103, 3.2624, 3.9248,
-                                         4.7198, 5.6738, 6.0000),
-                                        (0, 0.1818, 0.2675, 0.3567, 0.4601,
-                                         0.5852, 0.7305, 0.8737, 0.9878,
-                                         1.1246, 1.4328, 1.4745, 1.3132,
-                                         1.0466, 0.8419, 0.6704, 0.5284,
-                                         0.4190, 0.3395, 0.2614, 0.1890,
-                                         0.1411, 0.1104, 0.0662, 0.0311,
-                                         0.0233, 0.0012, 0.0000)],
-                    shape=('circle', 5), dir='z-')
-scene.source((clinac))
+
 
 # Render the scene so you can see that you're doing it correctly
 scene.render('clinac_no_target_h2')
