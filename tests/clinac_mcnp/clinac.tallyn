@@ -1,0 +1,13 @@
+c ---------------------------------- Tallies -----------------------------------
+fc14 bulb at center
+f14:n 30
+e14 1e-8 99i 20
+fc24 bulb at 52cm from axis
+f24:n 40
+e24 1e-8 99i 20
+fc34 bulb at 132cm from axis
+f34:n 50
+e34 1e-8 99i 20
+fc11 surface of concrete
+f11:n 10.5
+e11 1e-4 99i 20
