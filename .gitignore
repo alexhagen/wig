@@ -1,3 +1,5 @@
 *.pyc
 *.inp
 .DS_Store
+*.out_temp
+*.png
