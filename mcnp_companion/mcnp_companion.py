@@ -20,6 +20,8 @@ class mcnp_companion:
         self.matl_block = ''
         self.phys_block = ''
         self.tally_block = ''
+        self.data_block = ''
+        self.sdef_num = 1
         # now write the intro file
 
         self.intro_block += self.comment
@@ -41,6 +43,7 @@ class mcnp_companion:
             f.write("\n")
             # write the data block
             f.write("c " + " Data ".center(78, '-') + "\n")
+            f.write(self.data_block)
             f.write("c " + " Physics ".center(78, '-') + "\n")
             f.write(self.phys_block)
             f.write("c " + " Tallies ".center(78, '-') + "\n")
@@ -116,10 +119,10 @@ class mcnp_companion:
             # print the source definition
             self.data_block += "sdef    "
             # print the source string
-            self.data_block += "%s\n" % (source.string % (self.def_num))
+            self.data_block += "%s\n" % (source.string % (self.sdef_num))
             # print the distributions
-            for dist in source.dists:
-                # print the distribution definition
-                self.data_block += "     sp%d    " % (self.def_num)
-                self.data_block += "     %s\n" % (dist.string)
-                self.def_num += 1
+            # for dist in source.dists:
+            #    # print the distribution definition
+            #    self.data_block += "     sp%d    " % (self.sdef_num)
+            #    self.data_block += "     %s\n" % (dist.string)
+            #    self.sdef_num += 1
