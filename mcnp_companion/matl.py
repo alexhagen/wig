@@ -44,7 +44,7 @@ class matl:
                     A = 0
                 zaid = "%3d%03d" % (Z, A)
                 perc = atom[1]
-                self.string += "%6s %6.4f\n   " % (zaid, perc)
+                self.string += "%6s %6.4f\n     " % (zaid, perc)
         if mass_perc is not None:
             for mass in mass_perc:
                 # extract the formula for the atom
@@ -59,7 +59,7 @@ class matl:
                     A = int(arr[1])
                 else:
                     A = 0
-                zaid = "%d%03d" % (Z, A)
+                zaid = "%3d%03d" % (Z, A)
                 perc = -mass[1]
-                self.string += "%6s %6.4f\n   " % (zaid, perc)
-        self.string = self.string[:-4]
+                self.string += "%6s %6.4f\n     " % (zaid, perc)
+        self.string = self.string[:-6]

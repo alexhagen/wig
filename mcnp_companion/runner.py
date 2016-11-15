@@ -4,3 +4,4 @@ class runner:
         # first, create a temp folder
         # then, move the file
         # then, run with that flavor of mcnp
+        pass

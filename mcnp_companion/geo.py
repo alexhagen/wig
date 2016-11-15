@@ -1,27 +1,45 @@
 class geo:
 
     def __sub__(self, right):
-        print "left is %s - %s and right is %s - %s\n" % (self.id,
-                                                          self.__class__.__name__,
-                                                          right.id,
-                                                          right.__class__.__name__)
         if self.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
-            print "%s is geo\n" % (self.id)
             left = pseudogeo(self)
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
-            print "%s is geo\n" % (right.id)
             right = pseudogeo(right)
         return left - right
+
+    def __add__(self, right):
+        if self.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            left = pseudogeo(self)
+        if right.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            right = pseudogeo(right)
+        return left + right
+
+    def __or__(self, right):
+        if self.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            left = pseudogeo(self)
+        if right.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            right = pseudogeo(right)
+        return left | right
 
     def rpp(self, c=None, l=None, id=None):
         self.sense = -1
         self.id = id
         self.geo_num = 0
         self.comment = "c --- %s" % (self.id)
+        x1 = c[0] - abs(l[0] / 2.0)
+        x2 = c[0] + abs(l[0] / 2.0)
+        y1 = c[1] - abs(l[1] / 2.0)
+        y2 = c[1] + abs(l[1] / 2.0)
+        z1 = c[2] - abs(l[2] / 2.0)
+        z2 = c[2] + abs(l[2] / 2.0)
         self.string = "rpp %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
-            (c[0], c[1], c[2], l[0], l[1], l[2])
+            (x1, x2, y1, y2, z1, z2)
         return self
 
     def sph(self, c=None, r=None, id=None):
@@ -60,4 +78,39 @@ class pseudogeo:
             right = pseudogeo(right)
         self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
         self.id += "_less_%s" % right.geo.id
+        return self
+
+    def __add__(self, right):
+        if right.__class__.__name__ is 'geo':
+            right = pseudogeo(right)
+        self.nums.extend([(right.geo.geo_num, right.geo.sense)])
+        self.id += "_plus_%s" % right.geo.id
+        return self
+
+
+class group:
+    def __init__(self, content):
+        self.suffix = ""
+        self.string = ""
+        if content.__class__.__name__ is 'geo':
+            content = pseudogeo(content)
+        self.content = content
+        self.id = "%s" % self.content.id
+        self.already_unioned = False
+
+    def __or__(self, right):
+        if right.__class__.__name__ is not 'group':
+            right = group(right)
+        if not self.already_unioned:
+            self.string = "("
+            for num in self.content.nums:
+                self.string += "%d " % (num[0] * num[1])
+            self.string += "):("
+        else:
+            self.string += ":("
+        for num in right.content.nums:
+            self.string += "%d " % (num[0] * num[1])
+        self.string += ")"
+        self.id += "_u_%s" % (right.id)
+        self.already_unioned = True
         return self

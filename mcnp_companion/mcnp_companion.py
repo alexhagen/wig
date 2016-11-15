@@ -1,5 +1,6 @@
 import numpy as np
 import textwrap
+from runner import runner
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6'):
@@ -91,6 +92,8 @@ class mcnp_companion:
                 for num in cell.geo.nums:
                     self.cell_block += "%d " % (num[0] * num[1])
                 self.cell_block += "\n"
+            elif cell.geo.__class__.__name__ is 'group':
+                self.cell_block += "%s\n" % (cell.geo.string)
             # increment the cell num
             self.cell_num += 10
         # add void
@@ -107,6 +110,8 @@ class mcnp_companion:
                     self.cell_block += "%d " % (abs(cell.geo.geo_num))
                 elif cell.geo.__class__.__name__ is 'pseudogeo':
                     self.cell_block += "%d " % cell.geo.nums[0][0]
+                elif cell.geo.__class__.__name__ is 'group':
+                    self.cell_block += "%d " % cell.geo.content.nums[0][0]
         self.cell_block += "\n"
 
 
@@ -118,7 +123,7 @@ class mcnp_companion:
             # print the comment
             self.matl_block += "%s\n" % (matl.comment)
             # print the matl number
-            self.matl_block += "m%d " % (self.matl_num)
+            self.matl_block += "m%d   " % (self.matl_num)
             # print the matl string
             self.matl_block += "%s\n" % (matl.string)
             # set that number to the geometry object
