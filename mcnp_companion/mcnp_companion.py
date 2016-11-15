@@ -36,6 +36,7 @@ class mcnp_companion:
             f.write("\n")
             # write the cells block
             f.write("c " + " Cells ".center(78, '-') + "\n")
+            f.write(self.cell_block)
             f.write("\n")
             # write the geometry block
             f.write("c " + " Geometry ".center(78, '-') + "\n")
@@ -50,7 +51,7 @@ class mcnp_companion:
             f.write(self.tally_block)
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(self.matl_block)
-            f.write("\n")
+        self._runner = runner(self.filename, remote, sys)
 
 
     def geo(self, geos=None):
@@ -61,6 +62,7 @@ class mcnp_companion:
             self.geo_block += "%s\n" % (geo.comment)
             # print the number
             self.geo_block += "%d    " % (self.geo_num)
+            geo.geo_num = self.geo_num # does this pointer work?
             # print the geo string
             self.geo_block += "%s\n" % (geo.string)
             # set that geo number to the geometry object
@@ -69,8 +71,45 @@ class mcnp_companion:
             self.geo_num += 10
 
     def cell(self, cells=None):
-        # work on this algorithm
-        pass
+        # initialize a counter
+        self.cell_num = 10
+        for cell in cells:
+            # print the comment
+            self.cell_block += "%s\n" % (cell.comment)
+            # now print the cell number
+            self.cell_block += "%d     " % (self.cell_num)
+            cell.cell_num = self.cell_num
+            # now print the material number
+            self.cell_block += "%d " % (cell.matl.matl_num)
+            # now print the density
+            self.cell_block += "%15.10E " % (cell.matl.rho)
+            # now print the sense
+            if cell.geo.__class__.__name__ is 'geo':
+                self.cell_block += "%d\n" % (cell.geo.sense * cell.geo.geo_num)
+            elif cell.geo.__class__.__name__ is 'pseudogeo':
+                print cell.geo.nums
+                for num in cell.geo.nums:
+                    self.cell_block += "%d " % (num[0] * num[1])
+                self.cell_block += "\n"
+            # increment the cell num
+            self.cell_num += 10
+        # add void
+        self.cell_block += "%s\n" % ('c --- void')
+        self.cell_block += "%d     " % (99)
+        # now print the material number
+        self.cell_block += "%d " % (0)
+        # now print the density
+        self.cell_block += "                 "
+        # now search for the universe cell
+        for cell in cells:
+            if 'universe' in cell.geo.id:
+                if cell.geo.__class__.__name__ is 'geo':
+                    self.cell_block += "%d " % (abs(cell.geo.geo_num))
+                elif cell.geo.__class__.__name__ is 'pseudogeo':
+                    self.cell_block += "%d " % cell.geo.nums[0][0]
+        self.cell_block += "\n"
+
+
 
     def matl(self, matls=None):
         # initialize a counter
@@ -83,7 +122,7 @@ class mcnp_companion:
             # print the matl string
             self.matl_block += "%s\n" % (matl.string)
             # set that number to the geometry object
-            matl.num = self.matl_num
+            matl.matl_num = self.matl_num
             # increment matl num
             self.matl_num += 1
 
@@ -119,7 +158,7 @@ class mcnp_companion:
             # print the source definition
             self.data_block += "sdef    "
             # print the source string
-            self.data_block += "%s\n" % (source.string % (self.sdef_num))
+            self.data_block += "%s\n" % (source.string)
             # print the distributions
             # for dist in source.dists:
             #    # print the distribution definition
