@@ -1,3 +1,5 @@
+import textwrap
+
 class geo:
 
     def __sub__(self, right):
@@ -76,8 +78,14 @@ class pseudogeo:
     def __sub__(self, right):
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
-        self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
-        self.id += "_less_%s" % right.geo.id
+        if type(right) is type(list()):
+            for _right in right:
+                __right = pseudogeo(_right)
+                self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
+                self.id += "_less_%s" % __right.geo.id
+        else:
+            self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
+            self.id += "_less_%s" % right.geo.id
         return self
 
     def __add__(self, right):
@@ -89,13 +97,26 @@ class pseudogeo:
 
 
 class group:
-    def __init__(self, content):
+    def __init__(self, content, id=None):
         self.suffix = ""
         self.string = ""
         if content.__class__.__name__ is 'geo':
             content = pseudogeo(content)
+        if type(content) is type(list()):
+            _content = content[0]
+            for geo in content[1:]:
+                _content = _content + geo
+            content = _content
         self.content = content
-        self.id = "%s" % self.content.id
+        if id is None:
+            self.id = "%s" % self.content.id
+            self.manual_id = False
+        else:
+            self.id = id
+            self.manual_id = True
+        self.string = ""
+        for num in self.content.nums:
+            self.string += "%d " % (num[0] * num[1])
         self.already_unioned = False
 
     def __or__(self, right):
@@ -111,6 +132,7 @@ class group:
         for num in right.content.nums:
             self.string += "%d " % (num[0] * num[1])
         self.string += ")"
-        self.id += "_u_%s" % (right.id)
+        if not self.manual_id:
+            self.id += "_u_%s" % (right.id)
         self.already_unioned = True
         return self

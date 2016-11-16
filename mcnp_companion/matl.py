@@ -1,4 +1,5 @@
 import numpy as np
+import textwrap
 
 periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
                   "O": 8, "F": 9, "Ne": 10, "Na": 11, "Mg": 12, "Al": 13,
@@ -44,7 +45,7 @@ class matl:
                     A = 0
                 zaid = "%3d%03d" % (Z, A)
                 perc = atom[1]
-                self.string += "%6s %6.4f\n     " % (zaid, perc)
+                self.string += "%6s %6.4f\n" % (zaid, perc)
         if mass_perc is not None:
             for mass in mass_perc:
                 # extract the formula for the atom
@@ -61,5 +62,8 @@ class matl:
                     A = 0
                 zaid = "%3d%03d" % (Z, A)
                 perc = -mass[1]
-                self.string += "%6s %6.4f\n     " % (zaid, perc)
-        self.string = self.string[:-6]
+                self.string += "%6s %6.4f " % (zaid, perc)
+        self.string = self.string[:-1]
+        matl_string = textwrap.TextWrapper(initial_indent='',
+                                     subsequent_indent=' '*6, width=73)
+        self.string = matl_string.fill(self.string)

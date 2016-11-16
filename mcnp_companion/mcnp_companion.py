@@ -1,6 +1,7 @@
 import numpy as np
 import textwrap
 from runner import runner
+from mcnp_string import mstring
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6'):
@@ -37,21 +38,21 @@ class mcnp_companion:
             f.write("\n")
             # write the cells block
             f.write("c " + " Cells ".center(78, '-') + "\n")
-            f.write(self.cell_block)
+            f.write(mstring(self.cell_block).flow())
             f.write("\n")
             # write the geometry block
             f.write("c " + " Geometry ".center(78, '-') + "\n")
-            f.write(self.geo_block)
+            f.write(mstring(self.geo_block).flow())
             f.write("\n")
             # write the data block
             f.write("c " + " Data ".center(78, '-') + "\n")
-            f.write(self.data_block)
+            f.write(mstring(self.data_block).flow())
             f.write("c " + " Physics ".center(78, '-') + "\n")
-            f.write(self.phys_block)
+            f.write(mstring(self.phys_block).flow())
             f.write("c " + " Tallies ".center(78, '-') + "\n")
-            f.write(self.tally_block)
+            f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
-            f.write(self.matl_block)
+            f.write(mstring(self.matl_block).flow())
         self._runner = runner(self.filename, remote, sys)
 
 
@@ -143,9 +144,6 @@ class mcnp_companion:
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1}
         for tally in tallies:
-            # print the comment
-            self.tally_block += "fc%d%d %s\n" % \
-                (self.tally_nums[str(tally.card)], tally.card, tally.comment)
             # print the tally type card
             self.tally_block += "f%d%d%s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card, tally.string)
@@ -153,6 +151,9 @@ class mcnp_companion:
             self.tally_block += "e%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card,
                  tally.energy_string)
+            # print the comment
+            self.tally_block += "fc%d%d %s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card, tally.comment)
             # set that number to the geometry object
             tally.num = self.tally_nums[str(tally.card)]
             # increment matl num
