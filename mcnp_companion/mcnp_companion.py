@@ -151,6 +151,7 @@ class mcnp_companion:
     def tally(self, tallies=None):
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1, "7": 1}
+        self.tally_block = "prdmp 1E6 1E6 1 4\n"
         for tally in tallies:
             # print the tally type card
             self.tally_block += "f%d%d%s\n" % \

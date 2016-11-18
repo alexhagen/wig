@@ -5,7 +5,7 @@ import notify2 as n
 
 class runner:
     def __init__(self, filename, command, remote, sys, renderer=None):
-        self.needs_to_run = False
+        self.needs_to_run = True
         # initialize a notification system
         n.init('MCNP')
         # construct the command
@@ -23,6 +23,6 @@ class runner:
         if self.needs_to_run:
             subprocess.Popen(cmd, shell=True)
         # now start a daemon to watch the output file
-        checker = mcnpdaemon('/tmp/mcnpchecker.pid').set_notification_daemon(notification).start()
+        # checker = mcnpdaemon('/tmp/mcnpchecker.pid').set_notification_daemon(notification).start()
         # notify when it updates
         # notify when it ends
