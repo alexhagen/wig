@@ -1,6 +1,8 @@
 import textwrap
 
 class geo:
+    def __init__(self):
+        self.bstring = ''
 
     def __sub__(self, right):
         if self.__class__.__name__ is 'geo':
@@ -42,6 +44,7 @@ class geo:
         z2 = c[2] + abs(l[2] / 2.0)
         self.string = "rpp %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (x1, x2, y1, y2, z1, z2)
+        self.faces = [1, 2, 3, 4, 5, 6]
         return self
 
     def sph(self, c=None, r=None, id=None):
@@ -51,6 +54,7 @@ class geo:
         self.comment = "c --- %s" % (self.id)
         self.string = "sph %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], r)
+        self.faces = [1]
         return self
 
     def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None):
@@ -67,6 +71,7 @@ class geo:
         self.comment = "c --- %s" % (self.id)
         self.string = "rcc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], h[0], h[1], h[2], r)
+        self.surfaces = [1, 2, 3]
         return self
 
 class pseudogeo:

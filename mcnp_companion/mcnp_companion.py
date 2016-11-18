@@ -2,13 +2,18 @@ import numpy as np
 import textwrap
 from runner import runner
 from mcnp_string import mstring
+from renderer import renderer
 
 class mcnp_companion:
-    def __init__(self, comment, filename, flavor='6'):
+    def __init__(self, comment, filename, flavor='6', render=False):
         self.comment = ' '.join(comment.split())
         print "Initialized file with comment \"%s\"." % (self.comment)
         self.filename = filename
         print "Will be written to %s.inp." % (filename)
+        if render:
+            self.renderer = renderer(filename)
+        else:
+            self.renderer = None
         if flavor is '6':
             self.command = 'mcnp6'
         elif flavor is '5':
@@ -53,7 +58,9 @@ class mcnp_companion:
             f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
-        self._runner = runner(self.filename, remote, sys)
+        print self.filename
+        self._runner = runner(self.filename, self.command, remote, sys,
+                              renderer=self.renderer)
 
 
     def geo(self, geos=None):
@@ -84,18 +91,19 @@ class mcnp_companion:
             # now print the material number
             self.cell_block += "%d " % (cell.matl.matl_num)
             # now print the density
-            self.cell_block += "%15.10E " % (cell.matl.rho)
+            self.cell_block += "%15.10E " % (-cell.matl.rho)
             # now print the sense
             if cell.geo.__class__.__name__ is 'geo':
-                self.cell_block += "%d\n" % (cell.geo.sense * cell.geo.geo_num)
+                self.cell_block += "%d" % (cell.geo.sense * cell.geo.geo_num)
             elif cell.geo.__class__.__name__ is 'pseudogeo':
                 print cell.geo.nums
                 for num in cell.geo.nums:
                     self.cell_block += "%d " % (num[0] * num[1])
-                self.cell_block += "\n"
+                self.cell_block = self.cell_block[:-1]
             elif cell.geo.__class__.__name__ is 'group':
-                self.cell_block += "%s\n" % (cell.geo.string)
+                self.cell_block += "%s" % (cell.geo.string)
             # increment the cell num
+            self.cell_block += " imp:n=1\n"
             self.cell_num += 10
         # add void
         self.cell_block += "%s\n" % ('c --- void')
@@ -113,7 +121,7 @@ class mcnp_companion:
                     self.cell_block += "%d " % cell.geo.nums[0][0]
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%d " % cell.geo.content.nums[0][0]
-        self.cell_block += "\n"
+        self.cell_block += "imp:n=0\n"
 
 
 
@@ -142,7 +150,7 @@ class mcnp_companion:
 
     def tally(self, tallies=None):
         # initialize a counter
-        self.tally_nums = {"1": 1, "4": 1}
+        self.tally_nums = {"1": 1, "4": 1, "7": 1}
         for tally in tallies:
             # print the tally type card
             self.tally_block += "f%d%d%s\n" % \

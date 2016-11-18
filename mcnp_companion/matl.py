@@ -25,11 +25,15 @@ periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
 
 class matl:
     def __init__(self, rho, atom_perc=None, mass_perc=None, id=None):
+        self.bstring = ''
         self.string = ''
         self.matl_num = 0
         self.comment = "c --- %s" % (id)
         self.rho = float(rho)
         if atom_perc is not None:
+            atom_sum = 0.
+            for atom in atom_perc:
+                atom_sum += atom[1]
             for atom in atom_perc:
                 # extract the formula for the atom
                 formula = atom[0]
@@ -44,9 +48,12 @@ class matl:
                 else:
                     A = 0
                 zaid = "%3d%03d" % (Z, A)
-                perc = atom[1]
-                self.string += "%6s %6.4f\n" % (zaid, perc)
+                perc = atom[1] / atom_sum
+                self.string += "%6s %15.10e\n" % (zaid, perc)
         if mass_perc is not None:
+            mass_sum = 0.
+            for mass in mass_perc:
+                mass_sum += mass[1]
             for mass in mass_perc:
                 # extract the formula for the atom
                 formula = mass[0]
@@ -61,8 +68,8 @@ class matl:
                 else:
                     A = 0
                 zaid = "%3d%03d" % (Z, A)
-                perc = -mass[1]
-                self.string += "%6s %6.4f " % (zaid, perc)
+                perc = -mass[1] / mass_sum
+                self.string += "%6s %15.10e\n" % (zaid, perc)
         self.string = self.string[:-1]
         matl_string = textwrap.TextWrapper(initial_indent='',
                                      subsequent_indent=' '*6, width=73)

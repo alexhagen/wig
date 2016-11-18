@@ -14,7 +14,8 @@ class phys():
             self.string += "phys:p 20 0 1 -1 2J 1\n"
             self.string += "cut:p 20 J 0 0\n"
         if 'n' in particles:
-            self.string += "phys:n J 20. 3J 5\n"
+            self.string += "phys:n 20.\n"
+            self.string += "cut:n j 1.E-9\n"
         if nps is not None:
             self.nps(nps)
         if ctme is not None:
