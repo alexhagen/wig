@@ -5,6 +5,8 @@ class geo:
         self.bstring = ''
 
     def __sub__(self, right):
+        if right is None:
+            return pseudogeo(self)
         if self.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             left = pseudogeo(self)
@@ -14,6 +16,8 @@ class geo:
         return left - right
 
     def __add__(self, right):
+        if right is None:
+            return pseudogeo(self)
         if self.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             left = pseudogeo(self)
@@ -23,6 +27,8 @@ class geo:
         return left + right
 
     def __or__(self, right):
+        if right is None:
+            return pseudogeo(self)
         if self.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             left = pseudogeo(self)
@@ -81,6 +87,8 @@ class pseudogeo:
         self.nums = [(geo.geo_num, geo.sense)]
 
     def __sub__(self, right):
+        if right is None:
+            return self
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
         if type(right) is type(list()):
@@ -94,6 +102,8 @@ class pseudogeo:
         return self
 
     def __add__(self, right):
+        if right is None:
+            return self
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
         self.nums.extend([(right.geo.geo_num, right.geo.sense)])

@@ -3,12 +3,13 @@ import textwrap
 from runner import runner
 from mcnp_string import mstring
 from renderer import renderer
+from os.path import expanduser
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6', render=False):
         self.comment = ' '.join(comment.split())
         print "Initialized file with comment \"%s\"." % (self.comment)
-        self.filename = filename
+        self.filename = expanduser("~") + '/mcnp/active/' + filename
         print "Will be written to %s.inp." % (filename)
         if render:
             self.renderer = renderer(filename)
@@ -67,44 +68,46 @@ class mcnp_companion:
         # initialize a counter
         self.geo_num = 10
         for geo in geos:
-            # print the comment
-            self.geo_block += "%s\n" % (geo.comment)
-            # print the number
-            self.geo_block += "%d    " % (self.geo_num)
-            geo.geo_num = self.geo_num # does this pointer work?
-            # print the geo string
-            self.geo_block += "%s\n" % (geo.string)
-            # set that geo number to the geometry object
-            geo.num = self.geo_num
-            # increment geo num
-            self.geo_num += 10
+            if geo is not None:
+                # print the comment
+                self.geo_block += "%s\n" % (geo.comment)
+                # print the number
+                self.geo_block += "%d    " % (self.geo_num)
+                geo.geo_num = self.geo_num # does this pointer work?
+                # print the geo string
+                self.geo_block += "%s\n" % (geo.string)
+                # set that geo number to the geometry object
+                geo.num = self.geo_num
+                # increment geo num
+                self.geo_num += 10
 
     def cell(self, cells=None):
         # initialize a counter
         self.cell_num = 10
         for cell in cells:
-            # print the comment
-            self.cell_block += "%s\n" % (cell.comment)
-            # now print the cell number
-            self.cell_block += "%d     " % (self.cell_num)
-            cell.cell_num = self.cell_num
-            # now print the material number
-            self.cell_block += "%d " % (cell.matl.matl_num)
-            # now print the density
-            self.cell_block += "%15.10E " % (-cell.matl.rho)
-            # now print the sense
-            if cell.geo.__class__.__name__ is 'geo':
-                self.cell_block += "%d" % (cell.geo.sense * cell.geo.geo_num)
-            elif cell.geo.__class__.__name__ is 'pseudogeo':
-                print cell.geo.nums
-                for num in cell.geo.nums:
-                    self.cell_block += "%d " % (num[0] * num[1])
-                self.cell_block = self.cell_block[:-1]
-            elif cell.geo.__class__.__name__ is 'group':
-                self.cell_block += "%s" % (cell.geo.string)
-            # increment the cell num
-            self.cell_block += " imp:n=1\n"
-            self.cell_num += 10
+            if cell is not None:
+                # print the comment
+                self.cell_block += "%s\n" % (cell.comment)
+                # now print the cell number
+                self.cell_block += "%d     " % (self.cell_num)
+                cell.cell_num = self.cell_num
+                # now print the material number
+                self.cell_block += "%d " % (cell.matl.matl_num)
+                # now print the density
+                self.cell_block += "%15.10E " % (-cell.matl.rho)
+                # now print the sense
+                if cell.geo.__class__.__name__ is 'geo':
+                    self.cell_block += "%d" % (cell.geo.sense * cell.geo.geo_num)
+                elif cell.geo.__class__.__name__ is 'pseudogeo':
+                    print cell.geo.nums
+                    for num in cell.geo.nums:
+                        self.cell_block += "%d " % (num[0] * num[1])
+                    self.cell_block = self.cell_block[:-1]
+                elif cell.geo.__class__.__name__ is 'group':
+                    self.cell_block += "%s" % (cell.geo.string)
+                # increment the cell num
+                self.cell_block += " imp:n=1\n"
+                self.cell_num += 10
         # add void
         self.cell_block += "%s\n" % ('c --- void')
         self.cell_block += "%d     " % (99)
@@ -114,13 +117,14 @@ class mcnp_companion:
         self.cell_block += "                 "
         # now search for the universe cell
         for cell in cells:
-            if 'universe' in cell.geo.id:
-                if cell.geo.__class__.__name__ is 'geo':
-                    self.cell_block += "%d " % (abs(cell.geo.geo_num))
-                elif cell.geo.__class__.__name__ is 'pseudogeo':
-                    self.cell_block += "%d " % cell.geo.nums[0][0]
-                elif cell.geo.__class__.__name__ is 'group':
-                    self.cell_block += "%d " % cell.geo.content.nums[0][0]
+            if cell is not None:
+                if 'universe' in cell.geo.id:
+                    if cell.geo.__class__.__name__ is 'geo':
+                        self.cell_block += "%d " % (abs(cell.geo.geo_num))
+                    elif cell.geo.__class__.__name__ is 'pseudogeo':
+                        self.cell_block += "%d " % cell.geo.nums[0][0]
+                    elif cell.geo.__class__.__name__ is 'group':
+                        self.cell_block += "%d " % cell.geo.content.nums[0][0]
         self.cell_block += "imp:n=0\n"
 
 
@@ -151,22 +155,28 @@ class mcnp_companion:
     def tally(self, tallies=None):
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1, "7": 1}
-        self.tally_block = "prdmp 1E6 1E6 1 4\n"
+        self.tally_block = "prdmp j -15 1 4\n"
         for tally in tallies:
-            # print the tally type card
-            self.tally_block += "f%d%d%s\n" % \
-                (self.tally_nums[str(tally.card)], tally.card, tally.string)
-            # print the tally energy card
-            self.tally_block += "e%d%d %s\n" % \
-                (self.tally_nums[str(tally.card)], tally.card,
-                 tally.energy_string)
-            # print the comment
-            self.tally_block += "fc%d%d %s\n" % \
-                (self.tally_nums[str(tally.card)], tally.card, tally.comment)
-            # set that number to the geometry object
-            tally.num = self.tally_nums[str(tally.card)]
-            # increment matl num
-            self.tally_nums[str(tally.card)] += 1
+            if tally is not None:
+                # print the tally type card
+                self.tally_block += "f%d%d%s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card, tally.string)
+                # print the tally energy card
+                self.tally_block += "e%d%d %s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.energy_string)
+                # check for multipliers
+                if tally.multiplier:
+                    self.tally_block += "fm%d%d %s\n" % \
+                        (self.tally_nums[str(tally.card)], tally.card,
+                         tally.multiplier_string)
+                # print the comment
+                self.tally_block += "fc%d%d %s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card, tally.comment)
+                # set that number to the geometry object
+                tally.num = self.tally_nums[str(tally.card)]
+                # increment matl num
+                self.tally_nums[str(tally.card)] += 1
 
     def source(self, sources=None):
         for source in sources:

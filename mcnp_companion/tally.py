@@ -7,6 +7,7 @@ class tally():
     def __init__(self, **kwargs):
         tally.num = None
         self.comment = kwargs["comment"]
+        self.multiplier = False
 
     def flux_tally(self, **kwargs):
         self.card = 4
@@ -16,6 +17,15 @@ class tally():
         else:
             self.cell = kwargs["cell"]
         self.string = ":%s %d" % (kwargs["particle"], self.cell)
+        return self
+
+    def add_multiplier(self, **kwargs):
+        self.multiplier = True
+        if "mat" in kwargs:
+            self.mat = kwargs["mat"]
+        if "mt" in kwargs:
+            self.mt = kwargs["mt"]
+        self.multiplier_string = "(-1 %d %d) T" % (self.mat, self.mt)
         return self
 
     def current_tally(self, **kwargs):
@@ -47,7 +57,7 @@ class tally():
 
     def process_energy(self, **kwargs):
         if "energy" not in kwargs:
-            self.energy_string = '1e-8 99i 20'
+            self.energy_string = '1e-8 99log 20'
         else:
-            self.energy_string = '%e 99i %e' % (np.min(kwargs["energy"]),
+            self.energy_string = '%e 99log %e' % (np.min(kwargs["energy"]),
                                                 np.max(kwargs["energy"]))

@@ -36,26 +36,28 @@ class bgeo:
         return self
 
     def __add__(self, right):
-        self.name = self.name + "p" + right.name
-        union = self.object.modifiers.new(self.name,"BOOLEAN")
-        union.operation = "UNION"
-        union.object = right.object
-        bpy.ops.object.modifier_apply(apply_as='DATA', modifier=self.name)
-        bpy.context.scene.objects.unlink(right.object)
-        # self.object = bpy.context.scene.objects.get(self.name)
-        bpy.context.scene.objects.active = self.object
-        return self
+        if right is not None:
+            self.name = self.name + "p" + right.name
+            union = self.object.modifiers.new(self.name,"BOOLEAN")
+            union.operation = "UNION"
+            union.object = right.object
+            bpy.ops.object.modifier_apply(apply_as='DATA', modifier=self.name)
+            bpy.context.scene.objects.unlink(right.object)
+            # self.object = bpy.context.scene.objects.get(self.name)
+            bpy.context.scene.objects.active = self.object
+            return self
 
     def __sub__(self, right):
-        self.name = self.name + "m" + right.name
-        union = self.object.modifiers.new(self.name,"BOOLEAN")
-        union.operation = "DIFFERENCE"
-        union.object = right.object
-        bpy.ops.object.modifier_apply(apply_as='DATA', modifier=self.name)
-        bpy.context.scene.objects.unlink(right.object)
-        # self.object = bpy.context.scene.objects.get(self.name)
-        bpy.context.scene.objects.active = self.object
-        return self
+        if right is not None:
+            self.name = self.name + "m" + right.name
+            union = self.object.modifiers.new(self.name,"BOOLEAN")
+            union.operation = "DIFFERENCE"
+            union.object = right.object
+            bpy.ops.object.modifier_apply(apply_as='DATA', modifier=self.name)
+            bpy.context.scene.objects.unlink(right.object)
+            # self.object = bpy.context.scene.objects.get(self.name)
+            bpy.context.scene.objects.active = self.object
+            return self
 
     def pz(self, x1=None, x2=None, y1=None, y2=None, z=None,
            name='p'):
