@@ -8,10 +8,16 @@ class tally():
         tally.num = None
         self.comment = kwargs["comment"]
         self.multiplier = False
+        if "energy" in kwargs:
+            self.process_energy(**kwargs)
+            self.energies = True
+        else:
+            self.energies = False
 
     def flux_tally(self, **kwargs):
         self.card = 4
-        self.process_energy()
+        if not self.energies:
+            self.process_energy(**kwargs)
         if isinstance(kwargs["cell"], cell.cell):
             self.cell = kwargs["cell"].cell_num
         else:
@@ -30,7 +36,8 @@ class tally():
 
     def current_tally(self, **kwargs):
         self.card = 1
-        self.process_energy()
+        if not self.energies:
+            self.process_energy(**kwargs)
         self.surfaces = []
         if "surfaces" in kwargs:
             for surface in kwargs["surfaces"]:
@@ -47,7 +54,8 @@ class tally():
 
     def fission_tally(self, **kwargs):
         self.card = 7
-        self.process_energy()
+        if not self.energies:
+            self.process_energy(**kwargs)
         if isinstance(kwargs["cell"], cell.cell):
             self.cell = kwargs["cell"].cell_num
         else:

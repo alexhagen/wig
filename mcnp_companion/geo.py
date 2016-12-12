@@ -80,6 +80,27 @@ class geo:
         self.surfaces = [1, 2, 3]
         return self
 
+    def cone(self, c=None, dir='+z', h=None, r=None, id=None):
+        self.sense = -1
+        self.id = id
+        self.geo_num = 0
+        _h = [0, 0, 0]
+        if 'z' in dir:
+            i = 2
+        elif 'x' in dir:
+            i = 0
+        elif 'y' in dir:
+            i = 1
+        if '+' in dir:
+            _h(i) = h
+        elif '-' in dir:
+            _h(2) = -h
+        self.comment = 'c --- %s' % (self.id)
+        self.string = "trc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
+            (c[0], c[1], c[2], h[0], h[1], h[2], r[0], r[1])
+        self.surfaces = [1, 2, 3]
+        return self
+
 class pseudogeo:
     def __init__(self, geo):
         self.id = geo.id

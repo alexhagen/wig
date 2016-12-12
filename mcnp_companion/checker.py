@@ -8,18 +8,20 @@ import string
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+import notify2 as n
 
 fmt = '%A \n %m-%d-%y %I:%M:%S %p'
 
 class progress:
     def __init__(self, filename, cpu_use, nps, start_time, time_slope,
-                 end_time):
+                 end_time, proc):
         self.filename = filename
         self.cpu_use = cpu_use
         self.start_time = start_time
         self.time_slope = time_slope
         self.end_time = end_time
         self.nps = nps
+        self.proc = proc
 
 def find_between( s, first, last ):
     try:
@@ -37,6 +39,8 @@ def check():
     end_times = []
     cpu_uses = []
     npss = []
+    procs = []
+    filenames = []
     ps_aux_out = subprocess.check_output(['ps aux | grep mcnp'], shell=True)
     for line in ps_aux_out.split('\n'):
         if '/bin/sh' not in line and 'grep mcnp' not in line and '.inp' in line:
@@ -45,8 +49,13 @@ def check():
             pid = int(arr[0])
             file = find_between(line, 'out=', '.out')
             filenames.extend([file])
+            if 'tasks' in line:
+                procs.extend([float(arr[-1])])
+            else:
+                procs.extend([1])
+            cpu_use = cpu_use / float(arr[-1])
 
-    for filename in filenames:
+    for filename, i in zip(filenames, range(len(filenames))):
         dump = 1
         ctm_2 = None
         nps_2 = None
@@ -65,7 +74,7 @@ def check():
         for line in lines:
             nps = float(find_between(line, 'nps =', 'coll'))
             nps_from_file.extend([nps])
-            ctm = float(find_between(line, 'ctm =', 'nrn'))
+            ctm = float(find_between(line, 'ctm =', 'nrn')) / (procs[i])
             ctm_from_file.extend([ctm])
 
         if len(nps_from_file) >= 1:
@@ -87,17 +96,17 @@ def check():
         now = os.path.getmtime(filename + '.out')
         start_time = now - (ctm_1 * 60.)
         if nps_2 is not None:
-            time_slope = (nps_1 - nps_2) / (60. * (ctm_1 - ctm_2))
+            time_slope = procs[i] * (nps_1 - nps_2) / (60. * (ctm_1 - ctm_2))
             end_time = now + (1.E9 - nps_1) / time_slope
         else:
-            time_slope = None
-            end_time = None
+            time_slope = 0.0
+            end_time = 0.0
         npss.extend([nps_1])
         start_times.extend([start_time])
         time_slopes.extend([time_slope])
         end_times.extend([end_time])
         cpu_uses.extend([cpu_use])
-    return filenames, cpus, cpu_uses, npss, start_times, time_slopes, end_times
+    return filenames, cpus, cpu_uses, npss, start_times, time_slopes, end_times, procs
 
 class cpu_progress(QProgressBar):
     def __init__(self):
@@ -105,9 +114,12 @@ class cpu_progress(QProgressBar):
         self.setMaximum(4000 * 100)
         self.setMinimum(0)
         self.setOrientation(2)
+        self.setTextVisible(True)
+        self.setVisible(True)
+        self.setAlignment(Qt.AlignCenter)
 
     def setProgress(self, prg):
-        self.setFormat("%.2f%%" % prg)
+        # self.setFormat("%.2f %%" % prg)
         self.setValue(int(4000 * prg))
         return self
 
@@ -125,7 +137,8 @@ class progress_view(QWidget):
         self.filename = progress_view_label(progress.filename.replace("/home/ahagen/mcnp/active/", ""))
         self.v = QVBoxLayout(self)
         self.prog_bar = cpu_progress().setProgress(100. * progress.nps / 1.E9)
-        self.cpu_use = progress_view_label("CPU Use: %.2f%%" % (progress.cpu_use))
+        self.prog_text = progress_view_label("%.2f %%" % (100. * progress.nps / 1.E9))
+        self.cpu_use = progress_view_label("CPU Use: %.2f%% x %d" % (progress.cpu_use / progress.proc, progress.proc))
         self.start_time = progress_view_label("Start Time: %s" % time.strftime(fmt,
                                          time.localtime(progress.start_time)))
         self.end_time = progress_view_label("Estimated End Time: %s" %
@@ -135,6 +148,7 @@ class progress_view(QWidget):
                                          (progress.time_slope * 3600.))
         self.v.addWidget(self.filename)
         self.v.addWidget(self.prog_bar)
+        self.v.addWidget(self.prog_text)
         self.v.addWidget(self.cpu_use)
         self.v.addWidget(self.start_time)
         self.v.addWidget(self.time_slope)
@@ -144,6 +158,7 @@ class progress_view(QWidget):
     def refresh(self, progress):
         self.filename.setText(progress.filename.replace("/home/ahagen/mcnp/active/", ""))
         self.prog_bar.setProgress(100. * progress.nps / 1.E9)
+        self.prog_text.setText("%.2f %%" % (100. * progress.nps / 1.E9))
         self.start_time.setText("Start Time: %s" % time.strftime(fmt,
                                          time.localtime(progress.start_time)))
         self.end_time.setText("Estimated End Time: %s" %
@@ -167,9 +182,15 @@ class all_progress(QWidget):
     def refresh(self, progresses):
         for progress in progresses:
             for prog_view in self.prog:
-                if progress.filename in prog_view.filename.text():
+                if prog_view.filename.text() in progress.filename:
                     prog_view.refresh(progress)
 
+
+class refresh_button(QPushButton):
+    def __init__(self):
+        QPushButton.__init__(self)
+        self.setText("Refresh")
+        self.setFixedWidth(150)
 
 class ApplicationWindow(QMainWindow):
     def __init__(self):
@@ -190,30 +211,43 @@ class ApplicationWindow(QMainWindow):
         self.main_widget = QWidget(self)
 
         self.l = QVBoxLayout(self.main_widget)
+        self.l.setAlignment(Qt.AlignCenter)
         self.prg = all_progress(self.main_widget)
         filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
-            end_times = check()
+            end_times, procs = check()
         self.progresses = [progress(filenames[i], cpu_uses[i], npss[i],
                                     start_times[i], time_slopes[i],
-                                    end_times[i])
+                                    end_times[i], procs[i])
                       for i in range(len(filenames))]
         self.prg.add_progress(self.progresses)
         self.l.addWidget(self.prg)
-        timer = QTimer(self)
-        timer.timeout.connect(self.check_progress)
-        timer.start(1E3 * 30 * 60)
+        self.button1 = refresh_button()
+        self.l.addWidget(self.button1)
+        self.button1.pressed.connect(self.check_progress)
+
+        timeout = 1E3 * 10 * 60
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.check_progress)
+        self.timer.start(1E3 * 10 * 60)
 
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
 
+
     def check_progress(self):
+        self.button1.setText('Refreshed!')
+        QTimer.singleShot(1E3, self.button_text_back)
         filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
-            end_times = check()
+            end_times, procs = check()
         self.progresses = [progress(filenames[i], cpu_uses[i], npss[i],
                                     start_times[i], time_slopes[i],
-                                    end_times[i])
+                                    end_times[i], procs[i])
                       for i in range(len(filenames))]
         self.prg.refresh(self.progresses)
+
+    def button_text_back(self):
+        self.button1.setText('Refresh')
 
     def fileQuit(self):
         self.close()
@@ -242,9 +276,9 @@ darkPalette.setColor(QPalette.Link, QColor('#2eafa4'));
 darkPalette.setColor(QPalette.Highlight, QColor('#e3ae24'));
 darkPalette.setColor(QPalette.HighlightedText, QColor('#746c66'));
 
-qApp.setPalette(darkPalette);
+# qApp.setPalette(darkPalette);
 
-qApp.setStyleSheet("QToolTip { color: #d1d3d4; background-color: #7ed0e0; border: 1px solid #d1d3d4; }");
+# qApp.setStyleSheet("QToolTip { color: #d1d3d4; background-color: #7ed0e0; border: 1px solid #d1d3d4; }");
 
 aw = ApplicationWindow()
 aw.show()

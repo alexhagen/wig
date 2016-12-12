@@ -13,7 +13,7 @@ class runner:
         cmd = 'nohup ' + command + ' inp=' + filename + '.inp ' + \
             'out=' + filename + '.out ' + \
             'run=' + filename + '_runtpe ' + \
-            'mctal=' + filename + '_tallies.out & disown'
+            'mctal=' + filename + '_tallies.out tasks 3 &'
         # construct the notification
         notification = n.Notification(command, 'Will now run %s.' % cmd)
         notification.show()

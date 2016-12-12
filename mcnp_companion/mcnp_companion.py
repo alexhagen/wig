@@ -31,7 +31,6 @@ class mcnp_companion:
         self.data_block = ''
         self.sdef_num = 1
         # now write the intro file
-
         self.intro_block += self.comment
 
     def run(self, remote, sys):
@@ -59,7 +58,7 @@ class mcnp_companion:
             f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
-        print self.filename
+
         self._runner = runner(self.filename, self.command, remote, sys,
                               renderer=self.renderer)
 
