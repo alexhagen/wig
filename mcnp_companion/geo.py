@@ -1,4 +1,5 @@
 import textwrap
+from pyg import threed
 
 class geo:
     def __init__(self):
@@ -37,23 +38,67 @@ class geo:
             right = pseudogeo(right)
         return left | right
 
-    def rpp(self, c=None, l=None, id=None):
+    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None,
+            color='gray', show=True):
+        self.show = show
         self.sense = -1
         self.id = id
         self.geo_num = 0
         self.comment = "c --- %s" % (self.id)
-        x1 = c[0] - abs(l[0] / 2.0)
-        x2 = c[0] + abs(l[0] / 2.0)
-        y1 = c[1] - abs(l[1] / 2.0)
-        y2 = c[1] + abs(l[1] / 2.0)
-        z1 = c[2] - abs(l[2] / 2.0)
-        z2 = c[2] + abs(l[2] / 2.0)
+        if x is None:
+            x1 = c[0] - abs(l[0] / 2.0)
+            x2 = c[0] + abs(l[0] / 2.0)
+        else:
+            c = [0., 0., 0.]
+            l = [0., 0., 0.]
+            x1 = x[0]
+            x2 = x[1]
+            c[0] = (x[1] - x[0]) / 2.0 + x[0]
+            l[0] = x[1] - x[0]
+        if y is None:
+            y1 = c[1] - abs(l[1] / 2.0)
+            y2 = c[1] + abs(l[1] / 2.0)
+        else:
+            y1 = y[0]
+            y2 = y[1]
+            c[1] = (y[1] - y[0]) / 2.0 + y[0]
+            l[1] = y[1] - y[0]
+        if z is None:
+            z1 = c[2] - abs(l[2] / 2.0)
+            z2 = c[2] + abs(l[2] / 2.0)
+        else:
+            z1 = z[0]
+            z2 = z[1]
+            c[2] = (z[1] - z[0]) / 2.0 + z[0]
+            l[2] = z[1] - z[0]
         self.string = "rpp %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (x1, x2, y1, y2, z1, z2)
+        self.plot_cmd = threed.pyg3d.cube
+        self.plot_cmd_args = {"center": c, "dx": l[0], "dy": l[1], "dz": l[2],
+                               "color": color, "planes": 0.5, "lines": True}
         self.faces = [1, 2, 3, 4, 5, 6]
         return self
 
-    def sph(self, c=None, r=None, id=None):
+    def box(self, v=None, a1=None, a2=None, a3=None, id=None, color='gray',
+            show=True):
+        self.show = show
+        self.sense = -1
+        self.id = id
+        self.geo_num = 0
+        self.comment = "c --- %s" % (self.id)
+        self.string = ("box %6.4f %6.4f %6.4f  %6.4f %6.4f %6.4f  " +
+                       "%6.4f %6.4f %6.4f  %6.4f %6.4f %6.4f") % \
+                       (v[0], v[1], v[2], a1[0], a1[1], a1[2],
+                        a2[0], a2[1], a2[2], a3[0], a3[1], a3[2])
+        self.faces = [1, 2, 3, 4, 5, 6]
+        self.plot_cmd = threed.pyg3d.box
+        self.plot_cmd_args = {"corner": v, "d1": a1, "d2": a2,
+                              "d3": a3, "color": color, "lines": True,
+                              "planes": 0.5}
+        return self
+
+    def sph(self, c=None, r=None, id=None, color='gray', show=True):
+        self.show = show
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -61,9 +106,14 @@ class geo:
         self.string = "sph %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], r)
         self.faces = [1]
+        self.plot_cmd = threed.pyg3d.sphere
+        self.plot_cmd_args = {"center": c, "r": r, "color": color,
+                              "lines": True, "planes": 0.5}
         return self
 
-    def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None):
+    def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None,
+            color='gray', show=True):
+        self.show = show
         self.sense = -1
         h = [0, 0, 0]
         if lx is not None:
@@ -77,6 +127,9 @@ class geo:
         self.comment = "c --- %s" % (self.id)
         self.string = "rcc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], h[0], h[1], h[2], r)
+        self.plot_cmd = threed.pyg3d.cylinder
+        self.plot_cmd_args = {"center": c, "h": h, "r": r, "color": color,
+                              "lines": True, "planes": 0.5}
         self.surfaces = [1, 2, 3]
         return self
 
@@ -92,9 +145,9 @@ class geo:
         elif 'y' in dir:
             i = 1
         if '+' in dir:
-            _h(i) = h
+            _h[i] = h
         elif '-' in dir:
-            _h(2) = -h
+            _h[2] = -h
         self.comment = 'c --- %s' % (self.id)
         self.string = "trc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], h[0], h[1], h[2], r[0], r[1])
@@ -103,6 +156,8 @@ class geo:
 
 class pseudogeo:
     def __init__(self, geo):
+        if geo.__class__.__name__ == 'cell':
+            geo = geo.geo
         self.id = geo.id
         self.geo = geo
         self.nums = [(geo.geo_num, geo.sense)]

@@ -1,9 +1,11 @@
 import numpy as np
 import textwrap
 from runner import runner
+from pyg import threed
 from mcnp_string import mstring
 from renderer import renderer
 from os.path import expanduser
+import geo as mcnpg
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6', render=False):
@@ -34,6 +36,12 @@ class mcnp_companion:
         self.intro_block += self.comment
 
     def run(self, remote, sys):
+        self.write()
+
+        self._runner = runner(self.filename, self.command, remote, sys,
+                              renderer=self.renderer)
+
+    def write(self):
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
             intro = textwrap.TextWrapper(initial_indent='c ',
@@ -59,13 +67,11 @@ class mcnp_companion:
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
 
-        self._runner = runner(self.filename, self.command, remote, sys,
-                              renderer=self.renderer)
-
-
     def geo(self, geos=None):
         # initialize a counter
         self.geo_num = 10
+        # create a renderer
+        self.plot = threed.pyg3d()
         for geo in geos:
             if geo is not None:
                 # print the comment
@@ -77,8 +83,15 @@ class mcnp_companion:
                 self.geo_block += "%s\n" % (geo.string)
                 # set that geo number to the geometry object
                 geo.num = self.geo_num
+                # add the geo object to the plot
+                if geo.show:
+                    self.plot = geo.plot_cmd(self.plot, **geo.plot_cmd_args)
                 # increment geo num
                 self.geo_num += 10
+        self.plot.view(45, 235)
+        self.plot.export('some_plot', formats=['pdf'], sizes=['cs'],
+                         customsize=(6., 6.))
+        self.plot.show()
 
     def cell(self, cells=None):
         # initialize a counter
