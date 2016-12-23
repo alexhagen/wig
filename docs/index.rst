@@ -8,7 +8,7 @@
 mcnp_companion
 ~~~~~~~~~~~~~~
 
-.. automodule::mcnp_companion
+.. automodule::mcnp_companion.mcnp_companion
   :members:
   :show-inheritance:
 
