@@ -158,6 +158,8 @@ class pseudogeo:
     def __init__(self, geo):
         if geo.__class__.__name__ == 'cell':
             geo = geo.geo
+        if geo.__class__.__name__ == 'pseudogeo':
+            geo = geo.geo
         self.id = geo.id
         self.geo = geo
         self.nums = [(geo.geo_num, geo.sense)]

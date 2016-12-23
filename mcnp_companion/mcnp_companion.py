@@ -9,10 +9,8 @@ import geo as mcnpg
 
 class mcnp_companion:
     def __init__(self, comment, filename, flavor='6', render=False):
-        self.comment = ' '.join(comment.split())
-        print "Initialized file with comment \"%s\"." % (self.comment)
-        self.filename = expanduser("~") + '/mcnp/active/' + filename
-        print "Will be written to %s.inp." % (filename)
+        self.set_filename(filename)
+        self.set_comment(comment)
         if render:
             self.renderer = renderer(filename)
         else:
@@ -34,6 +32,32 @@ class mcnp_companion:
         self.sdef_num = 1
         # now write the intro file
         self.intro_block += self.comment
+
+    def set_filename(self, filename):
+        self.filename = expanduser("~") + '/mcnp/active/' + filename
+        print "Will be written to %s.inp." % (filename)
+
+    def set_comment(self, comment):
+        self.comment = ' '.join(comment.split())
+        print "Initialized file with comment \"%s\"." % (self.comment)
+
+    def refresh_data(self):
+        self.data_block = ''
+
+    def refresh_geo(self):
+        self.geo_block = ''
+
+    def refresh_cell(self):
+        self.cell_block = ''
+
+    def refresh_phys(self):
+        self.phys_block = ''
+
+    def refresh_tally(self):
+        self.tally_block = ''
+
+    def refresh_matl(self):
+        self.matl_block = ''
 
     def run(self, remote, sys):
         self.write()

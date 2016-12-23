@@ -5,8 +5,19 @@ import notify2 as n
 from os.path import expanduser
 
 class runner:
-    def __init__(self, filename, command, remote, sys, renderer=None):
+    def __init__(self, filename, command, remote=None, sys='linux',
+                 renderer=None):
+        if remote in ['solar system', 'Solar System', 'solar_system',
+                         'solar sys']:
+            pass
+        # check in the completed directory, and if there is an out file with
+        # exactly the same infile, then, don't run
         self.needs_to_run = True
+        # Then, check the current processes to see if there are any instances
+        # running on this machine
+
+        # If there are, then we will run it on the solarsystem
+
         # initialize a notification system
         n.init('MCNP')
         # construct the command
