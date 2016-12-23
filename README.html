@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MCNP Companion &mdash; MCNP Companion 0.0.1a documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="MCNP Companion 0.0.1a documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mcnp-companion">
+<h1>MCNP Companion<a class="headerlink" href="#mcnp-companion" title="Permalink to this headline">¶</a></h1>
+<p>MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
+for simulation of neutrons, photons, and electrons. I use this
+extensively for my research, and it does a great job at a very complex
+task. Unfortunately, it&#8217;s a nightmare to use. Basically uncompilable by
+real humans (and not mythical sys-admins), finicky about input decks and
+spaces, and almost completely text only, there are lots of improvements
+that could be made.</p>
+<p>This package will strive to solve a lot of these issues. First, this
+package will provide a different way to compile than the (difficult)
+<code class="docutils literal"><span class="pre">automake</span></code> method that is currently shipped with MCNPX.</p>
+<p>Secondly, this package will provide utilities to write input decks, a
+utility to run your input decks either remotely or locally, and finally,
+it will provide just a little visualization and results analysis.</p>
+<div class="section" id="proposal-for-a-generation-script">
+<h2>Proposal for a generation script<a class="headerlink" href="#proposal-for-a-generation-script" title="Permalink to this headline">¶</a></h2>
+<p>Ideally, a simple generation script would look like this:</p>
+<div class="code python highlight-python"><div class="highlight"><pre>import mcnp_companion
+
+# First, we initialize our scene and tell it that we&#39;ll use MCNPX
+scene = mcnp_companion(filename=&#39;example_scene&#39;, flavor=&#39;x&#39;,
+                       comment=&#39;&#39;&#39;An example scene to illustrate features of
+                                  mcnp_companion&#39;&#39;&#39;)
+
+# Now, we need to add all of our geometry to the scene
+geo = new geo()
+# Add a right plane parallelepiped
+gblock = geo.add_rpp(cx=1.0, cy=1.0, cz=1.0, lx=1.0, ly=2.0, lz=0.5,
+            id=&#39;graphite-block&#39;)
+# Add a sphere
+asphere = geo.add_sph(c=(0., 0., 0.), r=20., id=&#39;universe&#39;)
+# Register this to the scene
+scene.geo(geo)
+
+# Now, we need to define a few materials
+graphite = new matl(chem_formula=&#39;C&#39;, id=&#39;graphite&#39;)
+air = new matl(atom_perc=[(&#39;H&#39;, 0.000151), (&#39;N&#39;, 0.784437), (&#39;O&#39;, 0.210750),
+                          (&#39;Ar&#39;, 0.004671)], id=&#39;air&#39;)
+# Register these to the scene
+scene.matl((graphite, matl))
+
+# Finally, we can use some automatic cell creation
+graphite_cell = new cell(gblock, graphite)
+air_cell = new cell(asphere, air)
+# register the cells to the scene
+scene.cells((graphite_cell, air_cell))
+
+# Add a source (otherwise why are you doing this?)
+clinac = new source(type=&#39;p&#39;, spectrum = [(0., 1., 2.), (0.9, 0.5, 0.1)],
+                    shape=&#39;circle&#39;, dir=&#39;z-&#39;)
+
+# Now to add a few tally volumes
+det1 = new tally(cell=graphite_cell)
+det2 = new tally(c=(0., 0., 0.), r=1.)
+scene.tally((det1, det2))
+
+# Add some typical neutron physics - this will automatically fill
+scene.physics(nps=1E9)
+
+# Render the scene so you can see that you&#39;re doing it correctly
+scene.render(&#39;example_scene_render&#39;)
+
+# And, finally, run!
+scene.run(remote=&#39;ssh://ahagen@mars-ubuntu.dynu.com&#39;, sys=&#39;linux&#39;)
+</pre></div>
+</div>
+<p>Now this doesn&#8217;t exactly look like it&#8217;ll save you any time compared to
+writing an MCNP deck, but there are a couple things going on under the
+hood that will save you plenty:</p>
+<ul class="simple">
+<li>The rendering is better than VisEd, so it can be used for publishing</li>
+<li>You can SCRIPT in Python, so running multiple similar tests should be
+easier</li>
+<li>The <code class="docutils literal"><span class="pre">matl</span></code> module points out forgotten isotopes that might be
+important</li>
+<li>The cells doing things themselves is WAY better</li>
+<li>The physics are hands-off unless you&#8217;re doing something esoteric</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MCNP Companion</a><ul>
+<li><a class="reference internal" href="#proposal-for-a-generation-script">Proposal for a generation script</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/README.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Alex Hagen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/README.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
