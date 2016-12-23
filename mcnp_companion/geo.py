@@ -2,6 +2,8 @@ import textwrap
 from pyg import threed
 
 class geo:
+    """ some docstring
+    """
     def __init__(self):
         self.bstring = ''
 
