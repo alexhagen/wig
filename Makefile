@@ -9,7 +9,7 @@ docs: FORCE
 	cd ~/code/mcnp_companion/docs/; \
 	make html; \
 	cp -r _build/html/* ~/pages/mcnp_companion/; \
-	cd ~/pages/mcnp_companion/docs; \
+	cd ~/pages/mcnp_companion/; \
 	git add *; \
 	git commit -am "$(shell git log -1 --pretty=%B | tr -d '\n')"; \
 	git push origin gh-pages; \
