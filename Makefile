@@ -10,6 +10,7 @@ docs: FORCE
 	make html; \
 	cp -r _build/html/* ~/pages/mcnp_companion/; \
 	cd ~/pages/mcnp_companion/; \
+	touch .nojekyll; \
 	git add *; \
 	git commit -am "$(shell git log -1 --pretty=%B | tr -d '\n')"; \
 	git push origin gh-pages; \
