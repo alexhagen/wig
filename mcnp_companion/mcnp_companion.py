@@ -8,6 +8,24 @@ from os.path import expanduser
 import geo as mcnpg
 
 class mcnp_companion:
+    """ The ``mcnp_companion`` object is the base object for an MCNP setup.
+
+    The ``mcnp_companion`` object is basically the scene in which we create our
+    MCNP geometry, cells, materials, physics, tallies, and other data.  I
+    usually just call it ``scene`` and use it from there.
+
+    :param str comment: The comment that will be placed BELOW the first comment
+        line of the MCNP deck.
+    :param str filename: The filename (duh) of the input deck. '.inp' will be
+        automatically appended.  The full path to this file will be the first
+        line of the input file (i.e., the full path will be the first comment
+        line of the deck)
+    :param str flavor: '6' for ``mcnp6``, '5' for ``mcnp5``, 'x' for ``mcnpx``,
+        or 'polimi' for ``mcnpx-polimi``.  Make sure you alias the binaries to
+        those commands or the runner wont work.
+    :return: the ``mcnp_companion`` object.
+    :rtype: ``mcnp_companion``
+    """
     def __init__(self, comment, filename, flavor='6', render=False):
         self.set_filename(filename)
         self.set_comment(comment)
