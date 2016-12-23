@@ -1,9 +1,0 @@
-c ---------------------------------- Physics -----------------------------------
-c --- default physics for n p
-mode n p
-phys:p 20 0 1 -1 2J 1
-cut:p 20 1 0 0
-phys:n J 20. 3J 5
-nps 1E9
-ipol 54 3J
-files 2J 8J 1 clinac_no_target_h2_photo.out
