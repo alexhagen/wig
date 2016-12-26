@@ -9,10 +9,16 @@
 Class Documentation
 -------------------
 
-mcnp_companion
-~~~~~~~~~~~~~~
+Simulation Constructor Methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: mcnp_companion.mcnp_companion
+  :members:
+
+Analysis methods
+~~~~~~~~~~~~~~~~
+
+.. automodule:: mcnp_companion.analyze
   :members:
   :show-inheritance:
 

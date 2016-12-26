@@ -120,8 +120,61 @@ important</li>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-mcnp_companion.mcnp_companion">
-<span id="id1"></span><h3>mcnp_companion<a class="headerlink" href="#module-mcnp_companion.mcnp_companion" title="Permalink to this headline">¶</a></h3>
+<span id="simulation-constructor-methods"></span><h3>Simulation Constructor Methods<a class="headerlink" href="#module-mcnp_companion.mcnp_companion" title="Permalink to this headline">¶</a></h3>
 <p>vapory/__init__.py</p>
+</div>
+<div class="section" id="module-mcnp_companion.analyze">
+<span id="analysis-methods"></span><h3>Analysis methods<a class="headerlink" href="#module-mcnp_companion.analyze" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="mcnp_companion.analyze.analyze">
+<em class="property">class </em><code class="descclassname">mcnp_companion.analyze.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/analyze.html#analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.analyze.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p><code class="docutils literal"><span class="pre">analyze</span></code> goes through an output file and checks for tallies.</p>
+<p>An <code class="docutils literal"><span class="pre">analyze</span></code> object will hold <code class="docutils literal"><span class="pre">tally</span></code> objects in a list, one for each of
+the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
+tally file through mcnp.  Tallies printed on the <code class="docutils literal"><span class="pre">.out</span></code> file currently do
+not have support.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; filename of the <code class="docutils literal"><span class="pre">tallies.out</span></code> file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mcnp_companion.analyze.tally">
+<em class="property">class </em><code class="descclassname">mcnp_companion.analyze.</code><code class="descname">tally</code><span class="sig-paren">(</span><em>y</em>, <em>u_y</em>, <em>name=None</em>, <em>spectrum=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/analyze.html#tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.analyze.tally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A <code class="docutils literal"><span class="pre">tally</span></code> object holds data from a tally.</p>
+<p>The tally object holds the total nps, the error in total nps, the name,
+and the spectrum data from an f4 tally, imported using the <code class="docutils literal"><span class="pre">analyze</span></code>
+class.  The location and shape can also be set with external functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The total number of neutrons going through the volume.</li>
+<li><strong>u_y</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The uncertainty in the total number of neutrons going
+through the volume.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A descriptive name for the tally.</li>
+<li><strong>spectrum</strong> (<em>pym.func</em>) &#8211; A <code class="docutils literal"><span class="pre">curve</span></code> object holding the spectrum of the
+particles going through the volume.  <code class="docutils literal"><span class="pre">spectrum.y</span></code> and <code class="docutils literal"><span class="pre">spectrum.x</span></code>
+hold the bin height and bin left edges, respectively.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 </div>
@@ -136,6 +189,11 @@ important</li>
 </div>
 <div class="section" id="todos">
 <h2>ToDos<a class="headerlink" href="#todos" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-0"><em>original entry</em></a> is located in  /home/ahagen/code/mcnp_companion/mcnp_companion/analyze.py:docstring of mcnp_companion.analyze.analyze, line 8.)</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
@@ -155,7 +213,8 @@ important</li>
 <li><a class="reference internal" href="#">MCNP Companion</a><ul>
 <li><a class="reference internal" href="#proposal-for-a-generation-script">Proposal for a generation script</a></li>
 <li><a class="reference internal" href="#class-documentation">Class Documentation</a><ul>
-<li><a class="reference internal" href="#module-mcnp_companion.mcnp_companion">mcnp_companion</a></li>
+<li><a class="reference internal" href="#module-mcnp_companion.mcnp_companion">Simulation Constructor Methods</a></li>
+<li><a class="reference internal" href="#module-mcnp_companion.analyze">Analysis methods</a></li>
 </ul>
 </li>
 </ul>
