@@ -9,7 +9,7 @@ from pyg.colors import pu as puc
 class tally(object):
     """ A ``tally`` object holds data from a tally.
 
-    The tally object holds the total nps, the error in total nps, the name,
+    The ``tally`` object holds the total nps, the error in total nps, the name,
     and the spectrum data from an f4 tally, imported using the ``analyze``
     class.  The location and shape can also be set with external functions.
 
@@ -27,7 +27,7 @@ class tally(object):
         if name is not None:
             self.name = name
         if spectrum is not None:
-            self.fx = fx
+            self.spectrum = spectrum
 
         def set_loc(self, loc):
             """ Set the location of the current tally.
@@ -77,6 +77,8 @@ class analyze(object):
     :param str filename: filename of the ``tallies.out`` file
     """
     def __init__(self, filename):
+        if '_tallies.out' not in filename:
+            filename = filename + '_tallies.out'
         with open(filename, 'r') as f:
             file_string = f.read()
 

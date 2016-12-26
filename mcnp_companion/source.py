@@ -27,7 +27,6 @@ class source():
         col = Color(color).rgb
         self.vapory_cmd_args = [(0,0,0), col, 'looks_like { sphere { <0,0,0>,1 finish { ambient 1 } } } translate <%6.4f, %6.4f, %6.4f>' % (pos[0], pos[1], pos[2])]
         self.vapory_cmd_kwargs = {}
-        print self.vapory_cmd_args
         if positioned:
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
         elif cell is not None:

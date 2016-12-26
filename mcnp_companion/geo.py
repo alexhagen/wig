@@ -1,7 +1,7 @@
 import textwrap
 from pyg import threed
 import numpy as np
-from vapory import *
+from vapory import Box, Sphere, Cylinder, Pigment
 from colour import Color
 from transforms3d import euler, axangles
 
@@ -45,7 +45,7 @@ class geo:
         return left | right
 
     def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None,
-            color='gray', show=True, vapory_args=[]):
+            color='gray', show=True, vapory_args=[], inner_wall=False):
         self.show = show
         self.sense = -1
         self.id = id
@@ -90,7 +90,7 @@ class geo:
         return self
 
     def box(self, v=None, a1=None, a2=None, a3=None, id=None, color='gray',
-            show=True, vapory_args=[]):
+            show=True, vapory_args=[], inner_wall=False):
         self.show = show
         self.sense = -1
         self.id = id
@@ -118,7 +118,7 @@ class geo:
         return self
 
     def sph(self, c=None, r=None, id=None, color='gray', show=True,
-            vapory_args=[]):
+            vapory_args=[], inner_wall=False):
         self.show = show
         self.sense = -1
         self.id = id
@@ -136,7 +136,7 @@ class geo:
         return self
 
     def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None,
-            color='gray', show=True, vapory_args=[]):
+            color='gray', show=True, vapory_args=[], inner_wall=False):
         self.show = show
         self.sense = -1
         h = [0, 0, 0]
@@ -161,7 +161,7 @@ class geo:
         self.vapory_cmd_kwargs = {}
         return self
 
-    def cone(self, c=None, dir='+z', h=None, r=None, id=None):
+    def cone(self, c=None, dir='+z', h=None, r=None, id=None, inner_wall=False):
         self.sense = -1
         self.id = id
         self.geo_num = 0

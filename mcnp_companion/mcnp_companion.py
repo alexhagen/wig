@@ -59,11 +59,9 @@ class mcnp_companion:
 
     def set_filename(self, filename):
         self.filename = expanduser("~") + '/mcnp/active/' + filename
-        print "Will be written to %s.inp." % (filename)
 
     def set_comment(self, comment):
         self.comment = ' '.join(comment.split())
-        print "Initialized file with comment \"%s\"." % (self.comment)
 
     def refresh_data(self):
         self.data_block = ''
@@ -83,7 +81,7 @@ class mcnp_companion:
     def refresh_matl(self):
         self.matl_block = ''
 
-    def run(self, remote, sys):
+    def run(self, remote=False, sys='linux'):
         self.write()
 
         self._runner = runner(self.filename, self.command, remote, sys,
@@ -171,7 +169,6 @@ class mcnp_companion:
                 if cell.geo.__class__.__name__ is 'geo':
                     self.cell_block += "%d" % (cell.geo.sense * cell.geo.geo_num)
                 elif cell.geo.__class__.__name__ is 'pseudogeo':
-                    print cell.geo.nums
                     for num in cell.geo.nums:
                         self.cell_block += "%d " % (num[0] * num[1])
                     self.cell_block = self.cell_block[:-1]
@@ -266,7 +263,6 @@ class mcnp_companion:
             # print the source string
             self.data_block += "%s\n" % (source.string)
             if source.vapory_cmd is not None:
-                print "adding the source light"
                 self.vapory_geos.extend([source.vapory_cmd(*source.vapory_cmd_args, **source.vapory_cmd_kwargs)])
             # print the distributions
             # for dist in source.dists:
