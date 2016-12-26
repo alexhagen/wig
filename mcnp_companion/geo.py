@@ -1,5 +1,9 @@
 import textwrap
 from pyg import threed
+import numpy as np
+from vapory import *
+from colour import Color
+from transforms3d import euler, axangles
 
 class geo:
     """ some docstring
@@ -41,7 +45,7 @@ class geo:
         return left | right
 
     def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None,
-            color='gray', show=True):
+            color='gray', show=True, vapory_args=[]):
         self.show = show
         self.sense = -1
         self.id = id
@@ -78,11 +82,15 @@ class geo:
         self.plot_cmd = threed.pyg3d.cube
         self.plot_cmd_args = {"center": c, "dx": l[0], "dy": l[1], "dz": l[2],
                                "color": color, "planes": 0.5, "lines": True}
+        self.vapory_cmd = Box
+        self.vapory_cmd_args =  [(x1, y1, z1), (x2, y2, z2),
+                                 Pigment('color', Color(color).rgb)]
+        self.vapory_cmd_kwargs = {}
         self.faces = [1, 2, 3, 4, 5, 6]
         return self
 
     def box(self, v=None, a1=None, a2=None, a3=None, id=None, color='gray',
-            show=True):
+            show=True, vapory_args=[]):
         self.show = show
         self.sense = -1
         self.id = id
@@ -97,9 +105,20 @@ class geo:
         self.plot_cmd_args = {"corner": v, "d1": a1, "d2": a2,
                               "d3": a3, "color": color, "lines": True,
                               "planes": 0.5}
+        self.vapory_cmd = Box
+        top_corner = np.array(v) + (np.sqrt(np.sum(np.square(a1))),
+                                    np.sqrt(np.sum(np.square(a2))),
+                                    np.sqrt(np.sum(np.square(a3))))
+        top_corner = list(top_corner)
+        rotangle = euler.mat2euler([a1 / np.sqrt(np.sum(np.square(a1))),
+                                    a2 / np.sqrt(np.sum(np.square(a2))),
+                                    a3 / np.sqrt(np.sum(np.square(a3)))])
+        self.vapory_cmd_args = [v, top_corner]
+        self.vapory_cmd_kwargs = {}
         return self
 
-    def sph(self, c=None, r=None, id=None, color='gray', show=True):
+    def sph(self, c=None, r=None, id=None, color='gray', show=True,
+            vapory_args=[]):
         self.show = show
         self.sense = -1
         self.id = id
@@ -111,10 +130,13 @@ class geo:
         self.plot_cmd = threed.pyg3d.sphere
         self.plot_cmd_args = {"center": c, "r": r, "color": color,
                               "lines": True, "planes": 0.5}
+        self.vapory_cmd = Sphere
+        self.vapory_cmd_args = [c, r, Pigment('color', Color(color).rgb)]
+        self.vapory_cmd_kwargs = {}
         return self
 
     def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None,
-            color='gray', show=True):
+            color='gray', show=True, vapory_args=[]):
         self.show = show
         self.sense = -1
         h = [0, 0, 0]
@@ -133,6 +155,10 @@ class geo:
         self.plot_cmd_args = {"center": c, "h": h, "r": r, "color": color,
                               "lines": True, "planes": 0.5}
         self.surfaces = [1, 2, 3]
+        self.vapory_cmd = Cylinder
+        cap_point = list(np.array(c) + np.array(h))
+        self.vapory_cmd_args = [c, cap_point, r] #+ vapory_args
+        self.vapory_cmd_kwargs = {}
         return self
 
     def cone(self, c=None, dir='+z', h=None, r=None, id=None):

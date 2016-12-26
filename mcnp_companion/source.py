@@ -1,3 +1,6 @@
+from vapory import *
+from colour import Color
+
 class source():
 
     def __init__(self, particle='n', pos=None, x=None, y=None, z=None,
@@ -19,6 +22,12 @@ class source():
         self.comment = "c --- %s" % id
         types = {"n": 1, "p": 2, "e": 3, "fission": 1}
         self.string += "par=%s " % (types[particle])
+        color = '#2EAFA4'
+        self.vapory_cmd = LightSource
+        col = Color(color).rgb
+        self.vapory_cmd_args = [(0,0,0), col, 'looks_like { sphere { <0,0,0>,1 finish { ambient 1 } } } translate <%6.4f, %6.4f, %6.4f>' % (pos[0], pos[1], pos[2])]
+        self.vapory_cmd_kwargs = {}
+        print self.vapory_cmd_args
         if positioned:
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
         elif cell is not None:

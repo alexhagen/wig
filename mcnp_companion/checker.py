@@ -9,6 +9,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import notify2 as n
+import paramiko
 
 fmt = '%A \n %m-%d-%y %I:%M:%S %p'
 
@@ -33,6 +34,32 @@ def find_between( s, first, last ):
 
 filenames = []
 
+def read_ps_aux(outp, procs, filenames, mcnpservers, mcnpserver, cpu_uses):
+    for line in outp.split('\n'):
+        if '/bin/sh' not in line and 'grep mcnp' not in line and '.inp' in line:
+            arr = re.findall(r"[-+]?\d*\.\d+|\d+", line)
+            cpu_use = float(arr[1])
+            pid = int(arr[0])
+            file = find_between(line, 'out=', '.out')
+            print file
+            filenames.extend([file])
+            if 'tasks' in line:
+                procs.extend([float(arr[-1])])
+            else:
+                procs.extend([1])
+            cpu_use = cpu_use / float(arr[-1])
+            cpu_uses.extend([cpu_use])
+            mcnpservers.extend([mcnpserver])
+
+class server:
+    def __init__(self, type='local', name='sputnik', ip=None, port=None,
+                 home_folder='/home/ahagen'):
+        self.type = type
+        self.name = name
+        self.ip = ip
+        self.port = port
+        self.home_folder = home_folder
+
 def check():
     start_times = []
     time_slopes = []
@@ -41,26 +68,58 @@ def check():
     npss = []
     procs = []
     filenames = []
-    ps_aux_out = subprocess.check_output(['ps aux | grep mcnp'], shell=True)
-    for line in ps_aux_out.split('\n'):
-        if '/bin/sh' not in line and 'grep mcnp' not in line and '.inp' in line:
-            arr = re.findall(r"[-+]?\d*\.\d+|\d+", line)
-            cpu_use = float(arr[1])
-            pid = int(arr[0])
-            file = find_between(line, 'out=', '.out')
-            filenames.extend([file])
-            if 'tasks' in line:
-                procs.extend([float(arr[-1])])
-            else:
-                procs.extend([1])
-            cpu_use = cpu_use / float(arr[-1])
+    mcnpservers = []
+    for mcnpserver in [server(), server(type='remote', name='mercury',
+                                        ip='128.46.92.228', port=2120,
+                                        home_folder='/home/inokuser'),
+                       server(type='remote', name='venus',
+                              ip='128.46.92.228', port=2220,
+                              home_folder='/home/inokuser')]:
+        if mcnpserver.type == 'local':
+            ps_aux_out = subprocess.check_output(['ps aux | grep mcnp'],
+                                                 shell=True)
+        else:
+            ssh = paramiko.SSHClient()
+            print "started paramiko"
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            print "going to connect to the ip"
+            ssh.connect(hostname=mcnpserver.ip, username='inokuser',
+                        password='goldrush1', port=mcnpserver.port)
+            print "connected"
+            sftp_client = ssh.open_sftp()
+            stdin, stdout, stderr = ssh.exec_command('ps aux | grep mcnp')
+            ps_aux_out = stdout.read()
+            ssh.close()
 
-    for filename, i in zip(filenames, range(len(filenames))):
+        read_ps_aux(ps_aux_out, procs, filenames, mcnpservers, mcnpserver, cpu_uses)
+
+    print filenames
+    print mcnpservers
+
+    for filename, i, mcnpserver in zip(filenames, range(len(filenames)),
+                                       mcnpservers):
         dump = 1
         ctm_2 = None
         nps_2 = None
         filestring = ''
-        for line in reversed(open(filename + '.out', 'r').readlines()):
+        print mcnpserver.name
+        if mcnpserver.type == 'local':
+            filelines = reversed(open(filename + '.out', 'r').readlines())
+        else:
+            serverfilename = mcnpserver.home_folder + '/mcnp/active/' + \
+                filename.replace('/home/ahagen/mcnp/active/', '') + '.out'
+            print serverfilename
+            ssh = paramiko.SSHClient()
+            print "started paramiko"
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            print "going to connect to the ip"
+            ssh.connect(hostname=mcnpserver.ip, username='inokuser',
+                        password='goldrush1', port=mcnpserver.port)
+            print "connected"
+            sftp_client = ssh.open_sftp()
+            filelines = reversed(sftp_client.open(serverfilename, 'r')\
+                .readlines())
+        for line in filelines:
             if 'particle' in line:
                 break
             filestring = line.replace('\n', '') + filestring
@@ -84,17 +143,18 @@ def check():
                 ctm_2 = ctm_from_file[-2]
                 nps_2 = nps_from_file[-2]
 
-        # now grab the string from ps aux | grep mcnp
-        ps_aux_out = subprocess.check_output(['ps aux | grep mcnp'], shell=True)
-        for line in ps_aux_out.split('\n'):
-            if filename in line and '/bin/sh' not in line:
-                arr = re.findall(r"[-+]?\d*\.\d+|\d+", line)
-                cpu_use = float(arr[1])
-                pid = int(arr[0])
+        cpu_use = cpu_uses[i]
 
         cpus = float(multiprocessing.cpu_count())
-        now = os.path.getmtime(filename + '.out')
+        if mcnpserver.type == 'remote':
+            now = sftp_client.stat(serverfilename).st_mtime
+        else:
+            now = os.path.getmtime(filename + '.out')
         start_time = now - (ctm_1 * 60.)
+        if mcnpserver.type == 'remote':
+            start_time = now - (ctm_1 * 60.) - (15. * 60.)
+        else:
+            now = os.path.getctime(filename + '.out')
         if nps_2 is not None:
             time_slope = procs[i] * (nps_1 - nps_2) / (60. * (ctm_1 - ctm_2))
             end_time = now + (1.E9 - nps_1) / time_slope
@@ -106,7 +166,11 @@ def check():
         time_slopes.extend([time_slope])
         end_times.extend([end_time])
         cpu_uses.extend([cpu_use])
-    return filenames, cpus, cpu_uses, npss, start_times, time_slopes, end_times, procs
+        if mcnpserver.type == 'remote':
+            ssh.close()
+
+    return filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
+        end_times, procs
 
 class cpu_progress(QProgressBar):
     def __init__(self):

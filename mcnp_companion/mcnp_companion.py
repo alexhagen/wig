@@ -6,6 +6,10 @@ from mcnp_string import mstring
 from renderer import renderer
 from os.path import expanduser
 import geo as mcnpg
+from vapory import *
+import os
+from skimage.filter import sobel
+from scipy.misc import imsave
 
 class mcnp_companion:
     """ The ``mcnp_companion`` object is the base object for an MCNP setup.
@@ -48,6 +52,8 @@ class mcnp_companion:
         self.tally_block = ''
         self.data_block = ''
         self.sdef_num = 1
+        self.light = [LightSource([0, 100, 500], [1.0, 1.0, 1.0])]
+        self.vapory_geos = []
         # now write the intro file
         self.intro_block += self.comment
 
@@ -108,6 +114,17 @@ class mcnp_companion:
             f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
+        scene = Scene(Camera("location", [300, 300, 300], "look_at", [0, 100, 0], 'rotate', [90, 0, 90]),
+                      self.light + [Background("White")] + self.vapory_geos,
+                      included=["colors.inc", "textures.inc", 'glass.inc'])
+        im1 = scene.render(width=1980, height=1080, antialiasing=0.001)
+        im2 = scene.render(width=1980, height=1080, antialiasing=0.001,
+                           quality=0.5)
+        sobelized = np.array([sobel(1.0 * im2[:,:,i]) for i in [0, 1, 2]])
+        outline = np.dstack(3*[255*(sobelized.max(axis=0)==0)])
+        cel_shade = np.minimum(im1, outline)
+        imsave('purple_sphere.png', cel_shade)
+        os.system('eog purple_sphere.png &')
 
     def geo(self, geos=None):
         # initialize a counter
@@ -128,12 +145,13 @@ class mcnp_companion:
                 # add the geo object to the plot
                 if geo.show:
                     self.plot = geo.plot_cmd(self.plot, **geo.plot_cmd_args)
+                    self.vapory_geos.extend([geo.vapory_cmd(*geo.vapory_cmd_args, **geo.vapory_cmd_kwargs)])
                 # increment geo num
                 self.geo_num += 10
-        self.plot.view(45, 235)
-        self.plot.export('some_plot', formats=['pdf'], sizes=['cs'],
-                         customsize=(6., 6.))
-        self.plot.show()
+        #self.plot.view(45, 235)
+        #self.plot.export('some_plot', formats=['pdf'], sizes=['cs'],
+        #                 customsize=(6., 6.))
+        #self.plot.show()
 
     def cell(self, cells=None):
         # initialize a counter
@@ -213,12 +231,21 @@ class mcnp_companion:
         for tally in tallies:
             if tally is not None:
                 # print the tally type card
-                self.tally_block += "f%d%d%s\n" % \
-                    (self.tally_nums[str(tally.card)], tally.card, tally.string)
+                if tally.mesh:
+                    self.tally_block += "fmesh%d%d%s\n" % \
+                        (self.tally_nums[str(tally.card)], tally.card,
+                         tally.string)
+                else:
+                    self.tally_block += "f%d%d%s\n" % \
+                        (self.tally_nums[str(tally.card)], tally.card,
+                         tally.string)
                 # print the tally energy card
-                self.tally_block += "e%d%d %s\n" % \
-                    (self.tally_nums[str(tally.card)], tally.card,
-                     tally.energy_string)
+                if tally.mesh:
+                    pass
+                else:
+                    self.tally_block += "e%d%d %s\n" % \
+                        (self.tally_nums[str(tally.card)], tally.card,
+                         tally.energy_string)
                 # check for multipliers
                 if tally.multiplier:
                     self.tally_block += "fm%d%d %s\n" % \
@@ -238,6 +265,9 @@ class mcnp_companion:
             self.data_block += "sdef    "
             # print the source string
             self.data_block += "%s\n" % (source.string)
+            if source.vapory_cmd is not None:
+                print "adding the source light"
+                self.vapory_geos.extend([source.vapory_cmd(*source.vapory_cmd_args, **source.vapory_cmd_kwargs)])
             # print the distributions
             # for dist in source.dists:
             #    # print the distribution definition
