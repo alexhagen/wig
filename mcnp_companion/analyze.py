@@ -5,6 +5,7 @@ from pym import func as pym
 from pyg.threed import pyg3d
 import numpy as np
 from pyg.colors import pu as puc
+import os
 
 class tally(object):
     """ A ``tally`` object holds data from a tally.
@@ -56,10 +57,23 @@ class tally(object):
             self.shape = shape
             return self
 
-def find_between( s, first, last ):
+class meshtal(object):
+    def __init__(self, xs, ys, zs, Es, phis, u_phis, name=None, field=None):
+        self.xs = xs
+        self.ys = ys
+        self.zs = zs
+        self.Es = Es
+        self.phis = phis
+        self.u_phis = u_phis
+        self.name = name
+
+def find_between( s, first, last=None):
     try:
         start = s.index( first ) + len( first )
-        end = s.index( last, start )
+        if last is not None:
+            end = s.index( last, start )
+        else:
+            end = len(s)
         return s[start:end]
     except ValueError:
         return ""
@@ -77,6 +91,7 @@ class analyze(object):
     :param str filename: filename of the ``tallies.out`` file
     """
     def __init__(self, filename):
+        orig_filename = filename
         if '_tallies.out' not in filename:
             filename = filename + '_tallies.out'
         with open(filename, 'r') as f:
@@ -90,7 +105,53 @@ class analyze(object):
             tallies.extend([tally(total, u_total, name,
                                   pym.curve(e_bins, vals, u_y=u_vals,
                                             name=name, data='binned'))])
+        if '_tallies.out' not in orig_filename:
+            meshtal_filename = orig_filename + '_meshtal.out'
+        if os.path.exists(meshtal_filename):
+            with open(meshtal_filename, 'r') as f:
+                file_string = f.read()
+
+            meshtals = list()
+            strings = file_string.split('Mesh Tally Number')
+            for string in strings[1:]:
+                E_bins, xs, ys, zs, phis, u_phis = \
+                    self.import_meshtal_section(string)
+                tallies.extend(meshtal(xs, ys, zs, phis, u_phis))
         self.tallies = tallies
+
+    def import_meshtal_section(self, section):
+        string = section
+        name = string.split('\n')[1].strip()
+        x_bins_string = find_between(string, "X direction:", "Y direction")
+        y_bins_string = find_between(string, "Y direction:", "Z direction")
+        z_bins_string = find_between(string, "Z direction:", "Energy bin")
+        E_bins_string = find_between(string, "Energy bin boundaries:", "Energy")
+        x_bins_string = ' '.join(x_bins_string.split('\n'))
+        x_bins = x_bins_string.split()
+        x_bins = [float(bin) for bin in x_bins]
+        y_bins_string = ' '.join(y_bins_string.split('\n'))
+        y_bins = y_bins_string.split()
+        y_bins = [float(bin) for bin in y_bins]
+        z_bins_string = ' '.join(z_bins_string.split('\n'))
+        z_bins = z_bins_string.split()
+        z_bins = [float(bin) for bin in z_bins]
+        E_bins_string = ' '.join(E_bins_string.split('\n'))
+        E_bins = E_bins_string.split()
+        E_bins = [float(bin) for bin in E_bins]
+        val_string = find_between(string, 'Rel Error')
+        vals = []
+        u_vals = []
+        for line in val_string.split('\n')[1:-1]:
+            line_vals = ','.join(line.split())
+            line_vals = [float(lv) for lv in line_vals.split(',')]
+            val = line_vals[-2]
+            u_val = line_vals[-1]
+            vals.extend([val])
+            u_vals.extend([u_val])
+        vals = np.array(vals)
+        u_vals = np.array(u_vals)
+        vals.reshape((len(E_bins)-1, len(x_bins)-1, len(y_bins)-1, len(z_bins)-1))
+        return E_bins, x_bins, y_bins, z_bins, vals, u_vals
 
     def import_tally_section(self, section):
         string = section
