@@ -18,12 +18,9 @@ Simulation Constructor Methods
 Analysis methods
 ~~~~~~~~~~~~~~~~
 
-.. autoclass:: mcnp_companion.analyze.analyze
+.. automodule:: mcnp_companion.analyze
   :members:
-
-.. autoclass:: mcnp_companion.analyze.tally
-  :members:
-  :undoc-members:
+  :show-inheritance:
 
 Indices and tables
 ==================

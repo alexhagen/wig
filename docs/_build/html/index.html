@@ -123,12 +123,13 @@ important</li>
 <span id="simulation-constructor-methods"></span><h3>Simulation Constructor Methods<a class="headerlink" href="#module-mcnp_companion.mcnp_companion" title="Permalink to this headline">¶</a></h3>
 <p>vapory/__init__.py</p>
 </div>
-<div class="section" id="analysis-methods">
-<h3>Analysis methods<a class="headerlink" href="#analysis-methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-mcnp_companion.analyze">
+<span id="analysis-methods"></span><h3>Analysis methods<a class="headerlink" href="#module-mcnp_companion.analyze" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="mcnp_companion.analyze.analyze">
 <em class="property">class </em><code class="descclassname">mcnp_companion.analyze.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/analyze.html#analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.analyze.analyze" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">analyze</span></code> goes through an output file and checks for tallies.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p><code class="docutils literal"><span class="pre">analyze</span></code> goes through an output file and checks for tallies.</p>
 <p>An <code class="docutils literal"><span class="pre">analyze</span></code> object will hold <code class="docutils literal"><span class="pre">tally</span></code> objects in a list, one for each of
 the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
 tally file through mcnp.  Tallies printed on the <code class="docutils literal"><span class="pre">.out</span></code> file currently do
@@ -150,7 +151,8 @@ not have support.</p>
 <dl class="class">
 <dt id="mcnp_companion.analyze.tally">
 <em class="property">class </em><code class="descclassname">mcnp_companion.analyze.</code><code class="descname">tally</code><span class="sig-paren">(</span><em>y</em>, <em>u_y</em>, <em>name=None</em>, <em>spectrum=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/analyze.html#tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.analyze.tally" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <code class="docutils literal"><span class="pre">tally</span></code> object holds data from a tally.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A <code class="docutils literal"><span class="pre">tally</span></code> object holds data from a tally.</p>
 <p>The tally object holds the total nps, the error in total nps, the name,
 and the spectrum data from an f4 tally, imported using the <code class="docutils literal"><span class="pre">analyze</span></code>
 class.  The location and shape can also be set with external functions.</p>
@@ -212,7 +214,7 @@ hold the bin height and bin left edges, respectively.</li>
 <li><a class="reference internal" href="#proposal-for-a-generation-script">Proposal for a generation script</a></li>
 <li><a class="reference internal" href="#class-documentation">Class Documentation</a><ul>
 <li><a class="reference internal" href="#module-mcnp_companion.mcnp_companion">Simulation Constructor Methods</a></li>
-<li><a class="reference internal" href="#analysis-methods">Analysis methods</a></li>
+<li><a class="reference internal" href="#module-mcnp_companion.analyze">Analysis methods</a></li>
 </ul>
 </li>
 </ul>
