@@ -1,8 +1,7 @@
 import time
 import notify2 as n
-from daemon import Daemon
 
-class mcnpdaemon(Daemon):
+class mcnpdaemon():
     def set_notification_daemon(self, notification):
         notification.show()
         return self
