@@ -47,7 +47,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pyg.colors</span> <span class="kn">import</span> <span class="n">pu</span> <span class="k">as</span> <span class="n">puc</span>
 
-<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../index.html#mcnp_companion.analyze.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../mcnp_companion.analyze.html#mcnp_companion.analyze.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A ``tally`` object holds data from a tally.</span>
 
 <span class="sd">    The tally object holds the total nps, the error in total nps, the name,</span>
@@ -97,15 +97,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
             <span class="k">return</span> <span class="bp">self</span></div>
 
-<span class="k">def</span> <span class="nf">find_between</span><span class="p">(</span> <span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span> <span class="p">):</span>
+<div class="viewcode-block" id="find_between"><a class="viewcode-back" href="../../mcnp_companion.analyze.html#mcnp_companion.analyze.find_between">[docs]</a><span class="k">def</span> <span class="nf">find_between</span><span class="p">(</span> <span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span> <span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">start</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">first</span> <span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span> <span class="n">first</span> <span class="p">)</span>
         <span class="n">end</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">last</span><span class="p">,</span> <span class="n">start</span> <span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="analyze"><a class="viewcode-back" href="../../index.html#mcnp_companion.analyze.analyze">[docs]</a><span class="k">class</span> <span class="nc">analyze</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="analyze"><a class="viewcode-back" href="../../mcnp_companion.analyze.html#mcnp_companion.analyze.analyze">[docs]</a><span class="k">class</span> <span class="nc">analyze</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ``analyze`` goes through an output file and checks for tallies.</span>
 
 <span class="sd">    An ``analyze`` object will hold ``tally`` objects in a list, one for each of</span>
@@ -131,7 +131,7 @@
                                             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">))])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span> <span class="o">=</span> <span class="n">tallies</span>
 
-    <span class="k">def</span> <span class="nf">import_tally_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+<div class="viewcode-block" id="analyze.import_tally_section"><a class="viewcode-back" href="../../mcnp_companion.analyze.html#mcnp_companion.analyze.analyze.import_tally_section">[docs]</a>    <span class="k">def</span> <span class="nf">import_tally_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="n">section</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="c1"># find the string between et and t</span>
@@ -152,7 +152,7 @@
         <span class="n">vals</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">u_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">u_vals</span><span class="p">)</span>
         <span class="n">u_total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">*</span> <span class="n">u_total</span>
-        <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">u_total</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">e_bins</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">u_vals</span></div>
+        <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">u_total</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">e_bins</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">u_vals</span></div></div>
 </pre></div>
 
           </div>
