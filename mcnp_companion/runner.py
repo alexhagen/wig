@@ -1,6 +1,5 @@
 import os
 import subprocess
-from mcnpdaemon import mcnpdaemon
 import notify2 as n
 from os.path import expanduser
 

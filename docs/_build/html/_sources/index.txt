@@ -9,7 +9,7 @@
 Class Documentation
 -------------------
 
-.. include:: _pages/mcnp_companion.rst
+.. include:: mcnp_companion.rst
 
 Indices and tables
 ==================
