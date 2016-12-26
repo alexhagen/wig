@@ -39,6 +39,8 @@
           <div class="body" role="main">
             
   <h1>Source code for mcnp_companion.cell</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">matl</span> <span class="kn">as</span> <span class="nn">mcnpm</span>
+
 <div class="viewcode-block" id="cell"><a class="viewcode-back" href="../../mcnp_companion.cell.html#mcnp_companion.cell.cell">[docs]</a><span class="k">class</span> <span class="nc">cell</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -47,7 +49,38 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;c --- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comment</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="n">geo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">id</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="cell.air"><a class="viewcode-back" href="../../mcnp_companion.cell.html#mcnp_companion.cell.cell.air">[docs]</a>    <span class="k">def</span> <span class="nf">air</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; ``air`` is the common material for the universe.</span>
+
+<span class="sd">        ``air`` is a static method that returns the PNNL compendium defined</span>
+<span class="sd">        air material for use as universe materials, or others.  It should be</span>
+<span class="sd">        decided whether to use this class or the materials class as a</span>
+<span class="sd">        repository for materials.</span>
+
+<span class="sd">        .. todo:: use this or materials class for repo for pnnl defined</span>
+<span class="sd">            materials?</span>
+
+<span class="sd">        :returns: ``mcnp_companion.materials.air``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">mcnpm</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.001205</span><span class="p">,</span> <span class="n">atom_perc</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">0.000151</span><span class="p">),</span>
+                                                   <span class="p">(</span><span class="s1">&#39;N-14&#39;</span><span class="p">,</span> <span class="mf">0.784437</span><span class="p">),</span>
+                                                   <span class="p">(</span><span class="s1">&#39;O-16&#39;</span><span class="p">,</span> <span class="mf">0.210750</span><span class="p">),</span>
+                                                   <span class="p">(</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="mf">0.004671</span><span class="p">)],</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;air&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cell.universe"><a class="viewcode-back" href="../../mcnp_companion.cell.html#mcnp_companion.cell.cell.universe">[docs]</a>    <span class="k">def</span> <span class="nf">universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="n">air</span><span class="p">):</span>
+        <span class="c1"># get all the geometry added to the scene</span>
+        <span class="c1"># then, iterate through and subtract all the geometry that isnt an</span>
+        <span class="c1"># inner wall</span>
+        <span class="k">for</span> <span class="n">current_geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">current_geo</span><span class="o">.</span><span class="n">inner_wall</span><span class="p">:</span>
+                <span class="n">pg</span> <span class="o">-=</span> <span class="n">current_geo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="n">pg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span></div></div>
 </pre></div>
 
           </div>

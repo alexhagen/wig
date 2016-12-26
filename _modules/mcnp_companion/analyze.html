@@ -50,7 +50,7 @@
 <div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../mcnp_companion.analyze.html#mcnp_companion.analyze.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A ``tally`` object holds data from a tally.</span>
 
-<span class="sd">    The tally object holds the total nps, the error in total nps, the name,</span>
+<span class="sd">    The ``tally`` object holds the total nps, the error in total nps, the name,</span>
 <span class="sd">    and the spectrum data from an f4 tally, imported using the ``analyze``</span>
 <span class="sd">    class.  The location and shape can also be set with external functions.</span>
 
@@ -68,7 +68,7 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">if</span> <span class="n">spectrum</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fx</span> <span class="o">=</span> <span class="n">fx</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">spectrum</span>
 
         <span class="k">def</span> <span class="nf">set_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Set the location of the current tally.</span>
@@ -118,6 +118,8 @@
 <span class="sd">    :param str filename: filename of the ``tallies.out`` file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;_tallies.out&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;_tallies.out&#39;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">file_string</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
