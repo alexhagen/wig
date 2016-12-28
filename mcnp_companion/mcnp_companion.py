@@ -10,6 +10,7 @@ from vapory import *
 import os
 from skimage.filter import sobel
 from scipy.misc import imsave
+from pyb import pyb
 
 class mcnp_companion:
     """ The ``mcnp_companion`` object is the base object for an MCNP setup.
@@ -54,6 +55,8 @@ class mcnp_companion:
         self.sdef_num = 1
         self.light = [LightSource([0, 100, 500], [1.0, 1.0, 1.0])]
         self.vapory_geos = []
+        self.bscene = pyb.pyb()
+        self.bscene.sun()
         # now write the intro file
         self.intro_block += self.comment
 
@@ -68,6 +71,8 @@ class mcnp_companion:
 
     def refresh_geo(self):
         self.geo_block = ''
+        self.bscene = pyb.pyb()
+        self.bscene.sun()
 
     def refresh_cell(self):
         self.cell_block = ''
@@ -81,13 +86,13 @@ class mcnp_companion:
     def refresh_matl(self):
         self.matl_block = ''
 
-    def run(self, remote=False, sys='linux'):
-        self.write()
+    def run(self, remote=False, sys='linux', **kwargs):
+        self.write(**kwargs)
 
         self._runner = runner(self.filename, self.command, remote, sys,
                               renderer=self.renderer)
 
-    def write(self):
+    def write(self, render_target=None):
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
             intro = textwrap.TextWrapper(initial_indent='c ',
@@ -113,16 +118,20 @@ class mcnp_companion:
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
         scene = Scene(Camera("location", [300, 300, 300], "look_at", [0, 100, 0], 'rotate', [90, 0, 90]),
-                      self.light + [Background("White")] + self.vapory_geos,
-                      included=["colors.inc", "textures.inc", 'glass.inc'])
-        im1 = scene.render(width=1980, height=1080, antialiasing=0.001)
-        im2 = scene.render(width=1980, height=1080, antialiasing=0.001,
-                           quality=0.5)
-        sobelized = np.array([sobel(1.0 * im2[:,:,i]) for i in [0, 1, 2]])
-        outline = np.dstack(3*[255*(sobelized.max(axis=0)==0)])
-        cel_shade = np.minimum(im1, outline)
-        imsave('purple_sphere.png', cel_shade)
-        os.system('eog purple_sphere.png &')
+                   self.light + [Background("White")] + self.vapory_geos,
+                   included=["colors.inc", "textures.inc", 'glass.inc'])
+        # im1 = scene.render(width=1980, height=1080, antialiasing=0.001)
+        # im2 = scene.render(width=1980, height=1080, antialiasing=0.001,
+        #                 quality=0.5)
+        # sobelized = np.array([sobel(1.0 * im2[:,:,i]) for i in [0, 1, 2]])
+        # outline = np.dstack(3*[255*(sobelized.max(axis=0)==0)])
+        # cel_shade = np.minimum(im1, outline)
+        # imsave('purple_sphere.png', cel_shade)
+        # os.system('eog purple_sphere.png &')
+        if render_target is not None:
+            self.bscene.look_at(target=render_target)
+        self.bscene.run(filename=self.filename + '_setup.png')
+        self.bscene.show()
 
     def geo(self, geos=None):
         # initialize a counter
@@ -144,6 +153,7 @@ class mcnp_companion:
                 if geo.show:
                     self.plot = geo.plot_cmd(self.plot, **geo.plot_cmd_args)
                     self.vapory_geos.extend([geo.vapory_cmd(*geo.vapory_cmd_args, **geo.vapory_cmd_kwargs)])
+                    geo.blender_cmd(self.bscene, **geo.blender_cmd_args)
                 # increment geo num
                 self.geo_num += 10
         #self.plot.view(45, 235)

@@ -4,6 +4,7 @@ import numpy as np
 from vapory import Box, Sphere, Cylinder, Pigment
 from colour import Color
 from transforms3d import euler, axangles
+from pyb import pyb
 
 class geo:
     """ some docstring
@@ -44,8 +45,8 @@ class geo:
             right = pseudogeo(right)
         return left | right
 
-    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None,
-            color='gray', show=True, vapory_args=[], inner_wall=False):
+    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None, name=None,
+            color='gray', alpha=1.0, show=True, vapory_args=[], inner_wall=False):
         self.show = show
         self.sense = -1
         self.id = id
@@ -86,11 +87,14 @@ class geo:
         self.vapory_cmd_args =  [(x1, y1, z1), (x2, y2, z2),
                                  Pigment('color', Color(color).rgb)]
         self.vapory_cmd_kwargs = {}
+        self.blender_cmd = pyb.pyb.rpp
+        self.blender_cmd_args = {"c": c, "l": l, "name": id, "color": color,
+                                 "alpha": alpha}
         self.faces = [1, 2, 3, 4, 5, 6]
         return self
 
     def box(self, v=None, a1=None, a2=None, a3=None, id=None, color='gray',
-            show=True, vapory_args=[], inner_wall=False):
+            show=True, vapory_args=[], inner_wall=False, alpha=1.0):
         self.show = show
         self.sense = -1
         self.id = id
@@ -115,10 +119,22 @@ class geo:
                                     a3 / np.sqrt(np.sum(np.square(a3)))])
         self.vapory_cmd_args = [v, top_corner]
         self.vapory_cmd_kwargs = {}
+        c = np.array(v) + np.array(a1) / 2. + np.array(a2) / 2. + np.array(a3) / 2.
+        l = np.array(a1) + np.array(a2) + np.array(a3)
+        v = np.array(v)
+        a1 = np.array(a1)
+        a2 = np.array(a2)
+        a3 = np.array(a3)
+        verts = [tuple(v), tuple(v + a2), tuple(v + a3), tuple(v + a2 + a3),
+                 tuple(v + a1), tuple(v + a1 + a2), tuple(v + a1 + a3),
+                 tuple(v + a1 + a2 + a3)]
+        self.blender_cmd = pyb.pyb.rpp
+        self.blender_cmd_args = {"name": id, "color": color,
+                                 "alpha": alpha, "verts": verts}
         return self
 
     def sph(self, c=None, r=None, id=None, color='gray', show=True,
-            vapory_args=[], inner_wall=False):
+            vapory_args=[], inner_wall=False, alpha=1.0):
         self.show = show
         self.sense = -1
         self.id = id
@@ -133,10 +149,14 @@ class geo:
         self.vapory_cmd = Sphere
         self.vapory_cmd_args = [c, r, Pigment('color', Color(color).rgb)]
         self.vapory_cmd_kwargs = {}
+        self.blender_cmd = pyb.pyb.sph
+        self.blender_cmd_args = {"c": c, "r": r, "name": id, "color": color,
+                                 "alpha": alpha}
         return self
 
     def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None,
-            color='gray', show=True, vapory_args=[], inner_wall=False):
+            color='gray', show=True, vapory_args=[], inner_wall=False,
+            alpha=1.0):
         self.show = show
         self.sense = -1
         h = [0, 0, 0]
@@ -159,6 +179,11 @@ class geo:
         cap_point = list(np.array(c) + np.array(h))
         self.vapory_cmd_args = [c, cap_point, r] #+ vapory_args
         self.vapory_cmd_kwargs = {}
+        direction = h.index(max(h))
+        self.blender_cmd = pyb.pyb.rcc
+        self.blender_cmd_args = {"c": c, "r": r, "h": max(h), "name": id,
+                                 "color": color, "direction": direction,
+                                 "alpha": alpha}
         return self
 
     def cone(self, c=None, dir='+z', h=None, r=None, id=None, inner_wall=False):

@@ -105,6 +105,7 @@ class analyze(object):
             tallies.extend([tally(total, u_total, name,
                                   pym.curve(e_bins, vals, u_y=u_vals,
                                             name=name, data='binned'))])
+        '''
         if '_tallies.out' not in orig_filename:
             meshtal_filename = orig_filename + '_meshtal.out'
         if os.path.exists(meshtal_filename):
@@ -117,6 +118,7 @@ class analyze(object):
                 E_bins, xs, ys, zs, phis, u_phis = \
                     self.import_meshtal_section(string)
                 tallies.extend(meshtal(xs, ys, zs, phis, u_phis))
+        '''
         self.tallies = tallies
 
     def import_meshtal_section(self, section):
