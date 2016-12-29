@@ -25,8 +25,6 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="MCNP Companion 0.0.1a documentation" href="index.html" />
-    <link rel="next" title="mcnp_companion.matl module" href="mcnp_companion.matl.html" />
-    <link rel="prev" title="mcnp_companion.cell module" href="mcnp_companion.cell.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -41,7 +39,47 @@
             
   <div class="section" id="module-mcnp_companion.geo">
 <span id="mcnp-companion-geo-module"></span><h1>mcnp_companion.geo module<a class="headerlink" href="#module-mcnp_companion.geo" title="Permalink to this headline">¶</a></h1>
-<p>vapory/__init__.py</p>
+<dl class="class">
+<dt id="mcnp_companion.geo.geo">
+<em class="property">class </em><code class="descclassname">mcnp_companion.geo.</code><code class="descname">geo</code><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo" title="Permalink to this definition">¶</a></dt>
+<dd><p>some docstring</p>
+<dl class="method">
+<dt id="mcnp_companion.geo.geo.box">
+<code class="descname">box</code><span class="sig-paren">(</span><em>v=None</em>, <em>a1=None</em>, <em>a2=None</em>, <em>a3=None</em>, <em>id=None</em>, <em>color='gray'</em>, <em>show=True</em>, <em>vapory_args=[]</em>, <em>inner_wall=False</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo.box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="mcnp_companion.geo.geo.cone">
+<code class="descname">cone</code><span class="sig-paren">(</span><em>c=None</em>, <em>dir='+z'</em>, <em>h=None</em>, <em>r=None</em>, <em>id=None</em>, <em>inner_wall=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo.cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo.cone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="mcnp_companion.geo.geo.rcc">
+<code class="descname">rcc</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>r=None</em>, <em>id=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em>, <em>color='gray'</em>, <em>show=True</em>, <em>vapory_args=[]</em>, <em>inner_wall=False</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo.rcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo.rcc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="mcnp_companion.geo.geo.rpp">
+<code class="descname">rpp</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>id=None</em>, <em>name=None</em>, <em>color='gray'</em>, <em>alpha=1.0</em>, <em>show=True</em>, <em>vapory_args=[]</em>, <em>inner_wall=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo.rpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo.rpp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="mcnp_companion.geo.geo.sph">
+<code class="descname">sph</code><span class="sig-paren">(</span><em>c=None</em>, <em>r=None</em>, <em>id=None</em>, <em>color='gray'</em>, <em>show=True</em>, <em>vapory_args=[]</em>, <em>inner_wall=False</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#geo.sph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.geo.sph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mcnp_companion.geo.group">
+<em class="property">class </em><code class="descclassname">mcnp_companion.geo.</code><code class="descname">group</code><span class="sig-paren">(</span><em>content</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="mcnp_companion.geo.pseudogeo">
+<em class="property">class </em><code class="descclassname">mcnp_companion.geo.</code><code class="descname">pseudogeo</code><span class="sig-paren">(</span><em>geo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mcnp_companion/geo.html#pseudogeo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mcnp_companion.geo.pseudogeo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
@@ -53,8 +91,6 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="mcnp_companion.cell.html" title="previous chapter">mcnp_companion.cell module</a></li>
-      <li>Next: <a href="mcnp_companion.matl.html" title="next chapter">mcnp_companion.matl module</a></li>
   </ul></li>
 </ul>
 </div>

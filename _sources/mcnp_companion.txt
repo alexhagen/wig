@@ -1,6 +1,11 @@
 mcnp_companion package
 ======================
 
+.. automodule:: mcnp_companion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -8,10 +13,3 @@ Subpackages
 
     mcnp_companion.mcnp_companion
 
-Module contents
----------------
-
-.. automodule:: mcnp_companion
-    :members:
-    :undoc-members:
-    :show-inheritance:
