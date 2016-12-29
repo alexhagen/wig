@@ -5,10 +5,6 @@
 
 .. include:: README.rst
 
-
-Class Documentation
--------------------
-
 .. include:: mcnp_companion.rst
 
 Indices and tables
