@@ -1,26 +1,7 @@
-mcnp_companion.mcnp_companion package
-=====================================
+mcnp_companion.mcnp_companion module
+====================================
 
 .. automodule:: mcnp_companion.mcnp_companion
     :members:
     :undoc-members:
     :show-inheritance:
-
-Submodules
-----------
-
-.. toctree::
-
-   mcnp_companion.mcnp_companion.analyze
-   mcnp_companion.mcnp_companion.cell
-   mcnp_companion.mcnp_companion.geo
-   mcnp_companion.mcnp_companion.matl
-   mcnp_companion.mcnp_companion.mcnp_companion
-   mcnp_companion.mcnp_companion.mcnp_string
-   mcnp_companion.mcnp_companion.mcnpdaemon
-   mcnp_companion.mcnp_companion.phys
-   mcnp_companion.mcnp_companion.renderer
-   mcnp_companion.mcnp_companion.runner
-   mcnp_companion.mcnp_companion.source
-   mcnp_companion.mcnp_companion.tally
-
