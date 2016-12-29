@@ -4,6 +4,8 @@ docs: FORCE
 	MSG="$(shell git log -1 --pretty=%B | tr -d '\n')"
 	@echo $(MSG)
 	pandoc README.md -o docs/README.rst; \
+	cd docs/; \
+	sphinx-apidoc -e -f -M -o ./ ../mcnp_companion/; \
 	cd ~/pages/mcnp_companion/; \
 	git rm -r *; \
 	cd ~/code/mcnp_companion/docs/; \
