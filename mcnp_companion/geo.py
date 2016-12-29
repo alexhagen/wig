@@ -143,6 +143,7 @@ class geo:
         self.string = "sph %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], r)
         self.faces = [1]
+        self.r = r
         self.plot_cmd = threed.pyg3d.sphere
         self.plot_cmd_args = {"center": c, "r": r, "color": color,
                               "lines": True, "planes": 0.5}

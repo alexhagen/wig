@@ -3,3 +3,4 @@
 .DS_Store
 *.out_temp
 *.png
+_build/

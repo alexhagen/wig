@@ -130,7 +130,11 @@ class mcnp_companion:
         # os.system('eog purple_sphere.png &')
         if render_target is not None:
             self.bscene.look_at(target=render_target)
-        self.bscene.run(filename=self.filename + '_setup.png')
+        self.bscene.run(camera_location=(1.5 * self.universe.r,
+                                         1.5 * self.universe.r,
+                                         self.universe.r),
+                        filename=self.filename + '_setup.png')
+        self.proj_matrix = self.bscene.proj_matrix
         self.bscene.show()
 
     def geo(self, geos=None):
@@ -154,6 +158,8 @@ class mcnp_companion:
                     self.plot = geo.plot_cmd(self.plot, **geo.plot_cmd_args)
                     self.vapory_geos.extend([geo.vapory_cmd(*geo.vapory_cmd_args, **geo.vapory_cmd_kwargs)])
                     geo.blender_cmd(self.bscene, **geo.blender_cmd_args)
+                if 'universe' in geo.id:
+                    self.universe = geo
                 # increment geo num
                 self.geo_num += 10
         #self.plot.view(45, 235)
@@ -274,6 +280,7 @@ class mcnp_companion:
             self.data_block += "%s\n" % (source.string)
             if source.vapory_cmd is not None:
                 self.vapory_geos.extend([source.vapory_cmd(*source.vapory_cmd_args, **source.vapory_cmd_kwargs)])
+                source.blender_cmd(self.bscene, **source.blender_cmd_args)
             # print the distributions
             # for dist in source.dists:
             #    # print the distribution definition
