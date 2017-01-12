@@ -86,13 +86,13 @@ class mcnp_companion:
     def refresh_matl(self):
         self.matl_block = ''
 
-    def run(self, remote=False, sys='linux', **kwargs):
+    def run(self, remote=False, sys='linux', blocking=False, **kwargs):
         self.write(**kwargs)
 
         self._runner = runner(self.filename, self.command, remote, sys,
-                              renderer=self.renderer)
+                              renderer=self.renderer, blocking=blocking)
 
-    def write(self, render_target=None):
+    def write(self, camera_location=None, render_target=None, render=True):
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
             intro = textwrap.TextWrapper(initial_indent='c ',
@@ -130,10 +130,11 @@ class mcnp_companion:
         # os.system('eog purple_sphere.png &')
         if render_target is not None:
             self.bscene.look_at(target=render_target)
-        self.bscene.run(camera_location=(1.5 * self.universe.r,
-                                         1.5 * self.universe.r,
-                                         self.universe.r),
-                        filename=self.filename + '_setup.png')
+        if camera_location is None:
+            camera_location = (1.5 * self.universe.r, 1.5 * self.universe.r,
+                               self.universe.r)
+        self.bscene.run(camera_location=camera_location,
+                        filename=self.filename + '_setup.png', render=render)
         self.proj_matrix = self.bscene.proj_matrix
         self.bscene.show()
 

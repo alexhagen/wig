@@ -50,8 +50,15 @@ class source():
         self.vapory_cmd_kwargs = {}
         if positioned:
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
+            self.blender_cmd = pyb.pyb.sph
+            self.blender_cmd_args = {"c": (self.x, self.y, self.z), "r": 1.0,
+                                     "name": id, "color": color,
+                                     "alpha": 1.0, "emis": True}
         elif cell is not None:
             self.string += "cel=%d " % (cell.cell_num)
+            self.blender_cmd = cell.geo.blender_cmd
+            self.blender_cmd_args = cell.geo.blender_cmd_args
+            self.blender_cmd_args["emis"] = True
         if type(spectrum) is type([]):
             self.dists.extend([dist(spectrum[0], spectrum[1], self.dist_num)])
             self.string += 'erg=d%d ' % self.dist_num

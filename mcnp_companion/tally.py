@@ -93,13 +93,16 @@ class tally():
         self.surfaces = []
         if "surfaces" in kwargs:
             for surface in kwargs["surfaces"]:
-                if type(surface) is "float":
+                if isinstance(surface, float):
                     self.surfaces.extend([surface])
+                if isinstance(surface, list):
+                    self.surfaces.extend(surface)
                 elif surface.__class__.__name__ is 'geo':
                     self.surfaces.extend(float(surface.geo_num) +
                                          0.1 * np.array(surface.faces))
+        print kwargs["surfaces"]
+        print self.surfaces
         self.string = (":%s (" % kwargs["particle"] +
-                       "%.1f " * (len(self.surfaces) - 1) +
                        ' '.join("%.1f" % s for s in self.surfaces) +
                        ")")
         return self

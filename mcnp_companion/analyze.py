@@ -24,7 +24,7 @@ class tally(object):
     """
     def __init__(self, y, u_y, name=None, spectrum=None):
         self.y = y
-        self.u_y = y
+        self.u_y = u_y
         if name is not None:
             self.name = name
         if spectrum is not None:
