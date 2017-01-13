@@ -24,14 +24,17 @@ class source():
         self.string = ""
         self.comment = "c --- %s" % id
         types = {"n": 1, "p": 2, "e": 3, "fission": 1}
-        colors = {"n": '#7299C6', "p": "#E3AE24"}
+        colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915'}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
         if direction == '-z' or direction == 'z-':
             self.string += "vec=0 0 -1 dir=1 "
             self.axis = (0, 0, 1)
+        elif direction == '+x' or direction == 'x+':
+            self.string += "vec=1 0 0 dir=1 "
+            self.axis = (1, 0, 0)
         if shape == 'disk' and radius is not None:
-            self.dists.extend([dist([0, radius], [-21, 0], self.dist_num,
+            self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
                                     format='d')])
             self.string += "axs=%d %d %d rad=d%d " % (self.axis[0],
                                                       self.axis[1],
@@ -48,7 +51,7 @@ class source():
         col = Color(color).rgb
         self.vapory_cmd_args = [(0,0,0), col, 'looks_like { sphere { <0,0,0>,1 finish { ambient 1 } } } translate <%6.4f, %6.4f, %6.4f>' % (pos[0], pos[1], pos[2])]
         self.vapory_cmd_kwargs = {}
-        if positioned:
+        if positioned and shape != 'disk':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.blender_cmd = pyb.pyb.sph
             self.blender_cmd_args = {"c": (self.x, self.y, self.z), "r": 1.0,
@@ -78,12 +81,12 @@ class dist():
         self.dist_num = dist_num
         self.dist_string = ''
         if type is None:
-            self.dist_string += 'si%d a ' % (self.dist_num)
+            self.dist_string += 'si%d ' % (self.dist_num)
             for _x in x:
                 self.dist_string += "%15.10e " % (_x)
             self.dist_string = self.dist_string[:-1]
             self.dist_string += '\n'
-            self.dist_string += 'sp%d d ' % (self.dist_num)
+            self.dist_string += 'sp%d ' % (self.dist_num)
             for _y in y:
                 if format is None:
                     self.dist_string += '%15.10e ' % (_y)

@@ -12,6 +12,10 @@ class runner:
         # check in the completed directory, and if there is an out file with
         # exactly the same infile, then, don't run
         self.needs_to_run = True
+        if command == 'polimi':
+            processors = {"local": 1}
+        else:
+            processors = {"local": 3}
         # Then, check the current processes to see if there are any instances
         # running on this machine
 
@@ -23,16 +27,20 @@ class runner:
         if blocking:
             cmd = []
         else:
-            cmd = ["nohup"]
+            cmd = []
 
         cmd.extend([command])
         cmd.extend(['inp=' + filename + '.inp'])
         cmd.extend(['out=' + filename + '.out'])
         cmd.extend(['run=' + filename + '_runtpe'])
         cmd.extend(['mctal=' + filename + '_tallies.out'])
-        cmd.extend(['tasks %d' % processors[remote]])
+        if command == 'polimi':
+            cmd.extend(['DUMN1=' + filename + '_polimi.out'])
+        else:
+            cmd.extend(['tasks %d' % processors[remote]])
         if not blocking:
-            cmd += ' &'
+            pass
+            # cmd.extend(['&'])
         print cmd
         # construct the notification
         notification = n.Notification(command, 'Will now run %s.' % cmd)

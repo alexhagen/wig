@@ -44,6 +44,8 @@ class mcnp_companion:
             self.command = 'mcnp5'
         elif flavor is 'x':
             self.command = 'mcnpx'
+        elif flavor is 'polimi':
+            self.command = 'polimi'
         # initialize all of our blocks
         self.intro_block = ''
         self.geo_block = ''
@@ -61,7 +63,9 @@ class mcnp_companion:
         self.intro_block += self.comment
 
     def set_filename(self, filename):
-        self.filename = expanduser("~") + '/mcnp/active/' + filename
+        path = expanduser("~") + '/mcnp/active/'
+        os.chdir(path)
+        self.filename = filename
 
     def set_comment(self, comment):
         self.comment = ' '.join(comment.split())
@@ -86,13 +90,14 @@ class mcnp_companion:
     def refresh_matl(self):
         self.matl_block = ''
 
-    def run(self, remote=False, sys='linux', blocking=False, **kwargs):
+    def run(self, remote='local', sys='linux', blocking=False, **kwargs):
         self.write(**kwargs)
 
         self._runner = runner(self.filename, self.command, remote, sys,
                               renderer=self.renderer, blocking=blocking)
 
-    def write(self, camera_location=None, render_target=None, render=True):
+    def write(self, camera_location=None, render_target=None, render=True,
+              **kwargs):
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
             intro = textwrap.TextWrapper(initial_indent='c ',
@@ -134,7 +139,8 @@ class mcnp_companion:
             camera_location = (1.5 * self.universe.r, 1.5 * self.universe.r,
                                self.universe.r)
         self.bscene.run(camera_location=camera_location,
-                        filename=self.filename + '_setup.png', render=render)
+                        filename=self.filename + '_setup.png', render=render,
+                        **kwargs)
         self.proj_matrix = self.bscene.proj_matrix
         self.bscene.show()
 

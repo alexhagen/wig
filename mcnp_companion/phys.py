@@ -1,6 +1,6 @@
 class phys():
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
-                 nps=None, ctme=None):
+                 nps=None, ctme=None, polimi=False, polimi_cells=[]):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
         self.comment = "c --- default physics for "
@@ -26,6 +26,8 @@ class phys():
             self.nps(nps)
         if ctme is not None:
             self.ctme(ctme)
+        if polimi:
+            self.polimi(cells=polimi_cells)
 
     def nps(self, num):
         self.string += "nps %e\n" % (num)
@@ -38,4 +40,16 @@ class phys():
     def no_fission(self, cells=None):
         if cells is None:
             self.string += "nonu\n"
+        return self
+
+    def polimi(self, cells):
+        self.string += "ipol 0 0 0 0 2J %d " % len(cells)
+        for cell in cells:
+            if isinstance(cell, int):
+                self.string += "%d " % cell
+            elif cell.__class__.__name__ is 'cell':
+                self.string += "%d " % cell.cell_num
+        self.string = self.string[:-1]
+        self.string += "\n"
+        self.string += "files 21 DUMN1\n"
         return self
