@@ -22,9 +22,10 @@ class tally(object):
         particles going through the volume.  ``spectrum.y`` and ``spectrum.x``
         hold the bin height and bin left edges, respectively.
     """
-    def __init__(self, y, u_y, name=None, spectrum=None):
+    def __init__(self, y, u_y, name=None, spectrum=None, nps=None):
         self.y = y
         self.u_y = u_y
+        self.nps = nps
         if name is not None:
             self.name = name
         if spectrum is not None:
@@ -99,12 +100,14 @@ class analyze(object):
 
         tallies = list()
         strings = file_string.split('tally')
+        self.nps = float(strings[0].split()[5])
+        print "%e" % self.nps
         for string in strings[1:]:
             total, u_total, name, e_bins, vals, u_vals = \
                 self.import_tally_section(string)
             tallies.extend([tally(total, u_total, name,
                                   pym.curve(e_bins, vals, u_y=u_vals,
-                                            name=name, data='binned'))])
+                                            name=name, data='binned'), nps=self.nps)])
         '''
         if '_tallies.out' not in orig_filename:
             meshtal_filename = orig_filename + '_meshtal.out'
