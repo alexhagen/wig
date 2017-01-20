@@ -5,12 +5,22 @@ from vapory import Box, Sphere, Cylinder, Pigment
 from colour import Color
 from transforms3d import euler, axangles
 from pyb import pyb
+from mcnp_companion.mcnp_companion import cell as mcnpce
 
 class geo:
     """ some docstring
     """
     def __init__(self):
         self.bstring = ''
+
+    def cell(self, matl):
+        """ use ``geo.cell(matl)`` to return a cell of this geometry with
+            material ``matl``
+
+            :param matl mcnpm.matl: The material to make this cell
+            :returns: ``mcnpce.cell`` object
+        """
+        return mcnpce.cell(self, matl)
 
     def __sub__(self, right):
         if right is None:
