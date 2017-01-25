@@ -24,10 +24,14 @@ periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
                   "Uuo": 118}
 
 class matl:
-    def __init__(self, rho, atom_perc=None, mass_perc=None, id=None):
+    def __init__(self, rho, atom_perc=None, mass_perc=None, id=None,
+                 color=None, alpha=1.0):
         self.bstring = ''
         self.string = ''
         self.matl_num = 0
+        self.color = color
+        self.alpha = alpha
+        self.id = id
         self.comment = "c --- %s" % (id)
         self.rho = float(rho)
         if atom_perc is not None:

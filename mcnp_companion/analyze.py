@@ -1,9 +1,7 @@
 import copy
 import numpy as np
-#from pyg import twod as pyg
 from pym import func as pym
 from pyg.threed import pyg3d
-import numpy as np
 from pyg.colors import pu as puc
 import os
 

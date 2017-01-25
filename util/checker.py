@@ -36,7 +36,7 @@ filenames = []
 
 def read_ps_aux(outp, procs, filenames, mcnpservers, mcnpserver, cpu_uses):
     for line in outp.split('\n'):
-        if '/bin/sh' not in line and 'grep mcnp' not in line and '.inp' in line:
+        if '/bin/sh' not in line and 'grep' not in line and '.inp' in line:
             arr = re.findall(r"[-+]?\d*\.\d+|\d+", line)
             cpu_use = float(arr[1])
             pid = int(arr[0])
@@ -47,7 +47,7 @@ def read_ps_aux(outp, procs, filenames, mcnpservers, mcnpserver, cpu_uses):
                 procs.extend([float(arr[-1])])
             else:
                 procs.extend([1])
-            cpu_use = cpu_use / float(arr[-1])
+            cpu_use = cpu_use / float(arr[2])
             cpu_uses.extend([cpu_use])
             mcnpservers.extend([mcnpserver])
 
@@ -76,7 +76,7 @@ def check():
                               ip='128.46.92.228', port=2220,
                               home_folder='/home/inokuser')]:
         if mcnpserver.type == 'local':
-            ps_aux_out = subprocess.check_output(['ps aux | grep mcnp'],
+            ps_aux_out = subprocess.check_output(["ps aux | grep 'mcnp\|polimi'"],
                                                  shell=True)
         else:
             ssh = paramiko.SSHClient()
@@ -104,6 +104,7 @@ def check():
         filestring = ''
         print mcnpserver.name
         if mcnpserver.type == 'local':
+            filename = '/home/ahagen/mcnp/active/' + filename
             filelines = reversed(open(filename + '.out', 'r').readlines())
         else:
             serverfilename = mcnpserver.home_folder + '/mcnp/active/' + \

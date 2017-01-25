@@ -1,4 +1,3 @@
-from vapory import *
 from colour import Color
 from pyb import pyb
 
@@ -47,10 +46,6 @@ class source():
                                      "color": color, "direction": direction.replace('-', '').replace('+', ''),
                                      "alpha": 1.0, "emis": True}
         color = '#2EAFA4'
-        self.vapory_cmd = LightSource
-        col = Color(color).rgb
-        self.vapory_cmd_args = [(0,0,0), col, 'looks_like { sphere { <0,0,0>,1 finish { ambient 1 } } } translate <%6.4f, %6.4f, %6.4f>' % (pos[0], pos[1], pos[2])]
-        self.vapory_cmd_kwargs = {}
         if positioned and shape != 'disk':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.blender_cmd = pyb.pyb.sph
@@ -70,6 +65,8 @@ class source():
             self.dists.extend([dist(type='Watt', dist_num=self.dist_num)])
             self.string +=  'erg=d%d ' % self.dist_num
             self.dist_num += 1
+        elif isinstance(spectrum, float):
+            self.string += 'erg=%15.10e ' % spectrum
         self.string = self.string[:-1]
         self.string += '\n'
         for _dist in self.dists:
@@ -96,6 +93,7 @@ class dist():
         elif type is "Maxwellian":
             self.dist_string += 'sp%d -2 %f' % (self.dist_num, a)
         elif type is "Watt":
+            # A and B for U-235 induced fission
             a = 0.988
             b = 2.249
             self.dist_string += 'sp%d -3 %e %e' % (self.dist_num, a, b)

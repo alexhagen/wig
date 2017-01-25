@@ -1,17 +1,18 @@
 import textwrap
 from pyg import threed
 import numpy as np
-from vapory import Box, Sphere, Cylinder, Pigment
 from colour import Color
 from transforms3d import euler, axangles
 from pyb import pyb
-from mcnp_companion.mcnp_companion import cell as mcnpce
+import cell as mcnpce
 
 class geo:
     """ some docstring
     """
     def __init__(self):
         self.bstring = ''
+        self.b_cmds = []
+        self.b_kwargs = []
 
     def cell(self, matl):
         """ use ``geo.cell(matl)`` to return a cell of this geometry with
@@ -31,6 +32,10 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
+        self.b_cmds.extend([right.b_cmds])
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.subtract])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left - right
 
     def __add__(self, right):
@@ -42,6 +47,10 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
+        self.b_cmds.extend([right.b_cmds])
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.union])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left + right
 
     def __or__(self, right):
@@ -53,11 +62,13 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
+        self.b_cmds.extend([right.blender_cmd])
+        self.b_kwargs.extend(right.blender_cmd_args)
+        self.b_cmds.extend([pyb.pyb.union])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left | right
 
-    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None, name=None,
-            color='gray', alpha=1.0, show=True, vapory_args=[], inner_wall=False):
-        self.show = show
+    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None, name=None):
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -90,22 +101,12 @@ class geo:
             l[2] = z[1] - z[0]
         self.string = "rpp %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (x1, x2, y1, y2, z1, z2)
-        self.plot_cmd = threed.pyg3d.cube
-        self.plot_cmd_args = {"center": c, "dx": l[0], "dy": l[1], "dz": l[2],
-                               "color": color, "planes": 0.5, "lines": True}
-        self.vapory_cmd = Box
-        self.vapory_cmd_args =  [(x1, y1, z1), (x2, y2, z2),
-                                 Pigment('color', Color(color).rgb)]
-        self.vapory_cmd_kwargs = {}
         self.blender_cmd = pyb.pyb.rpp
-        self.blender_cmd_args = {"c": c, "l": l, "name": id, "color": color,
-                                 "alpha": alpha}
+        self.blender_cmd_args = {"c": c, "l": l, "name": id}
         self.faces = [1, 2, 3, 4, 5, 6]
         return self
 
-    def box(self, v=None, a1=None, a2=None, a3=None, id=None, color='gray',
-            show=True, vapory_args=[], inner_wall=False, alpha=1.0):
-        self.show = show
+    def box(self, v=None, a1=None, a2=None, a3=None, id=None):
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -115,20 +116,6 @@ class geo:
                        (v[0], v[1], v[2], a1[0], a1[1], a1[2],
                         a2[0], a2[1], a2[2], a3[0], a3[1], a3[2])
         self.faces = [1, 2, 3, 4, 5, 6]
-        self.plot_cmd = threed.pyg3d.box
-        self.plot_cmd_args = {"corner": v, "d1": a1, "d2": a2,
-                              "d3": a3, "color": color, "lines": True,
-                              "planes": 0.5}
-        self.vapory_cmd = Box
-        top_corner = np.array(v) + (np.sqrt(np.sum(np.square(a1))),
-                                    np.sqrt(np.sum(np.square(a2))),
-                                    np.sqrt(np.sum(np.square(a3))))
-        top_corner = list(top_corner)
-        rotangle = euler.mat2euler([a1 / np.sqrt(np.sum(np.square(a1))),
-                                    a2 / np.sqrt(np.sum(np.square(a2))),
-                                    a3 / np.sqrt(np.sum(np.square(a3)))])
-        self.vapory_cmd_args = [v, top_corner]
-        self.vapory_cmd_kwargs = {}
         c = np.array(v) + np.array(a1) / 2. + np.array(a2) / 2. + np.array(a3) / 2.
         l = np.array(a1) + np.array(a2) + np.array(a3)
         v = np.array(v)
@@ -139,13 +126,10 @@ class geo:
                  tuple(v + a1), tuple(v + a1 + a2), tuple(v + a1 + a3),
                  tuple(v + a1 + a2 + a3)]
         self.blender_cmd = pyb.pyb.rpp
-        self.blender_cmd_args = {"name": id, "color": color,
-                                 "alpha": alpha, "verts": verts}
+        self.blender_cmd_args = {"name": id, "verts": verts}
         return self
 
-    def sph(self, c=None, r=None, id=None, color='gray', show=True,
-            vapory_args=[], inner_wall=False, alpha=1.0):
-        self.show = show
+    def sph(self, c=None, r=None, id=None):
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -154,21 +138,11 @@ class geo:
             (c[0], c[1], c[2], r)
         self.faces = [1]
         self.r = r
-        self.plot_cmd = threed.pyg3d.sphere
-        self.plot_cmd_args = {"center": c, "r": r, "color": color,
-                              "lines": True, "planes": 0.5}
-        self.vapory_cmd = Sphere
-        self.vapory_cmd_args = [c, r, Pigment('color', Color(color).rgb)]
-        self.vapory_cmd_kwargs = {}
         self.blender_cmd = pyb.pyb.sph
-        self.blender_cmd_args = {"c": c, "r": r, "name": id, "color": color,
-                                 "alpha": alpha}
+        self.blender_cmd_args = {"c": c, "r": r, "name": id}
         return self
 
-    def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None,
-            color='gray', show=True, vapory_args=[], inner_wall=False,
-            alpha=1.0):
-        self.show = show
+    def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None):
         self.sense = -1
         h = [0, 0, 0]
         if lx is not None:
@@ -182,22 +156,14 @@ class geo:
         self.comment = "c --- %s" % (self.id)
         self.string = "rcc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], h[0], h[1], h[2], r)
-        self.plot_cmd = threed.pyg3d.cylinder
-        self.plot_cmd_args = {"center": c, "h": h, "r": r, "color": color,
-                              "lines": True, "planes": 0.5}
         self.surfaces = [1, 2, 3]
-        self.vapory_cmd = Cylinder
-        cap_point = list(np.array(c) + np.array(h))
-        self.vapory_cmd_args = [c, cap_point, r] #+ vapory_args
-        self.vapory_cmd_kwargs = {}
         direction = h.index(max(h))
         self.blender_cmd = pyb.pyb.rcc
         self.blender_cmd_args = {"c": c, "r": r, "h": max(h), "name": id,
-                                 "color": color, "direction": direction,
-                                 "alpha": alpha}
+                                 "direction": direction}
         return self
 
-    def cone(self, c=None, dir='+z', h=None, r=None, id=None, inner_wall=False):
+    def cone(self, c=None, dir='+z', h=None, r=None, id=None):
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -227,6 +193,14 @@ class pseudogeo:
         self.id = geo.id
         self.geo = geo
         self.nums = [(geo.geo_num, geo.sense)]
+        self.b_cmds = []
+        self.b_kwargs = []
+        if len(geo.b_cmds) == 0:
+            self.b_cmds = [geo.blender_cmd]
+            self.b_kwargs = [geo.blender_cmd_args]
+        else:
+            self.b_cmds = geo.b_cmds
+            self.b_kwargs = geo.b_kwargs
 
     def __sub__(self, right):
         if right is None:
@@ -238,8 +212,16 @@ class pseudogeo:
                 __right = pseudogeo(_right)
                 self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
                 self.id += "_less_%s" % __right.geo.id
+                self.b_cmds.extend([_right.b_cmds])
+                self.b_kwargs.extend(_right.b_kwargs)
+                self.b_cmds.extend([pyb.pyb.subtract])
+                self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
         else:
             self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
+            self.b_cmds.extend([right.b_cmds])
+            self.b_kwargs.extend(right.b_kwargs)
+            self.b_cmds.extend([pyb.pyb.subtract])
+            self.b_kwargs.extend([{"left": self.id, "right": right.id}])
             self.id += "_less_%s" % right.geo.id
         return self
 
@@ -249,6 +231,10 @@ class pseudogeo:
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
         self.nums.extend([(right.geo.geo_num, right.geo.sense)])
+        self.b_cmds.extend([right.b_cmds])
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.union])
+        self.b_kwargs.extend([{"left": self.id, "right": right.id}])
         self.id += "_plus_%s" % right.geo.id
         return self
 

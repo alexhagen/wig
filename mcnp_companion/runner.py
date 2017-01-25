@@ -1,5 +1,6 @@
 import os
 import subprocess
+from subprocess import PIPE
 import notify2 as n
 from os.path import expanduser
 
@@ -52,9 +53,9 @@ class runner:
             # renderer.run()cd
         # now run the actual mcnp
         if self.needs_to_run:
-            p = subprocess.Popen(cmd)#, shell=True)
+            self.p = subprocess.Popen(cmd, stdin=PIPE)#, shell=True)
             if blocking:
-                p.communicate()
+                self.p.communicate()
                 print "waiting for the process to finish"
         # now start a daemon to watch the output file
         # checker = mcnpdaemon('/tmp/mcnpchecker.pid').set_notification_daemon(notification).start()

@@ -1,7 +1,14 @@
 import matl as mcnpm
 
+from pyb import pyb
+
 class cell:
-    def __init__(self, geo=None, matl=None, comment=None):
+    def refresh(self):
+        self.b_cmds = []
+        self.b_kwargs = []
+    
+    def __init__(self, geo=None, matl=None, comment=None, show=True):
+        self.show = show
         if comment is None:
             self.comment = "c --- %s" % (geo.id)
         else:
@@ -9,6 +16,19 @@ class cell:
         self.matl = matl
         self.geo = geo
         self.id = geo.id
+        if show:
+            if len(geo.b_cmds) == 0:
+                self.b_cmds = [geo.blender_cmd]
+                self.b_kwargs = [geo.blender_cmd_args]
+            else:
+                self.b_cmds = geo.b_cmds
+                self.b_kwargs = geo.b_kwargs
+            if matl.color is not None:
+                self.b_cmds.extend([pyb.pyb.flat, pyb.pyb.set_matl])
+                self.b_kwargs.extend([{"name": matl.id, "color": matl.color,
+                                       "alpha": matl.alpha}, {"matl": matl.id,
+                                       "obj": self.id}])
+
         self.cell_num = 0
 
     @staticmethod

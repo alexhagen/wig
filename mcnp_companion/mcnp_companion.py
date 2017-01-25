@@ -6,10 +6,7 @@ from mcnp_string import mstring
 from renderer import renderer
 from os.path import expanduser
 import geo as mcnpg
-from vapory import *
 import os
-from skimage.filter import sobel
-from scipy.misc import imsave
 from pyb import pyb
 
 class mcnp_companion:
@@ -29,7 +26,6 @@ class mcnp_companion:
         or 'polimi' for ``mcnpx-polimi``.  Make sure you alias the binaries to
         those commands or the runner wont work.
     :return: the ``mcnp_companion`` object.
-    :rtype: ``mcnp_companion``
     """
     def __init__(self, comment, filename, flavor='6', render=False):
         self.set_filename(filename)
@@ -55,8 +51,6 @@ class mcnp_companion:
         self.tally_block = ''
         self.data_block = ''
         self.sdef_num = 1
-        self.light = [LightSource([0, 100, 500], [1.0, 1.0, 1.0])]
-        self.vapory_geos = []
         self.bscene = pyb.pyb()
         self.bscene.sun()
         # now write the intro file
@@ -75,8 +69,6 @@ class mcnp_companion:
 
     def refresh_geo(self):
         self.geo_block = ''
-        self.bscene = pyb.pyb()
-        self.bscene.sun()
 
     def refresh_cell(self):
         self.cell_block = ''
@@ -122,17 +114,6 @@ class mcnp_companion:
             f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
-        scene = Scene(Camera("location", [300, 300, 300], "look_at", [0, 100, 0], 'rotate', [90, 0, 90]),
-                   self.light + [Background("White")] + self.vapory_geos,
-                   included=["colors.inc", "textures.inc", 'glass.inc'])
-        # im1 = scene.render(width=1980, height=1080, antialiasing=0.001)
-        # im2 = scene.render(width=1980, height=1080, antialiasing=0.001,
-        #                 quality=0.5)
-        # sobelized = np.array([sobel(1.0 * im2[:,:,i]) for i in [0, 1, 2]])
-        # outline = np.dstack(3*[255*(sobelized.max(axis=0)==0)])
-        # cel_shade = np.minimum(im1, outline)
-        # imsave('purple_sphere.png', cel_shade)
-        # os.system('eog purple_sphere.png &')
         if render_target is not None:
             self.bscene.look_at(target=render_target)
         if camera_location is None:
@@ -142,13 +123,12 @@ class mcnp_companion:
                         filename=self.filename + '_setup.png', render=render,
                         **kwargs)
         self.proj_matrix = self.bscene.proj_matrix
-        self.bscene.show()
+        if render:
+            self.bscene.show()
 
     def geo(self, geos=None):
         # initialize a counter
         self.geo_num = 10
-        # create a renderer
-        self.plot = threed.pyg3d()
         for geo in geos:
             if geo is not None:
                 # print the comment
@@ -161,10 +141,6 @@ class mcnp_companion:
                 # set that geo number to the geometry object
                 geo.num = self.geo_num
                 # add the geo object to the plot
-                if geo.show:
-                    self.plot = geo.plot_cmd(self.plot, **geo.plot_cmd_args)
-                    self.vapory_geos.extend([geo.vapory_cmd(*geo.vapory_cmd_args, **geo.vapory_cmd_kwargs)])
-                    geo.blender_cmd(self.bscene, **geo.blender_cmd_args)
                 if 'universe' in geo.id:
                     self.universe = geo
                 # increment geo num
@@ -177,6 +153,7 @@ class mcnp_companion:
     def cell(self, cells=None):
         # initialize a counter
         self.cell_num = 10
+        self.cells = cells
         for cell in cells:
             if cell is not None:
                 # print the comment
@@ -197,6 +174,14 @@ class mcnp_companion:
                     self.cell_block = self.cell_block[:-1]
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%s" % (cell.geo.string)
+                if cell.show:
+                    print cell.id
+                    for plot_cmd, plot_kwargs in zip(cell.b_cmds, cell.b_kwargs):
+                        if isinstance(plot_cmd, list):
+                            plot_cmd = plot_cmd[0]
+                        plot_cmd(self.bscene, **plot_kwargs)
+                        print plot_cmd
+                        print plot_kwargs
                 # increment the cell num
                 self.cell_block += " imp:n=1\n"
                 self.cell_num += 10
@@ -245,6 +230,7 @@ class mcnp_companion:
         self.phys_block = self.phys_block[:-1]
 
     def tally(self, tallies=None):
+
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1, "7": 1}
         self.tally_block = "prdmp j -15 1 4\n"
@@ -285,12 +271,5 @@ class mcnp_companion:
             self.data_block += "sdef    "
             # print the source string
             self.data_block += "%s\n" % (source.string)
-            if source.vapory_cmd is not None:
-                self.vapory_geos.extend([source.vapory_cmd(*source.vapory_cmd_args, **source.vapory_cmd_kwargs)])
+            if source.blender_cmd is not None:
                 source.blender_cmd(self.bscene, **source.blender_cmd_args)
-            # print the distributions
-            # for dist in source.dists:
-            #    # print the distribution definition
-            #    self.data_block += "     sp%d    " % (self.sdef_num)
-            #    self.data_block += "     %s\n" % (dist.string)
-            #    self.sdef_num += 1
