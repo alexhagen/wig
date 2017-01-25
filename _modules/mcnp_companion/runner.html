@@ -41,6 +41,7 @@
   <h1>Source code for mcnp_companion.runner</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">PIPE</span>
 <span class="kn">import</span> <span class="nn">notify2</span> <span class="kn">as</span> <span class="nn">n</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
 
@@ -93,9 +94,9 @@
             <span class="c1"># renderer.run()cd</span>
         <span class="c1"># now run the actual mcnp</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_to_run</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="c1">#, shell=True)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span><span class="c1">#, shell=True)</span>
             <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
                 <span class="k">print</span> <span class="s2">&quot;waiting for the process to finish&quot;</span></div>
         <span class="c1"># now start a daemon to watch the output file</span>
         <span class="c1"># checker = mcnpdaemon(&#39;/tmp/mcnpchecker.pid&#39;).set_notification_daemon(notification).start()</span>

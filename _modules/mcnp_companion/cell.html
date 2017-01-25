@@ -41,8 +41,15 @@
   <h1>Source code for mcnp_companion.cell</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">matl</span> <span class="kn">as</span> <span class="nn">mcnpm</span>
 
+<span class="kn">from</span> <span class="nn">pyb</span> <span class="kn">import</span> <span class="n">pyb</span>
+
 <div class="viewcode-block" id="cell"><a class="viewcode-back" href="../../mcnp_companion.cell.html#mcnp_companion.cell.cell">[docs]</a><span class="k">class</span> <span class="nc">cell</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cell.refresh"><a class="viewcode-back" href="../../mcnp_companion.cell.html#mcnp_companion.cell.cell.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="p">[]</span></div>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span> <span class="o">=</span> <span class="n">show</span>
         <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;c --- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -50,6 +57,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="n">geo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">b_cmds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="p">[</span><span class="n">geo</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="n">geo</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">b_cmds</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">b_kwargs</span>
+            <span class="k">if</span> <span class="n">matl</span><span class="o">.</span><span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="o">.</span><span class="n">set_matl</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">matl</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">matl</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                                       <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">matl</span><span class="o">.</span><span class="n">alpha</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;matl&quot;</span><span class="p">:</span> <span class="n">matl</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                       <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">}])</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="nd">@staticmethod</span>
