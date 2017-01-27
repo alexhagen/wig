@@ -32,7 +32,7 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
-        self.b_cmds.extend([right.b_cmds])
+        self.b_cmds.extend(right.b_cmds)
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.subtract])
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
@@ -47,7 +47,7 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
-        self.b_cmds.extend([right.b_cmds])
+        self.b_cmds.extend(right.b_cmds)
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
@@ -212,13 +212,13 @@ class pseudogeo:
                 __right = pseudogeo(_right)
                 self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
                 self.id += "_less_%s" % __right.geo.id
-                self.b_cmds.extend([_right.b_cmds])
-                self.b_kwargs.extend(_right.b_kwargs)
+                self.b_cmds.extend(_right.b_cmds)
+                self.b_kwargs.extend([_right.b_kwargs])
                 self.b_cmds.extend([pyb.pyb.subtract])
                 self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
         else:
             self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
-            self.b_cmds.extend([right.b_cmds])
+            self.b_cmds.extend(right.b_cmds)
             self.b_kwargs.extend(right.b_kwargs)
             self.b_cmds.extend([pyb.pyb.subtract])
             self.b_kwargs.extend([{"left": self.id, "right": right.id}])
@@ -231,7 +231,7 @@ class pseudogeo:
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
         self.nums.extend([(right.geo.geo_num, right.geo.sense)])
-        self.b_cmds.extend([right.b_cmds])
+        self.b_cmds.extend(right.b_cmds)
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
         self.b_kwargs.extend([{"left": self.id, "right": right.id}])

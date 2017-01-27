@@ -72,6 +72,8 @@ class mcnp_companion:
 
     def refresh_cell(self):
         self.cell_block = ''
+        self.bscene = pyb.pyb()
+        self.bscene.sun()
 
     def refresh_phys(self):
         self.phys_block = ''
@@ -179,6 +181,7 @@ class mcnp_companion:
                     for plot_cmd, plot_kwargs in zip(cell.b_cmds, cell.b_kwargs):
                         if isinstance(plot_cmd, list):
                             plot_cmd = plot_cmd[0]
+                            print plot_cmd
                         plot_cmd(self.bscene, **plot_kwargs)
                         print plot_cmd
                         print plot_kwargs
