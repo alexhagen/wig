@@ -5,7 +5,10 @@ class source():
 
     def __init__(self, particle='n', pos=None, x=None, y=None, z=None,
                  spectrum=None, shape=None, direction=None, id=None,
-                 radius=None, cell=None):
+                 radius=None, cell=None, show=True, spectrum_type='C'):
+        self.show = show
+        self.blender_cmd = None
+        self.blender_cmd_args = None
         if cell is not None:
             positioned = False
         else:
@@ -54,11 +57,17 @@ class source():
                                      "alpha": 1.0, "emis": True}
         elif cell is not None:
             self.string += "cel=%d " % (cell.cell_num)
-            self.blender_cmd = cell.geo.blender_cmd
-            self.blender_cmd_args = cell.geo.blender_cmd_args
-            self.blender_cmd_args["emis"] = True
+            self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
+            self.dists.extend([dist([0, radius], [-21, 1], self.dist_num, format='d')])
+            self.string += 'rad=d%d ' % (self.dist_num)
+            self.dist_num += 1
+            if self.show:
+                self.blender_cmd = cell.blender_cmd
+                self.blender_cmd_args = cell.blender_cmd_args
+                self.blender_cmd_args["emis"] = True
         if type(spectrum) is type([]):
-            self.dists.extend([dist(spectrum[0], spectrum[1], self.dist_num)])
+            self.dists.extend([dist(spectrum[0], spectrum[1], self.dist_num,
+                               spectrum_type=spectrum_type)])
             self.string += 'erg=d%d ' % self.dist_num
             self.dist_num += 1
         elif particle == "fission":
@@ -74,11 +83,14 @@ class source():
         self.string = self.string[:-1]
 
 class dist():
-    def __init__(self, x=None, y=None, dist_num=None, type=None, format=None):
+    def __init__(self, x=None, y=None, dist_num=None, spectrum_type=None, format=None):
         self.dist_num = dist_num
         self.dist_string = ''
-        if type is None:
-            self.dist_string += 'si%d ' % (self.dist_num)
+        if spectrum_type is None or len(spectrum_type) == 1:
+            if spectrum_type is None:
+                self.dist_string += 'si%d ' % (self.dist_num)
+            else:
+                self.dist_string += 'si%d %s ' % (self.dist_num, spectrum_type)
             for _x in x:
                 self.dist_string += "%15.10e " % (_x)
             self.dist_string = self.dist_string[:-1]
@@ -90,9 +102,9 @@ class dist():
                 elif format == 'd':
                     self.dist_string += '%d ' % (_y)
             self.dist_string = self.dist_string[:-1]
-        elif type is "Maxwellian":
+        elif spectrum_type is "Maxwellian":
             self.dist_string += 'sp%d -2 %f' % (self.dist_num, a)
-        elif type is "Watt":
+        elif spectrum_type is "Watt":
             # A and B for U-235 induced fission
             a = 0.988
             b = 2.249

@@ -6,7 +6,7 @@ class cell:
     def refresh(self):
         self.b_cmds = []
         self.b_kwargs = []
-    
+
     def __init__(self, geo=None, matl=None, comment=None, show=True):
         self.show = show
         if comment is None:

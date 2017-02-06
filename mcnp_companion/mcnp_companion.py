@@ -274,5 +274,5 @@ class mcnp_companion:
             self.data_block += "sdef    "
             # print the source string
             self.data_block += "%s\n" % (source.string)
-            if source.blender_cmd is not None:
+            if source.blender_cmd is not None and source.show:
                 source.blender_cmd(self.bscene, **source.blender_cmd_args)

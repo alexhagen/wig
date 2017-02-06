@@ -13,7 +13,7 @@ class runner:
         # check in the completed directory, and if there is an out file with
         # exactly the same infile, then, don't run
         self.needs_to_run = True
-        if command == 'polimi':
+        if command == 'polimi' or command == 'mcnpx':
             processors = {"local": 1}
         else:
             processors = {"local": 3}
@@ -35,7 +35,7 @@ class runner:
         cmd.extend(['out=' + filename + '.out'])
         cmd.extend(['run=' + filename + '_runtpe'])
         cmd.extend(['mctal=' + filename + '_tallies.out'])
-        if command == 'polimi':
+        if command == 'polimi' or command == 'mcnpx':
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])
         else:
             cmd.extend(['tasks %d' % processors[remote]])
