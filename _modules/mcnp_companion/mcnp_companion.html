@@ -315,7 +315,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;sdef    &quot;</span>
             <span class="c1"># print the source string</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
                 <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">)</span></div></div>
 </pre></div>
 
