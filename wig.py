@@ -9,12 +9,12 @@ import geo as mcnpg
 import os
 from pyb import pyb
 
-class mcnp_companion:
-    """ The ``mcnp_companion`` object is the base object for an MCNP setup.
+class wig:
+    """ The ``wig`` object is the base object for an MCNP setup.
 
-    The ``mcnp_companion`` object is basically the scene in which we create our
-    MCNP geometry, cells, materials, physics, tallies, and other data.  I
-    usually just call it ``scene`` and use it from there.
+    The ``wig`` object is basically the scene in which we create our MCNP
+    geometry, cells, materials, physics, tallies, and other data.  I usually
+    just call it ``scene`` and use it from there.
 
     :param str comment: The comment that will be placed BELOW the first comment
         line of the MCNP deck.
@@ -25,7 +25,7 @@ class mcnp_companion:
     :param str flavor: '6' for ``mcnp6``, '5' for ``mcnp5``, 'x' for ``mcnpx``,
         or 'polimi' for ``mcnpx-polimi``.  Make sure you alias the binaries to
         those commands or the runner wont work.
-    :return: the ``mcnp_companion`` object.
+    :return: the ``wig`` object.
     """
     def __init__(self, comment, filename, flavor='6', render=False):
         self.set_filename(filename)
