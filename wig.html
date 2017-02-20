@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wig &mdash; wig 0.0.1a documentation</title>
+    <title>wig package &mdash; wig 0.0.1a documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="wig 0.0.1a documentation" href="#" />
+    <link rel="top" title="wig 0.0.1a documentation" href="index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -37,41 +37,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="wig">
-<h1>wig<a class="headerlink" href="#wig" title="Permalink to this headline">¶</a></h1>
-<p>MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
-for simulation of neutrons, photons, and electrons. I use this
-extensively for my research, and it does a great job at a very complex
-task. Unfortunately, it&#8217;s a nightmare to use. Basically uncompilable by
-real humans (and not mythical sys-admins), finicky about input decks and
-spaces, and almost completely text only, there are lots of improvements
-that could be made.</p>
-<p>As of now, this package is in a really alpha stage. I think only I can
-use it because of it&#8217;s finickiness. But, it allows for quick (and
-semantic) development of MCNP decks using a <strong>pipeline</strong> method. The
-<strong>pipeline</strong> method will be familiar to those that use MCNP a lot. The
-steps in the pipeline are:</p>
-<ol class="arabic simple">
-<li>Geometry (create <code class="docutils literal"><span class="pre">geo</span></code>s)</li>
-<li>Materials (create <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
-<li>Cells (combine <code class="docutils literal"><span class="pre">geo</span></code>s as needed and apply <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
-<li>Physics (there&#8217;s a pretty hands off way to define the common physics)</li>
-<li>Sources (create <code class="docutils literal"><span class="pre">source</span></code>)</li>
-<li>Tallies (there&#8217;s pretty hands off way for some tally specs now)</li>
-<li>Run</li>
-</ol>
-<p>The pipeline method means that this package is very semantic, so instead
-of just typing in numbers separated by spaces, you actually assign
-variables and document things. You can also script mcnp because of
-python, for example if you wanted to move a source throughout a bunch of
-different simulations. Finally, this code will, if you have the proper
-requirements, render pretty pictures of your simulation.</p>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s learn by doing. Following is a cutesy little example:</p>
-</div>
-</div>
-<div class="section" id="wig-package">
+  <div class="section" id="wig-package">
 <h1>wig package<a class="headerlink" href="#wig-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -211,7 +177,7 @@ material <code class="docutils literal"><span class="pre">matl</span></code></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mcnpm.matl</strong> (<a class="reference internal" href="wig.html#wig.matl.matl" title="wig.matl.matl"><em>matl</em></a>) &#8211; The material to make this cell</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mcnpm.matl</strong> (<a class="reference internal" href="#wig.matl.matl" title="wig.matl.matl"><em>matl</em></a>) &#8211; The material to make this cell</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnpce.cell</span></code> object</td>
 </tr>
@@ -524,46 +490,6 @@ those commands or the runner wont work.</li>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wig" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="contents">
-<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
-</div>
-</div>
-<div class="section" id="todos">
-<h2>ToDos<a class="headerlink" href="#todos" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-todo admonition">
-<p class="first admonition-title">Todo</p>
-<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
-</div>
-<p class="todo-source">(The <a class="reference internal" href="#index-0"><em>original entry</em></a> is located in  /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
-<div class="admonition-todo admonition">
-<p class="first admonition-title">Todo</p>
-<p class="last">use this or materials class for repo for pnnl defined
-materials?</p>
-</div>
-<p class="todo-source">(The <a class="reference internal" href="#index-1"><em>original entry</em></a> is located in  /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
-<div class="admonition-todo admonition">
-<p class="first admonition-title">Todo</p>
-<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
-</div>
-<p class="todo-source">(The <a class="reference internal" href="wig.html#index-0"><em>original entry</em></a> is located in  /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
-<div class="admonition-todo admonition">
-<p class="first admonition-title">Todo</p>
-<p class="last">use this or materials class for repo for pnnl defined
-materials?</p>
-</div>
-<p class="todo-source">(The <a class="reference internal" href="wig.html#index-1"><em>original entry</em></a> is located in  /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
-</ul>
-</div>
-</div>
 
 
           </div>
@@ -571,13 +497,9 @@ materials?</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">wig</a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wig-package">wig package</a><ul>
+<li><a class="reference internal" href="#">wig package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-wig.analyze">wig.analyze module</a></li>
 <li><a class="reference internal" href="#module-wig.cell">wig.cell module</a></li>
@@ -594,23 +516,18 @@ materials?</p>
 <li><a class="reference internal" href="#module-wig">Module contents</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
-<li><a class="reference internal" href="#contents">Contents:</a></li>
-<li><a class="reference internal" href="#todos">ToDos</a></li>
-</ul>
-</li>
 </ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="#">Documentation overview</a><ul>
+  <li><a href="index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/wig.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -639,7 +556,7 @@ materials?</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/wig.txt"
           rel="nofollow">Page source</a>
     </div>
 
