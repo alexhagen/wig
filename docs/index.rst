@@ -16,11 +16,11 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
- Test Coverage
- -------------
+Test Coverage
+-------------
 
- .. raw:: html
-    :file: test_coverage.html
+.. raw:: html
+  :file: test_coverage.html
 
 Documentation Coverage
 ----------------------
