@@ -3,4 +3,5 @@
 .DS_Store
 *.out_temp
 *.png
-_build/
+docs/_build/*
+docs/README.rst
