@@ -55,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'MCNP Companion'
+project = u'wig'
 copyright = u'2016, Alex Hagen'
 author = u'Alex Hagen'
 
@@ -211,7 +211,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MCNPCompaniondoc'
+htmlhelp_basename = 'wigdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -233,7 +233,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MCNPCompanion.tex', u'MCNP Companion Documentation',
+    (master_doc, 'wig.tex', u'wig Documentation',
      u'Alex Hagen', 'manual'),
 ]
 
@@ -263,7 +263,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mcnpcompanion', u'MCNP Companion Documentation',
+    (master_doc, 'wig', u'wig Documentation',
      [author], 1)
 ]
 
@@ -277,8 +277,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MCNPCompanion', u'MCNP Companion Documentation',
-     author, 'MCNPCompanion', 'One line description of project.',
+    (master_doc, 'wig', u'wig Documentation',
+     author, 'wig', 'One line description of project.',
      'Miscellaneous'),
 ]
 

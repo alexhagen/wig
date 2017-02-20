@@ -1,4 +1,4 @@
-# MCNP Companion
+# wig
 
 MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool for
 simulation of neutrons, photons, and electrons.  I use this extensively for my
