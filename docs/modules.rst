@@ -1,5 +1,5 @@
-mcnp_companion
-==============
+wig
+===
 
 .. toctree::
    :maxdepth: 4

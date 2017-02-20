@@ -71,6 +71,459 @@ requirements, render pretty pictures of your simulation.</p>
 <p>Let&#8217;s learn by doing. Following is a cutesy little example:</p>
 </div>
 </div>
+<div class="section" id="wig-package">
+<h1>wig package<a class="headerlink" href="#wig-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-wig.analyze">
+<span id="wig-analyze-module"></span><h2>wig.analyze module<a class="headerlink" href="#module-wig.analyze" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.analyze.analyze">
+<em class="property">class </em><code class="descclassname">wig.analyze.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p><code class="docutils literal"><span class="pre">analyze</span></code> goes through an output file and checks for tallies.</p>
+<p>An <code class="docutils literal"><span class="pre">analyze</span></code> object will hold <code class="docutils literal"><span class="pre">tally</span></code> objects in a list, one for each of
+the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
+tally file through mcnp.  Tallies printed on the <code class="docutils literal"><span class="pre">.out</span></code> file currently do
+not have support.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; filename of the <code class="docutils literal"><span class="pre">tallies.out</span></code> file</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="wig.analyze.analyze.import_meshtal_section">
+<code class="descname">import_meshtal_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze.import_meshtal_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze.import_meshtal_section" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.analyze.analyze.import_tally_section">
+<code class="descname">import_tally_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze.import_tally_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze.import_tally_section" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="wig.analyze.find_between">
+<code class="descclassname">wig.analyze.</code><code class="descname">find_between</code><span class="sig-paren">(</span><em>s</em>, <em>first</em>, <em>last=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#find_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.find_between" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="wig.analyze.meshtal">
+<em class="property">class </em><code class="descclassname">wig.analyze.</code><code class="descname">meshtal</code><span class="sig-paren">(</span><em>xs</em>, <em>ys</em>, <em>zs</em>, <em>Es</em>, <em>phis</em>, <em>u_phis</em>, <em>name=None</em>, <em>field=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#meshtal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.meshtal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="wig.analyze.tally">
+<em class="property">class </em><code class="descclassname">wig.analyze.</code><code class="descname">tally</code><span class="sig-paren">(</span><em>y</em>, <em>u_y</em>, <em>name=None</em>, <em>spectrum=None</em>, <em>nps=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.tally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A <code class="docutils literal"><span class="pre">tally</span></code> object holds data from a tally.</p>
+<p>The <code class="docutils literal"><span class="pre">tally</span></code> object holds the total nps, the error in total nps, the name,
+and the spectrum data from an f4 tally, imported using the <code class="docutils literal"><span class="pre">analyze</span></code>
+class.  The location and shape can also be set with external functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The total number of neutrons going through the volume.</li>
+<li><strong>u_y</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The uncertainty in the total number of neutrons going
+through the volume.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A descriptive name for the tally.</li>
+<li><strong>spectrum</strong> (<em>pym.func</em>) &#8211; A <code class="docutils literal"><span class="pre">curve</span></code> object holding the spectrum of the
+particles going through the volume.  <code class="docutils literal"><span class="pre">spectrum.y</span></code> and <code class="docutils literal"><span class="pre">spectrum.x</span></code>
+hold the bin height and bin left edges, respectively.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.cell">
+<span id="wig-cell-module"></span><h2>wig.cell module<a class="headerlink" href="#module-wig.cell" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.cell.cell">
+<em class="property">class </em><code class="descclassname">wig.cell.</code><code class="descname">cell</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em>, <em>comment=None</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="wig.cell.cell.air">
+<em class="property">static </em><code class="descname">air</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.air" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">air</span></code> is the common material for the universe.</p>
+<p><code class="docutils literal"><span class="pre">air</span></code> is a static method that returns the PNNL compendium defined
+air material for use as universe materials, or others.  It should be
+decided whether to use this class or the materials class as a
+repository for materials.</p>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">use this or materials class for repo for pnnl defined
+materials?</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnp_companion.materials.air</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.cell.cell.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.cell.cell.universe">
+<code class="descname">universe</code><span class="sig-paren">(</span><em>scene</em>, <em>matl=&lt;staticmethod object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.universe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.geo">
+<span id="wig-geo-module"></span><h2>wig.geo module<a class="headerlink" href="#module-wig.geo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.geo.geo">
+<em class="property">class </em><code class="descclassname">wig.geo.</code><code class="descname">geo</code><a class="reference internal" href="_modules/wig/geo.html#geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo" title="Permalink to this definition">¶</a></dt>
+<dd><p>some docstring</p>
+<dl class="method">
+<dt id="wig.geo.geo.box">
+<code class="descname">box</code><span class="sig-paren">(</span><em>v=None</em>, <em>a1=None</em>, <em>a2=None</em>, <em>a3=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.cell">
+<code class="descname">cell</code><span class="sig-paren">(</span><em>matl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>use <code class="docutils literal"><span class="pre">geo.cell(matl)</span></code> to return a cell of this geometry with
+material <code class="docutils literal"><span class="pre">matl</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mcnpm.matl</strong> (<a class="reference internal" href="wig.html#wig.matl.matl" title="wig.matl.matl"><em>matl</em></a>) &#8211; The material to make this cell</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnpce.cell</span></code> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.cone">
+<code class="descname">cone</code><span class="sig-paren">(</span><em>c=None</em>, <em>dir='+z'</em>, <em>h=None</em>, <em>r=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.rcc">
+<code class="descname">rcc</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>r=None</em>, <em>id=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rcc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.rpp">
+<code class="descname">rpp</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>id=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rpp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.sph">
+<code class="descname">sph</code><span class="sig-paren">(</span><em>c=None</em>, <em>r=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.sph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.sph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="wig.geo.group">
+<em class="property">class </em><code class="descclassname">wig.geo.</code><code class="descname">group</code><span class="sig-paren">(</span><em>content</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="wig.geo.pseudogeo">
+<em class="property">class </em><code class="descclassname">wig.geo.</code><code class="descname">pseudogeo</code><span class="sig-paren">(</span><em>geo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#pseudogeo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.pseudogeo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wig.matl">
+<span id="wig-matl-module"></span><h2>wig.matl module<a class="headerlink" href="#module-wig.matl" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.matl.matl">
+<em class="property">class </em><code class="descclassname">wig.matl.</code><code class="descname">matl</code><span class="sig-paren">(</span><em>rho</em>, <em>atom_perc=None</em>, <em>mass_perc=None</em>, <em>id=None</em>, <em>color=None</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/matl.html#matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.matl.matl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wig.mcnp_string">
+<span id="wig-mcnp-string-module"></span><h2>wig.mcnp_string module<a class="headerlink" href="#module-wig.mcnp_string" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.mcnp_string.mstring">
+<em class="property">class </em><code class="descclassname">wig.mcnp_string.</code><code class="descname">mstring</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnp_string.html#mstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnp_string.mstring" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="wig.mcnp_string.mstring.flow">
+<code class="descname">flow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnp_string.html#mstring.flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnp_string.mstring.flow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.mcnpdaemon">
+<span id="wig-mcnpdaemon-module"></span><h2>wig.mcnpdaemon module<a class="headerlink" href="#module-wig.mcnpdaemon" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.mcnpdaemon.mcnpdaemon">
+<em class="property">class </em><code class="descclassname">wig.mcnpdaemon.</code><code class="descname">mcnpdaemon</code><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="wig.mcnpdaemon.mcnpdaemon.check_file">
+<code class="descname">check_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon.check_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon.check_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.mcnpdaemon.mcnpdaemon.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.mcnpdaemon.mcnpdaemon.set_notification_daemon">
+<code class="descname">set_notification_daemon</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon.set_notification_daemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon.set_notification_daemon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.phys">
+<span id="wig-phys-module"></span><h2>wig.phys module<a class="headerlink" href="#module-wig.phys" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.phys.phys">
+<em class="property">class </em><code class="descclassname">wig.phys.</code><code class="descname">phys</code><span class="sig-paren">(</span><em>particles=None</em>, <em>sources=None</em>, <em>maxE=None</em>, <em>minE=None</em>, <em>nps=None</em>, <em>ctme=None</em>, <em>polimi=False</em>, <em>polimi_cells=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="wig.phys.phys.ctme">
+<code class="descname">ctme</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.ctme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.ctme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.phys.phys.no_fission">
+<code class="descname">no_fission</code><span class="sig-paren">(</span><em>cells=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.no_fission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.no_fission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.phys.phys.nps">
+<code class="descname">nps</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.nps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.nps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.phys.phys.polimi">
+<code class="descname">polimi</code><span class="sig-paren">(</span><em>cells</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.polimi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.polimi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.renderer">
+<span id="wig-renderer-module"></span><h2>wig.renderer module<a class="headerlink" href="#module-wig.renderer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.renderer.renderer">
+<em class="property">class </em><code class="descclassname">wig.renderer.</code><code class="descname">renderer</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="wig.renderer.renderer.add_geo">
+<code class="descname">add_geo</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.add_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.add_geo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.renderer.renderer.add_matl">
+<code class="descname">add_matl</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.add_matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.add_matl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.renderer.renderer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.runner">
+<span id="wig-runner-module"></span><h2>wig.runner module<a class="headerlink" href="#module-wig.runner" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.runner.runner">
+<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote='local'</em>, <em>sys='linux'</em>, <em>renderer=None</em>, <em>blocking=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wig.source">
+<span id="wig-source-module"></span><h2>wig.source module<a class="headerlink" href="#module-wig.source" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.source.dist">
+<em class="property">class </em><code class="descclassname">wig.source.</code><code class="descname">dist</code><span class="sig-paren">(</span><em>x=None</em>, <em>y=None</em>, <em>dist_num=None</em>, <em>spectrum_type=None</em>, <em>format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/source.html#dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.source.dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="wig.source.source">
+<em class="property">class </em><code class="descclassname">wig.source.</code><code class="descname">source</code><span class="sig-paren">(</span><em>particle='n'</em>, <em>pos=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>spectrum=None</em>, <em>shape=None</em>, <em>direction=None</em>, <em>id=None</em>, <em>radius=None</em>, <em>cell=None</em>, <em>show=True</em>, <em>spectrum_type='C'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/source.html#source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.source.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wig.tally">
+<span id="wig-tally-module"></span><h2>wig.tally module<a class="headerlink" href="#module-wig.tally" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.tally.tally">
+<em class="property">class </em><code class="descclassname">wig.tally.</code><code class="descname">tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="wig.tally.tally.add_multiplier">
+<code class="descname">add_multiplier</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.add_multiplier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.add_multiplier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.current_tally">
+<code class="descname">current_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.current_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.current_tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.fission_tally">
+<code class="descname">fission_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.fission_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.fission_tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.flux_tally">
+<code class="descname">flux_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.flux_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.flux_tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.mesh_tally">
+<code class="descname">mesh_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.mesh_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.mesh_tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.process_energy">
+<code class="descname">process_energy</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.process_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.process_energy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig.wig">
+<span id="wig-wig-module"></span><h2>wig.wig module<a class="headerlink" href="#module-wig.wig" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.wig.wig">
+<em class="property">class </em><code class="descclassname">wig.wig.</code><code class="descname">wig</code><span class="sig-paren">(</span><em>comment</em>, <em>filename</em>, <em>flavor='6'</em>, <em>render=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">wig</span></code> object is the base object for an MCNP setup.</p>
+<p>The <code class="docutils literal"><span class="pre">wig</span></code> object is basically the scene in which we create our MCNP
+geometry, cells, materials, physics, tallies, and other data.  I usually
+just call it <code class="docutils literal"><span class="pre">scene</span></code> and use it from there.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The comment that will be placed BELOW the first comment
+line of the MCNP deck.</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The filename (duh) of the input deck. &#8216;.inp&#8217; will be
+automatically appended.  The full path to this file will be the first
+line of the input file (i.e., the full path will be the first comment
+line of the deck)</li>
+<li><strong>flavor</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; &#8216;6&#8217; for <code class="docutils literal"><span class="pre">mcnp6</span></code>, &#8216;5&#8217; for <code class="docutils literal"><span class="pre">mcnp5</span></code>, &#8216;x&#8217; for <code class="docutils literal"><span class="pre">mcnpx</span></code>,
+or &#8216;polimi&#8217; for <code class="docutils literal"><span class="pre">mcnpx-polimi</span></code>.  Make sure you alias the binaries to
+those commands or the runner wont work.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <code class="docutils literal"><span class="pre">wig</span></code> object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="wig.wig.wig.cell">
+<code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.geo">
+<code class="descname">geo</code><span class="sig-paren">(</span><em>geos=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.geo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.matl">
+<code class="descname">matl</code><span class="sig-paren">(</span><em>matls=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.matl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.phys">
+<code class="descname">phys</code><span class="sig-paren">(</span><em>phys=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.phys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_cell">
+<code class="descname">refresh_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_data">
+<code class="descname">refresh_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_geo">
+<code class="descname">refresh_geo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_geo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_matl">
+<code class="descname">refresh_matl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_matl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_phys">
+<code class="descname">refresh_phys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_phys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_tally">
+<code class="descname">refresh_tally</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>remote='local'</em>, <em>sys='linux'</em>, <em>blocking=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.set_comment">
+<code class="descname">set_comment</code><span class="sig-paren">(</span><em>comment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.set_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.set_comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.set_filename">
+<code class="descname">set_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.set_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.set_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.source">
+<code class="descname">source</code><span class="sig-paren">(</span><em>sources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.tally">
+<code class="descname">tally</code><span class="sig-paren">(</span><em>tallies=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.tally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>camera_location=None</em>, <em>render_target=None</em>, <em>render=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wig">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wig" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="contents">
@@ -82,6 +535,28 @@ requirements, render pretty pictures of your simulation.</p>
 </div>
 <div class="section" id="todos">
 <h2>ToDos<a class="headerlink" href="#todos" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-0"><em>original entry</em></a> is located in  /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">use this or materials class for repo for pnnl defined
+materials?</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-1"><em>original entry</em></a> is located in  /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="wig.html#index-0"><em>original entry</em></a> is located in  /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">use this or materials class for repo for pnnl defined
+materials?</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="wig.html#index-1"><em>original entry</em></a> is located in  /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
@@ -100,6 +575,23 @@ requirements, render pretty pictures of your simulation.</p>
   <ul>
 <li><a class="reference internal" href="#">wig</a><ul>
 <li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wig-package">wig package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-wig.analyze">wig.analyze module</a></li>
+<li><a class="reference internal" href="#module-wig.cell">wig.cell module</a></li>
+<li><a class="reference internal" href="#module-wig.geo">wig.geo module</a></li>
+<li><a class="reference internal" href="#module-wig.matl">wig.matl module</a></li>
+<li><a class="reference internal" href="#module-wig.mcnp_string">wig.mcnp_string module</a></li>
+<li><a class="reference internal" href="#module-wig.mcnpdaemon">wig.mcnpdaemon module</a></li>
+<li><a class="reference internal" href="#module-wig.phys">wig.phys module</a></li>
+<li><a class="reference internal" href="#module-wig.renderer">wig.renderer module</a></li>
+<li><a class="reference internal" href="#module-wig.runner">wig.runner module</a></li>
+<li><a class="reference internal" href="#module-wig.source">wig.source module</a></li>
+<li><a class="reference internal" href="#module-wig.tally">wig.tally module</a></li>
+<li><a class="reference internal" href="#module-wig.wig">wig.wig module</a></li>
+<li><a class="reference internal" href="#module-wig">Module contents</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
