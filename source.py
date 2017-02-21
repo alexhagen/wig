@@ -5,7 +5,8 @@ class source():
 
     def __init__(self, particle='n', pos=None, x=None, y=None, z=None,
                  spectrum=None, shape=None, direction=None, id=None,
-                 radius=None, cell=None, show=True, spectrum_type='C'):
+                 radius=None, cell=None, show=True, spectrum_type='C',
+                 axis=None, lx=None, ly=None, lz=None):
         self.show = show
         self.blender_cmd = None
         self.blender_cmd_args = None
@@ -35,6 +36,11 @@ class source():
         elif direction == '+x' or direction == 'x+':
             self.string += "vec=1 0 0 dir=1 "
             self.axis = (1, 0, 0)
+        if axis is not None:
+            if axis == '+z' and lz is not None:
+                direction = 'z'
+                self.string += 'vec=0 0 1 '
+                self.axis = [0, 0, lz]
         if shape == 'disk' and radius is not None:
             self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
                                     format='d')])

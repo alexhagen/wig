@@ -34,7 +34,7 @@ class tally():
         self.mesh = True
         #if not self.energies:
         #    self.process_energy(**kwargs)
-        origin = (0, 0, 0)
+        origin = [0, 0, 0]
         if "xmin" in kwargs:
             origin[0] = kwargs["xmin"]
         if "ymin" in kwargs:

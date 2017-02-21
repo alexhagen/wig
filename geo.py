@@ -62,8 +62,8 @@ class geo:
         if right.__class__.__name__ is 'geo':
             # convert the right argument to a pseudogeo
             right = pseudogeo(right)
-        self.b_cmds.extend([right.blender_cmd])
-        self.b_kwargs.extend(right.blender_cmd_args)
+        self.b_cmds.extend([right.b_cmds])
+        self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left | right
@@ -164,7 +164,7 @@ class geo:
         return self
 
     def gq(self, A=None, B=None, C=None, D=None, E=None, F=None, G=None,
-           H=None, J=None, K=None, coeffs=None):
+           H=None, J=None, K=None, coeffs=None, id='gq'):
         r""" ``gq`` creates a generalized quadratic surface.
 
         ``gq`` creates a generalized quadratic surface defined by the equation
@@ -196,8 +196,8 @@ class geo:
         self.id = id
         self.geo_num = 0
         self.comment = "c --- %s" % (self.id)
-        self.string = "gq %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e" % \
-            (A, B, C, D, E, F)
+        self.string = "gq %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e" % \
+            (A, B, C, D, E, F, G, H, J, K)
         self.surfaces = None
         direction = None
         self.blender_cmd = pyb.pyb.gq
@@ -205,7 +205,8 @@ class geo:
                                  "F": F, "G": G, "H": H, "J": J, "K": K}
         return self
 
-    def cone(self, c=None, dir='+z', h=None, r=None, id=None):
+    def cone(self, c=None, dir='+z', h=None, r=None, r1=0.0, r2=0.0,
+             lx=0.0, ly=0.0, lz=0.0, id=0.0):
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -220,10 +221,19 @@ class geo:
             _h[i] = h
         elif '-' in dir:
             _h[2] = -h
+        if h is None:
+            h = [lx, ly, lz]
+        if r is None:
+            r = [r1, r2]
         self.comment = 'c --- %s' % (self.id)
         self.string = "trc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (c[0], c[1], c[2], h[0], h[1], h[2], r[0], r[1])
         self.surfaces = [1, 2, 3]
+        blender_dir = dir.replace('+', '').replace('-', '')
+        self.blender_cmd = pyb.pyb.cone
+        self.blender_cmd_args = {"c": c, "r1": r[0], "r2": r[1],
+                                 "h": np.max(h), "direction": blender_dir,
+                                 "name": id}
         return self
 
 class pseudogeo:
@@ -243,6 +253,23 @@ class pseudogeo:
         else:
             self.b_cmds = geo.b_cmds
             self.b_kwargs = geo.b_kwargs
+
+    def __or__(self, right):
+        if right is None:
+            return pseudogeo(self)
+        if self.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            left = pseudogeo(self)
+        else:
+            left = self
+        if right.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            right = pseudogeo(right)
+        self.b_cmds.extend([right.b_cmds])
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.union])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
+        return self
 
     def __sub__(self, right):
         if right is None:
@@ -293,6 +320,8 @@ class group:
                 _content = _content + geo
             content = _content
         self.content = content
+        self.b_cmds = content.b_cmds
+        self.b_kwargs = content.b_kwargs
         if id is None:
             self.id = "%s" % self.content.id
             self.manual_id = False
@@ -320,4 +349,8 @@ class group:
         if not self.manual_id:
             self.id += "_u_%s" % (right.id)
         self.already_unioned = True
+        self.b_cmds.extend(right.b_cmds)
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.union])
+        self.b_kwargs.extend([{"left": self.id, "right": right.id}])
         return self
