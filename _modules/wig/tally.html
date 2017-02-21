@@ -44,7 +44,7 @@
 <span class="kn">import</span> <span class="nn">cell</span>
 
 
-<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../index.html#wig.tally.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">():</span>
+<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../wig.html#wig.tally.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">():</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">tally</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="bp">False</span>
@@ -58,7 +58,7 @@
         <span class="k">if</span> <span class="s2">&quot;particle&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particle</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;particle&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="tally.flux_tally"><a class="viewcode-back" href="../../index.html#wig.tally.tally.flux_tally">[docs]</a>    <span class="k">def</span> <span class="nf">flux_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.flux_tally"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.flux_tally">[docs]</a>    <span class="k">def</span> <span class="nf">flux_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_energy</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -70,7 +70,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;:</span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;particle&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="tally.mesh_tally"><a class="viewcode-back" href="../../index.html#wig.tally.tally.mesh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">mesh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.mesh_tally"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.mesh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">mesh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="c1">#if not self.energies:</span>
@@ -118,7 +118,7 @@
             <span class="s2">&quot; kmesh=&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%6.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kmesh</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="tally.add_multiplier"><a class="viewcode-back" href="../../index.html#wig.tally.tally.add_multiplier">[docs]</a>    <span class="k">def</span> <span class="nf">add_multiplier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.add_multiplier"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.add_multiplier">[docs]</a>    <span class="k">def</span> <span class="nf">add_multiplier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiplier</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">if</span> <span class="s2">&quot;mat&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;mat&quot;</span><span class="p">]</span>
@@ -127,7 +127,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">multiplier_string</span> <span class="o">=</span> <span class="s2">&quot;(-1 </span><span class="si">%d</span><span class="s2"> </span><span class="si">%d</span><span class="s2">) T&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mt</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="tally.current_tally"><a class="viewcode-back" href="../../index.html#wig.tally.tally.current_tally">[docs]</a>    <span class="k">def</span> <span class="nf">current_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.current_tally"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.current_tally">[docs]</a>    <span class="k">def</span> <span class="nf">current_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_energy</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -148,7 +148,7 @@
                        <span class="s2">&quot;)&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="tally.fission_tally"><a class="viewcode-back" href="../../index.html#wig.tally.tally.fission_tally">[docs]</a>    <span class="k">def</span> <span class="nf">fission_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.fission_tally"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.fission_tally">[docs]</a>    <span class="k">def</span> <span class="nf">fission_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="mi">7</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_energy</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -159,7 +159,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;:n </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="tally.process_energy"><a class="viewcode-back" href="../../index.html#wig.tally.tally.process_energy">[docs]</a>    <span class="k">def</span> <span class="nf">process_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tally.process_energy"><a class="viewcode-back" href="../../wig.html#wig.tally.tally.process_energy">[docs]</a>    <span class="k">def</span> <span class="nf">process_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;energy&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">energy_string</span> <span class="o">=</span> <span class="s1">&#39;1e-8 99log 20&#39;</span>
         <span class="k">else</span><span class="p">:</span>
