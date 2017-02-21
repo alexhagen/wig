@@ -163,6 +163,48 @@ class geo:
                                  "direction": direction}
         return self
 
+    def gq(self, A=None, B=None, C=None, D=None, E=None, F=None, G=None,
+           H=None, J=None, K=None, coeffs=None):
+        r""" ``gq`` creates a generalized quadratic surface.
+
+        ``gq`` creates a generalized quadratic surface defined by the equation
+
+        .. math::
+
+            Ax^{2}+By^{2}+Cz^{2}+Dxy+Eyz\\+Fzx+Gx+Hy+Jz+K=0
+
+        and takes inputs of either :math:`A`, :math:`B`, :math:`C`, :math:`D`,
+        :math:`E`, :math:`F`, :math:`G`, :math:`H`, :math:`J`, :math:`K`, or an
+        array ``coeffs`` which has the coefficients (all 10 of them) defined
+        in alphabetical order.
+
+        :param float A: the coefficient :math:`A`
+        :param float B: the coefficient :math:`B`
+        :param float C: the coefficient :math:`C`
+        :param float D: the coefficient :math:`D`
+        :param float E: the coefficient :math:`E`
+        :param float F: the coefficient :math:`F`
+        :param float G: the coefficient :math:`G`
+        :param float H: the coefficient :math:`H`
+        :param float J: the coefficient :math:`J`
+        :param float K: the coefficient :math:`K`
+        :param list coeffs: a ``(10,)`` or ``(1,10)`` size array containing the
+            coefficients :math:`A` through :math:`K`, respectively
+        :returns: the generalized quadratic surface object
+        """
+        self.sense = -1
+        self.id = id
+        self.geo_num = 0
+        self.comment = "c --- %s" % (self.id)
+        self.string = "gq %10.5e %10.5e %10.5e %10.5e %10.5e %10.5e" % \
+            (A, B, C, D, E, F)
+        self.surfaces = None
+        direction = None
+        self.blender_cmd = pyb.pyb.gq
+        self.blender_cmd_args = {"A": A, "B": B, "C": C, "D": D, "E": E,
+                                 "F": F, "G": G, "H": H, "J": J, "K": K}
+        return self
+
     def cone(self, c=None, dir='+z', h=None, r=None, id=None):
         self.sense = -1
         self.id = id
