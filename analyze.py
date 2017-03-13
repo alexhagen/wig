@@ -91,35 +91,33 @@ class analyze(object):
     """
     def __init__(self, filename):
         orig_filename = filename
-        if '_tallies.out' not in filename:
+        if '_tallies.out' not in filename and 'meshtal' not in filename:
             filename = filename + '_tallies.out'
         with open(filename, 'r') as f:
             file_string = f.read()
 
         tallies = list()
         strings = file_string.split('tally')
-        self.nps = float(strings[0].split()[5])
+        # print strings[0].split()
+        if '_tallies.out' in filename:
+            self.nps = float(strings[0].split()[5])
+        elif 'meshtal' in filename:
+            self.nps = float(strings[0].split()[19])
         print "%e" % self.nps
-        for string in strings[1:]:
-            total, u_total, name, e_bins, vals, u_vals = \
-                self.import_tally_section(string)
-            tallies.extend([tally(total, u_total, name,
-                                  pym.curve(e_bins, vals, u_y=u_vals,
-                                            name=name, data='binned'), nps=self.nps)])
-        '''
-        if '_tallies.out' not in orig_filename:
-            meshtal_filename = orig_filename + '_meshtal.out'
-        if os.path.exists(meshtal_filename):
-            with open(meshtal_filename, 'r') as f:
-                file_string = f.read()
-
+        if '_tallies.out' in filename:
+            for string in strings[1:]:
+                total, u_total, name, e_bins, vals, u_vals = \
+                    self.import_tally_section(string)
+                tallies.extend([tally(total, u_total, name,
+                                      pym.curve(e_bins, vals, u_y=u_vals,
+                                                name=name, data='binned'), nps=self.nps)])
+        elif 'meshtal' in filename:
             meshtals = list()
             strings = file_string.split('Mesh Tally Number')
             for string in strings[1:]:
                 E_bins, xs, ys, zs, phis, u_phis = \
                     self.import_meshtal_section(string)
-                tallies.extend(meshtal(xs, ys, zs, phis, u_phis))
-        '''
+                tallies.extend([meshtal(xs, ys, zs, E_bins, phis, u_phis)])
         self.tallies = tallies
 
     def import_meshtal_section(self, section):
