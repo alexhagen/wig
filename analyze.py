@@ -4,6 +4,7 @@ from pym import func as pym
 from pyg.threed import pyg3d
 from pyg.colors import pu as puc
 import os
+import pandas as pd
 
 class tally(object):
     """ A ``tally`` object holds data from a tally.
@@ -65,6 +66,13 @@ class meshtal(object):
         self.phis = phis
         self.u_phis = u_phis
         self.name = name
+
+class pos_ref_array(object):
+    def __init__(self, xs, ys, zs, vals, us=None):
+        self.xs = np.unique(xs)
+        self.ys = np.unique(ys)
+        self.zs = np.unique(zs)
+
 
 def find_between( s, first, last=None):
     try:
@@ -142,17 +150,27 @@ class analyze(object):
         val_string = find_between(string, 'Rel Error')
         vals = []
         u_vals = []
+        self.xm = []
+        self.ym = []
+        self.zm = []
+        self.phim = np.array([])
+        self.u_phim = np.array([])
+        self.locs = []
+        self.phis = []
         for line in val_string.split('\n')[1:-1]:
-            line_vals = ','.join(line.split())
-            line_vals = [float(lv) for lv in line_vals.split(',')]
-            val = line_vals[-2]
-            u_val = line_vals[-1]
-            vals.extend([val])
-            u_vals.extend([u_val])
+            if len(line) > 0:
+                line_vals = ','.join(line.split())
+                line_vals = [float(lv) for lv in line_vals.split(',')]
+                val = line_vals[-2]
+                u_val = line_vals[-1]
+                vals.extend([val])
+                u_vals.extend([u_val])
         vals = np.array(vals)
         u_vals = np.array(u_vals)
         vals.reshape((len(E_bins)-1, len(x_bins)-1, len(y_bins)-1, len(z_bins)-1))
-        return E_bins, x_bins, y_bins, z_bins, vals, u_vals
+        u_vals.reshape((len(E_bins)-1, len(x_bins)-1, len(y_bins)-1, len(z_bins)-1))
+        return np.array(E_bins), np.array(x_bins), np.array(y_bins), \
+            np.array(z_bins), np.array(vals), np.array(u_vals)
 
     def import_tally_section(self, section):
         string = section
