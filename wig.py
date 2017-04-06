@@ -90,8 +90,7 @@ class wig:
         self._runner = runner(self.filename, self.command, remote, sys,
                               renderer=self.renderer, blocking=blocking)
 
-    def write(self, camera_location=None, render_target=None, render=True,
-              **kwargs):
+    def write(self, **kwargs):
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
             intro = textwrap.TextWrapper(initial_indent='c ',
@@ -116,13 +115,16 @@ class wig:
             f.write(mstring(self.tally_block).flow())
             f.write("c " + " Materials ".center(78, '-') + "\n")
             f.write(mstring(self.matl_block).flow())
+        self.render(**kwargs)
+
+    def render(self, filename_suffix='', render_target=None, camera_location=None, render=True, **kwargs):
         if render_target is not None:
             self.bscene.look_at(target=render_target)
         if camera_location is None:
             camera_location = (1.5 * self.universe.r, 1.5 * self.universe.r,
                                self.universe.r)
         self.bscene.run(camera_location=camera_location,
-                        filename=self.filename + '_setup.png', render=render,
+                        filename=self.filename + filename_suffix + '_setup.png', render=render,
                         **kwargs)
         self.proj_matrix = self.bscene.proj_matrix
         if render:

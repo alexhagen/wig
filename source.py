@@ -96,7 +96,7 @@ class dist():
             if spectrum_type is None:
                 self.dist_string += 'si%d ' % (self.dist_num)
             else:
-                self.dist_string += 'si%d %s ' % (self.dist_num, spectrum_type)
+                self.dist_string += 'si%d ' % (self.dist_num)
             for _x in x:
                 self.dist_string += "%15.10e " % (_x)
             self.dist_string = self.dist_string[:-1]
