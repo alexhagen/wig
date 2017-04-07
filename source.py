@@ -77,7 +77,7 @@ class source():
             self.string += 'erg=d%d ' % self.dist_num
             self.dist_num += 1
         elif particle == "fission":
-            self.dists.extend([dist(type='Watt', dist_num=self.dist_num)])
+            self.dists.extend([dist(spectrum_type='Watt', dist_num=self.dist_num)])
             self.string +=  'erg=d%d ' % self.dist_num
             self.dist_num += 1
         elif isinstance(spectrum, float):
