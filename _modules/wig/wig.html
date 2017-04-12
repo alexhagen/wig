@@ -69,6 +69,7 @@
 <span class="sd">    :return: the ``wig`` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
@@ -96,6 +97,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">sun</span><span class="p">()</span>
         <span class="c1"># now write the intro file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">intro_block</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="wig.go_home"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.go_home">[docs]</a>    <span class="k">def</span> <span class="nf">go_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="wig.set_filename"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.set_filename">[docs]</a>    <span class="k">def</span> <span class="nf">set_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/mcnp/active/&#39;</span>
@@ -173,27 +181,27 @@
 
 <div class="viewcode-block" id="wig.geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.geo">[docs]</a>    <span class="k">def</span> <span class="nf">geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># initialize a counter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_geo</span><span class="p">(</span><span class="n">geos</span><span class="o">=</span><span class="n">geos</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="c1"># print the comment</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
-                <span class="c1"># print the number</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">    &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span><span class="p">)</span>
-                <span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="c1"># does this pointer work?</span>
-                <span class="c1"># print the geo string</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-                <span class="c1"># set that geo number to the geometry object</span>
-                <span class="n">geo</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span>
-                <span class="c1"># add the geo object to the plot</span>
-                <span class="k">if</span> <span class="s1">&#39;universe&#39;</span> <span class="ow">in</span> <span class="n">geo</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">universe</span> <span class="o">=</span> <span class="n">geo</span>
-                <span class="c1"># increment geo num</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span></div>
-        <span class="c1">#self.plot.view(45, 235)</span>
-        <span class="c1">#self.plot.export(&#39;some_plot&#39;, formats=[&#39;pdf&#39;], sizes=[&#39;cs&#39;],</span>
-        <span class="c1">#                 customsize=(6., 6.))</span>
-        <span class="c1">#self.plot.show()</span>
+                <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="p">:</span>
+                    <span class="c1"># print the comment</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+                    <span class="c1"># print the number</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">    &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span><span class="p">)</span>
+                    <span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="c1"># does this pointer work?</span>
+                    <span class="c1"># print the geo string</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+                    <span class="c1"># set that geo number to the geometry object</span>
+                    <span class="n">geo</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span>
+                    <span class="c1"># add the geo object to the plot</span>
+                    <span class="k">if</span> <span class="s1">&#39;universe&#39;</span> <span class="ow">in</span> <span class="n">geo</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">universe</span> <span class="o">=</span> <span class="n">geo</span>
+                    <span class="c1"># increment geo num</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># initialize a counter</span>
@@ -253,19 +261,23 @@
 
 
 <div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="c1"># initialize a counter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_matl</span><span class="p">(</span><span class="n">matls</span><span class="o">=</span><span class="n">matls</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wig.add_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">matl</span> <span class="ow">in</span> <span class="n">matls</span><span class="p">:</span>
-            <span class="c1"># print the comment</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">matl</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
-            <span class="c1"># print the matl number</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;m</span><span class="si">%d</span><span class="s2">   &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span><span class="p">)</span>
-            <span class="c1"># print the matl string</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">matl</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-            <span class="c1"># set that number to the geometry object</span>
-            <span class="n">matl</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span>
-            <span class="c1"># increment matl num</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">+=</span> <span class="mi">1</span></div>
+            <span class="k">if</span> <span class="n">matl</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="p">:</span>
+                <span class="c1"># print the comment</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">matl</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+                <span class="c1"># print the matl number</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;m</span><span class="si">%d</span><span class="s2">   &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span><span class="p">)</span>
+                <span class="c1"># print the matl string</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">matl</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+                <span class="c1"># set that number to the geometry object</span>
+                <span class="n">matl</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span>
+                <span class="c1"># increment matl num</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">matl</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="wig.phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.phys">[docs]</a>    <span class="k">def</span> <span class="nf">phys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phys</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># print the comment</span>
