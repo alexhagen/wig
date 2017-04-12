@@ -43,19 +43,26 @@ HTML = """\
         }
     </style>
 
-    <!-- <script>
+    <script>
     $(document).ready(function() {
         setInterval(function(){
-            $("#myimg").attr("src", "{{data}}?"+new Date().getTime());
-        }, 5000);
+            $.ajax({
+                type: 'GET',
+                url: '/all_prog',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#ajaxP').html(response);
+                }
+            });
+            MathJax.Hub.Typeset();
+        }, 10*60*1000);
     });
-
-    </script> -->
+    </script>
 </head>
 <body>
     <div class="container">
       <h1>MCNP Processes</h1>
-      {{!content}}
+      <div id="ajaxP">{{!content}}</div>
     </div>
 </body>
 """
@@ -369,6 +376,7 @@ app = Bottle()
 def serve_picture():
     return template(HTML, content=all_prog(), data='somedata')
 
+@app.route('/all_prog', method='GET')
 def all_prog():
     string = ""
     filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
@@ -378,6 +386,7 @@ def all_prog():
         string += prog_bar(100. * nps / 1.E9)
     return string
 
+@app.route('/prog_bar', method='GET')
 def prog_bar(perc):
     string = ''
     string += r'<div class="progress">'
@@ -389,6 +398,7 @@ def prog_bar(perc):
     string += r'</div>'
     return string
 
+@app.route('/info', method='GET')
 def info(fname, start_time, time_slope, end_time, procs):
     string = ''
     string += "<p><b>Filename:</b> %s\n" % fname
@@ -400,4 +410,4 @@ def info(fname, start_time, time_slope, end_time, procs):
     string += "<p><b>Processes:</b> %d</p>\n" % procs
     return string
 
-run(app, host='128.46.92.223', port=8080)
+run(app, host='128.46.92.223', port=8080, reloader=True)
