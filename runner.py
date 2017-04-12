@@ -35,6 +35,7 @@ class runner:
         cmd.extend(['out=' + filename + '.out'])
         cmd.extend(['run=' + filename + '_runtpe'])
         cmd.extend(['mctal=' + filename + '_tallies.out'])
+        cmd.extend(['meshtal=' + filename + '.meshtal'])
         if command == 'polimi' or command == 'mcnpx':
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])
         else:

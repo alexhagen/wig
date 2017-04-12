@@ -28,6 +28,7 @@ class wig:
     :return: the ``wig`` object.
     """
     def __init__(self, comment, filename, flavor='6', render=False):
+        self.original_directory = os.getcwd()
         self.set_filename(filename)
         self.set_comment(comment)
         if render:
@@ -55,6 +56,13 @@ class wig:
         self.bscene.sun()
         # now write the intro file
         self.intro_block += self.comment
+        self.geo_num = 10
+        self.geo_comments = []
+        self.matl_num = 1
+        self.matl_comments = []
+
+    def go_home(self):
+        os.chdir(self.original_directory)
 
     def set_filename(self, filename):
         path = expanduser("~") + '/mcnp/active/'
@@ -132,27 +140,27 @@ class wig:
 
     def geo(self, geos=None):
         # initialize a counter
-        self.geo_num = 10
+        self.add_geo(geos=geos)
+
+    def add_geo(self, geos=None):
         for geo in geos:
             if geo is not None:
-                # print the comment
-                self.geo_block += "%s\n" % (geo.comment)
-                # print the number
-                self.geo_block += "%d    " % (self.geo_num)
-                geo.geo_num = self.geo_num # does this pointer work?
-                # print the geo string
-                self.geo_block += "%s\n" % (geo.string)
-                # set that geo number to the geometry object
-                geo.num = self.geo_num
-                # add the geo object to the plot
-                if 'universe' in geo.id:
-                    self.universe = geo
-                # increment geo num
-                self.geo_num += 10
-        #self.plot.view(45, 235)
-        #self.plot.export('some_plot', formats=['pdf'], sizes=['cs'],
-        #                 customsize=(6., 6.))
-        #self.plot.show()
+                if geo.comment not in self.geo_comments:
+                    # print the comment
+                    self.geo_block += "%s\n" % (geo.comment)
+                    # print the number
+                    self.geo_block += "%d    " % (self.geo_num)
+                    geo.geo_num = self.geo_num # does this pointer work?
+                    # print the geo string
+                    self.geo_block += "%s\n" % (geo.string)
+                    # set that geo number to the geometry object
+                    geo.num = self.geo_num
+                    # add the geo object to the plot
+                    if 'universe' in geo.id:
+                        self.universe = geo
+                    # increment geo num
+                    self.geo_num += 10
+                    self.geo_comments.extend([geo.comment])
 
     def cell(self, cells=None):
         # initialize a counter
@@ -212,19 +220,23 @@ class wig:
 
 
     def matl(self, matls=None):
-        # initialize a counter
-        self.matl_num = 1
+        self.add_matl(matls=matls)
+
+
+    def add_matl(self, matls=None):
         for matl in matls:
-            # print the comment
-            self.matl_block += "%s\n" % (matl.comment)
-            # print the matl number
-            self.matl_block += "m%d   " % (self.matl_num)
-            # print the matl string
-            self.matl_block += "%s\n" % (matl.string)
-            # set that number to the geometry object
-            matl.matl_num = self.matl_num
-            # increment matl num
-            self.matl_num += 1
+            if matl.comment not in self.matl_comments:
+                # print the comment
+                self.matl_block += "%s\n" % (matl.comment)
+                # print the matl number
+                self.matl_block += "m%d   " % (self.matl_num)
+                # print the matl string
+                self.matl_block += "%s\n" % (matl.string)
+                # set that number to the geometry object
+                matl.matl_num = self.matl_num
+                # increment matl num
+                self.matl_num += 1
+                self.matl_comments.extend([matl.comment])
 
     def phys(self, phys=None):
         # print the comment

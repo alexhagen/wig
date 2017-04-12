@@ -110,7 +110,8 @@ class analyze(object):
         if '_tallies.out' in filename:
             self.nps = float(strings[0].split()[5])
         elif 'meshtal' in filename:
-            self.nps = float(strings[0].split()[19])
+            #self.nps = float(strings[0].split()[19])
+            self.nps = 1.0e9
         print "%e" % self.nps
         if '_tallies.out' in filename:
             for string in strings[1:]:
@@ -187,6 +188,8 @@ class analyze(object):
         vals = val_string.split()
         u_vals = [float(val) for val in vals[1::2]]
         vals = [float(val) for val in vals[0::2]]
+        print name
+        print vals
         total = vals[-1]
         u_total = u_vals[-1]
         u_vals = u_vals[:-1]
