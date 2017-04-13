@@ -40,7 +40,7 @@
             
   <h1>Source code for wig.renderer</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">subprocess</span>
-<div class="viewcode-block" id="renderer"><a class="viewcode-back" href="../../wig.html#wig.renderer.renderer">[docs]</a><span class="k">class</span> <span class="nc">renderer</span><span class="p">:</span>
+<div class="viewcode-block" id="renderer"><a class="viewcode-back" href="../../index.html#wig.renderer.renderer">[docs]</a><span class="k">class</span> <span class="nc">renderer</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;_blend&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render</span> <span class="o">=</span> <span class="s2">&quot;brender(&#39;</span><span class="si">%s</span><span class="s2">&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span> <span class="o">+</span> \
@@ -56,7 +56,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-<div class="viewcode-block" id="renderer.run"><a class="viewcode-back" href="../../wig.html#wig.renderer.renderer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="renderer.run"><a class="viewcode-back" href="../../index.html#wig.renderer.renderer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl</span><span class="p">)</span>
@@ -65,10 +65,10 @@
         <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;blender --python=</span><span class="si">%s</span><span class="s1"> --background&#39;</span> <span class="o">%</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">)],</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="renderer.add_geo"><a class="viewcode-back" href="../../wig.html#wig.renderer.renderer.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="renderer.add_geo"><a class="viewcode-back" href="../../index.html#wig.renderer.renderer.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span></div>
 
-<div class="viewcode-block" id="renderer.add_matl"><a class="viewcode-back" href="../../wig.html#wig.renderer.renderer.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="renderer.add_matl"><a class="viewcode-back" href="../../index.html#wig.renderer.renderer.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span></div></div>
 </pre></div>
 

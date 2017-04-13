@@ -40,11 +40,11 @@
             
   <h1>Source code for wig.mcnp_string</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">textwrap</span>
-<div class="viewcode-block" id="mstring"><a class="viewcode-back" href="../../wig.html#wig.mcnp_string.mstring">[docs]</a><span class="k">class</span> <span class="nc">mstring</span><span class="p">:</span>
+<div class="viewcode-block" id="mstring"><a class="viewcode-back" href="../../index.html#wig.mcnp_string.mstring">[docs]</a><span class="k">class</span> <span class="nc">mstring</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">string</span>
 
-<div class="viewcode-block" id="mstring.flow"><a class="viewcode-back" href="../../wig.html#wig.mcnp_string.mstring.flow">[docs]</a>    <span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mstring.flow"><a class="viewcode-back" href="../../index.html#wig.mcnp_string.mstring.flow">[docs]</a>    <span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">newstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
             <span class="c1"># if the line is longer than 80 characters</span>

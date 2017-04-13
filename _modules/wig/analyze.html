@@ -47,7 +47,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../wig.html#wig.analyze.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="tally"><a class="viewcode-back" href="../../index.html#wig.analyze.tally">[docs]</a><span class="k">class</span> <span class="nc">tally</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A ``tally`` object holds data from a tally.</span>
 
 <span class="sd">    The ``tally`` object holds the total nps, the error in total nps, the name,</span>
@@ -98,7 +98,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
             <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="meshtal"><a class="viewcode-back" href="../../wig.html#wig.analyze.meshtal">[docs]</a><span class="k">class</span> <span class="nc">meshtal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="meshtal"><a class="viewcode-back" href="../../index.html#wig.analyze.meshtal">[docs]</a><span class="k">class</span> <span class="nc">meshtal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">Es</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="n">u_phis</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xs</span> <span class="o">=</span> <span class="n">xs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ys</span> <span class="o">=</span> <span class="n">ys</span>
@@ -108,14 +108,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">u_phis</span> <span class="o">=</span> <span class="n">u_phis</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
 
-<div class="viewcode-block" id="pos_ref_array"><a class="viewcode-back" href="../../wig.html#wig.analyze.pos_ref_array">[docs]</a><span class="k">class</span> <span class="nc">pos_ref_array</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="pos_ref_array"><a class="viewcode-back" href="../../index.html#wig.analyze.pos_ref_array">[docs]</a><span class="k">class</span> <span class="nc">pos_ref_array</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">us</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="find_between"><a class="viewcode-back" href="../../wig.html#wig.analyze.find_between">[docs]</a><span class="k">def</span> <span class="nf">find_between</span><span class="p">(</span> <span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="find_between"><a class="viewcode-back" href="../../index.html#wig.analyze.find_between">[docs]</a><span class="k">def</span> <span class="nf">find_between</span><span class="p">(</span> <span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">start</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">first</span> <span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span> <span class="n">first</span> <span class="p">)</span>
         <span class="k">if</span> <span class="n">last</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -126,7 +126,7 @@
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="analyze"><a class="viewcode-back" href="../../wig.html#wig.analyze.analyze">[docs]</a><span class="k">class</span> <span class="nc">analyze</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="analyze"><a class="viewcode-back" href="../../index.html#wig.analyze.analyze">[docs]</a><span class="k">class</span> <span class="nc">analyze</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ``analyze`` goes through an output file and checks for tallies.</span>
 
 <span class="sd">    An ``analyze`` object will hold ``tally`` objects in a list, one for each of</span>
@@ -170,7 +170,7 @@
                 <span class="n">tallies</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">meshtal</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">E_bins</span><span class="p">,</span> <span class="n">phis</span><span class="p">,</span> <span class="n">u_phis</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tallies</span> <span class="o">=</span> <span class="n">tallies</span>
 
-<div class="viewcode-block" id="analyze.import_meshtal_section"><a class="viewcode-back" href="../../wig.html#wig.analyze.analyze.import_meshtal_section">[docs]</a>    <span class="k">def</span> <span class="nf">import_meshtal_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+<div class="viewcode-block" id="analyze.import_meshtal_section"><a class="viewcode-back" href="../../index.html#wig.analyze.analyze.import_meshtal_section">[docs]</a>    <span class="k">def</span> <span class="nf">import_meshtal_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="n">section</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">x_bins_string</span> <span class="o">=</span> <span class="n">find_between</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="s2">&quot;X direction:&quot;</span><span class="p">,</span> <span class="s2">&quot;Y direction&quot;</span><span class="p">)</span>
@@ -214,7 +214,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">E_bins</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_bins</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_bins</span><span class="p">),</span> \
             <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_bins</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_vals</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="analyze.import_tally_section"><a class="viewcode-back" href="../../wig.html#wig.analyze.analyze.import_tally_section">[docs]</a>    <span class="k">def</span> <span class="nf">import_tally_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
+<div class="viewcode-block" id="analyze.import_tally_section"><a class="viewcode-back" href="../../index.html#wig.analyze.analyze.import_tally_section">[docs]</a>    <span class="k">def</span> <span class="nf">import_tally_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="n">section</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="c1"># find the string between et and t</span>
