@@ -1,7 +1,7 @@
 import os
 import subprocess
 from subprocess import PIPE
-import notify2 as n
+# import notify2 as n
 from os.path import expanduser
 
 class runner:
@@ -23,7 +23,7 @@ class runner:
         # If there are, then we will run it on the solarsystem
 
         # initialize a notification system
-        n.init('MCNP')
+        # n.init('MCNP')
         # construct the command
         if blocking:
             cmd = []
@@ -45,8 +45,8 @@ class runner:
             # cmd.extend(['&'])
         print cmd
         # construct the notification
-        notification = n.Notification(command, 'Will now run %s.' % cmd)
-        notification.show()
+        # notification = n.Notification(command, 'Will now run %s.' % cmd)
+        # notification.show()
         # check if there is an output file that has the EXACT same input and
         # has completed
         if renderer is not None:
