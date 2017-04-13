@@ -8,6 +8,7 @@ import string
 import notify2 as n
 import paramiko
 from bottle import Bottle, run, response, static_file, template
+from paste import httpserver
 
 HTML = """\
 <!DOCTYPE html>
@@ -410,4 +411,5 @@ def info(fname, start_time, time_slope, end_time, procs):
     string += "<p><b>Processes:</b> %d</p>\n" % procs
     return string
 
-run(app, host='128.46.92.223', port=8080, reloader=True)
+#run(app, host='128.46.92.223', port=8080)
+httpserver.serve(app, host='0.0.0.0', port=8080)
