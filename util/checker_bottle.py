@@ -55,6 +55,9 @@ HTML = """\
                     $('#ajaxP').html(response);
                 }
             });
+            MathJax.Hub.Config({
+              tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+            });
             MathJax.Hub.Typeset();
         }, 10*60*1000);
     });
