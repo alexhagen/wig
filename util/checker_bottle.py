@@ -96,7 +96,7 @@ filenames = []
 
 def read_ps_aux(outp, procs, filenames, mcnpservers, mcnpserver, cpu_uses):
     for line in outp.split('\n'):
-        if '/bin/sh' not in line and 'grep' not in line and '.inp' in line:
+        if '/bin/sh' not in line and 'bash -c' not in line and 'grep' not in line and '.inp' in line:
             arr = re.findall(r"[-+]?\d*\.\d+|\d+", line)
             cpu_use = float(arr[1])
             pid = int(arr[0])
@@ -107,7 +107,7 @@ def read_ps_aux(outp, procs, filenames, mcnpservers, mcnpserver, cpu_uses):
                 procs.extend([float(arr[-1])])
             else:
                 procs.extend([1])
-            cpu_use = cpu_use / float(arr[2])
+            cpu_use = cpu_use # / float(arr[2])
             cpu_uses.extend([cpu_use])
             mcnpservers.extend([mcnpserver])
 

@@ -48,8 +48,8 @@ class runner:
         else:
             cmd.extend(['tasks %d' % processors[remote]])
         if remote:
-            #cmd.extend(['> %s' % (filename + '.nohup')])
-            cmd.extend(['&'])
+            cmd.extend(['> %s' % (filename + '.nohup')])
+            #cmd.extend(['&'])
             #cmd.extend(['> /dev/null 2>&1 &'])
         if not blocking:
             pass
@@ -93,7 +93,7 @@ class runner:
                 #status = out.channel.recv_exit_status()
                 #print status
                 #print out.readlines()
-                sshcommand = "source .profile; cd mcnp/active/; %s" % sshcommand
+                sshcommand = "nohup bash -c 'source .profile; cd mcnp/active/; %s'" % sshcommand
                 print sshcommand
                 _, out, err = ssh.exec_command(sshcommand, timeout=0.0)
                 sleep(10)
