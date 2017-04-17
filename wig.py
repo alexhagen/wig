@@ -27,7 +27,7 @@ class wig:
         those commands or the runner wont work.
     :return: the ``wig`` object.
     """
-    def __init__(self, comment, filename, flavor='6', render=False):
+    def __init__(self, comment, filename, flavor='6', render=True):
         self.original_directory = os.getcwd()
         self.set_filename(filename)
         self.set_comment(comment)
@@ -35,6 +35,7 @@ class wig:
             self.renderer = renderer(filename)
         else:
             self.renderer = None
+        self._render = render
         if flavor is '6':
             self.command = 'mcnp6'
         elif flavor is '5':
@@ -92,11 +93,10 @@ class wig:
     def refresh_matl(self):
         self.matl_block = ''
 
-    def run(self, remote='local', sys='linux', blocking=False, **kwargs):
+    def run(self, remote='local', sys='linux', blocking=False, clean=False, **kwargs):
         self.write(**kwargs)
-
         self._runner = runner(self.filename, self.command, remote, sys,
-                              renderer=self.renderer, blocking=blocking)
+                              renderer=self.renderer, blocking=blocking, clean=clean)
 
     def write(self, **kwargs):
         with open(self.filename + '.inp', 'w') as f:
@@ -186,7 +186,7 @@ class wig:
                     self.cell_block = self.cell_block[:-1]
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%s" % (cell.geo.string)
-                if cell.show:
+                if cell.show and self._render:
                     print cell.id
                     for plot_cmd, plot_kwargs in zip(cell.b_cmds, cell.b_kwargs):
                         if isinstance(plot_cmd, list):
@@ -222,7 +222,6 @@ class wig:
     def matl(self, matls=None):
         self.add_matl(matls=matls)
 
-
     def add_matl(self, matls=None):
         for matl in matls:
             if matl.comment not in self.matl_comments:
@@ -247,7 +246,6 @@ class wig:
         self.phys_block = self.phys_block[:-1]
 
     def tally(self, tallies=None):
-
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1, "7": 1}
         self.tally_block = "prdmp j -15 1 4\n"
@@ -288,5 +286,5 @@ class wig:
             self.data_block += "sdef    "
             # print the source string
             self.data_block += "%s\n" % (source.string)
-            if source.blender_cmd is not None and source.show:
+            if source.blender_cmd is not None and source.show and self._render:
                 source.blender_cmd(self.bscene, **source.blender_cmd_args)

@@ -136,7 +136,15 @@ def check():
                        server(type='remote', name='venus',
                               ip='128.46.92.228', port=2220,
                               home_folder='/home/inokuser')]]'''
-    for mcnpserver in [server()]:
+    for mcnpserver in [server(), server(type='remote', name='mercury',
+                                        ip='128.46.92.228', port=2120,
+                                        home_folder='/home/inokuser'),
+                       server(type='remote', name='venus',
+                              ip='128.46.92.228', port=2220,
+                              home_folder='/home/inokuser'),
+                       server(type='remote', name='mars',
+                              ip='128.46.92.228', port=2420,
+                              home_folder='/home/inokuser')]:
         if mcnpserver.type == 'local':
             ps_aux_out = subprocess.check_output(["ps aux | grep 'mcnp\|polimi'"],
                                                  shell=True)
@@ -157,7 +165,7 @@ def check():
 
     print filenames
     print mcnpservers
-
+    cpus = []
     for filename, i, mcnpserver in zip(filenames, range(len(filenames)),
                                        mcnpservers):
         dump = 1
@@ -208,7 +216,6 @@ def check():
 
         cpu_use = cpu_uses[i]
 
-        cpus = float(multiprocessing.cpu_count())
         if mcnpserver.type == 'remote':
             now = sftp_client.stat(serverfilename).st_mtime
         else:
@@ -231,7 +238,6 @@ def check():
         cpu_uses.extend([cpu_use])
         if mcnpserver.type == 'remote':
             ssh.close()
-
     return filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
         end_times, procs
 '''
