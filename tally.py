@@ -83,7 +83,11 @@ class tally():
             self.mat = kwargs["mat"]
         if "mt" in kwargs:
             self.mt = kwargs["mt"]
-        self.multiplier_string = "(-1 %d %d) T" % (self.mat, self.mt)
+        if "C" in kwargs:
+            self.C = kwargs["C"]
+        else:
+            self.C = 1
+        self.multiplier_string = "(%d %d %d) T" % (self.C, self.mat, self.mt)
         return self
 
     def current_tally(self, **kwargs):
