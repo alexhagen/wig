@@ -126,7 +126,7 @@ hold the bin height and bin left edges, respectively.</li>
 <span id="wig-cell-module"></span><h2>wig.cell module<a class="headerlink" href="#module-wig.cell" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.cell.cell">
-<em class="property">class </em><code class="descclassname">wig.cell.</code><code class="descname">cell</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em>, <em>comment=None</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.cell.</code><code class="descname">cell</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em>, <em>color=None</em>, <em>alpha=1.0</em>, <em>comment=None</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="staticmethod">
 <dt id="wig.cell.cell.air">
 <em class="property">static </em><code class="descname">air</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.air" title="Permalink to this definition">¶</a></dt>
@@ -361,7 +361,7 @@ coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</s
 <span id="wig-runner-module"></span><h2>wig.runner module<a class="headerlink" href="#module-wig.runner" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.runner.runner">
-<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote='local'</em>, <em>sys='linux'</em>, <em>renderer=None</em>, <em>blocking=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote='local'</em>, <em>sys='linux'</em>, <em>renderer=None</em>, <em>blocking=False</em>, <em>clean=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -420,7 +420,7 @@ coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</s
 <span id="wig-wig-module"></span><h2>wig.wig module<a class="headerlink" href="#module-wig.wig" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.wig.wig">
-<em class="property">class </em><code class="descclassname">wig.wig.</code><code class="descname">wig</code><span class="sig-paren">(</span><em>comment</em>, <em>filename</em>, <em>flavor='6'</em>, <em>render=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.wig.</code><code class="descname">wig</code><span class="sig-paren">(</span><em>comment</em>, <em>filename</em>, <em>flavor='6'</em>, <em>render=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal"><span class="pre">wig</span></code> object is the base object for an MCNP setup.</p>
 <p>The <code class="docutils literal"><span class="pre">wig</span></code> object is basically the scene in which we create our MCNP
 geometry, cells, materials, physics, tallies, and other data.  I usually
@@ -519,7 +519,7 @@ those commands or the runner wont work.</li>
 
 <dl class="method">
 <dt id="wig.wig.wig.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>remote='local'</em>, <em>sys='linux'</em>, <em>blocking=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><em>remote='local'</em>, <em>sys='linux'</em>, <em>blocking=False</em>, <em>clean=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

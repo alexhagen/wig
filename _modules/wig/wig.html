@@ -50,7 +50,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pyb</span> <span class="kn">import</span> <span class="n">pyb</span>
 
-<div class="viewcode-block" id="wig"><a class="viewcode-back" href="../../index.html#wig.wig.wig">[docs]</a><span class="k">class</span> <span class="nc">wig</span><span class="p">:</span>
+<div class="viewcode-block" id="wig"><a class="viewcode-back" href="../../wig.html#wig.wig.wig">[docs]</a><span class="k">class</span> <span class="nc">wig</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; The ``wig`` object is the base object for an MCNP setup.</span>
 
 <span class="sd">    The ``wig`` object is basically the scene in which we create our MCNP</span>
@@ -68,7 +68,7 @@
 <span class="sd">        those commands or the runner wont work.</span>
 <span class="sd">    :return: the ``wig`` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
@@ -76,6 +76,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_render</span> <span class="o">=</span> <span class="n">render</span>
         <span class="k">if</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;6&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;mcnp6&#39;</span>
         <span class="k">elif</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;5&#39;</span><span class="p">:</span>
@@ -102,44 +103,43 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="wig.go_home"><a class="viewcode-back" href="../../index.html#wig.wig.wig.go_home">[docs]</a>    <span class="k">def</span> <span class="nf">go_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.go_home"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.go_home">[docs]</a>    <span class="k">def</span> <span class="nf">go_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.set_filename"><a class="viewcode-back" href="../../index.html#wig.wig.wig.set_filename">[docs]</a>    <span class="k">def</span> <span class="nf">set_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.set_filename"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.set_filename">[docs]</a>    <span class="k">def</span> <span class="nf">set_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/mcnp/active/&#39;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span></div>
 
-<div class="viewcode-block" id="wig.set_comment"><a class="viewcode-back" href="../../index.html#wig.wig.wig.set_comment">[docs]</a>    <span class="k">def</span> <span class="nf">set_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.set_comment"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.set_comment">[docs]</a>    <span class="k">def</span> <span class="nf">set_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="wig.refresh_data"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_data">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_data"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_data">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
-<div class="viewcode-block" id="wig.refresh_geo"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_geo">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_geo">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
-<div class="viewcode-block" id="wig.refresh_cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_cell">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_cell">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">sun</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="wig.refresh_phys"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_phys">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_phys">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
-<div class="viewcode-block" id="wig.refresh_tally"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
-<div class="viewcode-block" id="wig.refresh_matl"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_matl">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.refresh_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_matl">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
-<div class="viewcode-block" id="wig.run"><a class="viewcode-back" href="../../index.html#wig.wig.wig.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.run"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span>
-                              <span class="n">renderer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">)</span></div>
+                              <span class="n">renderer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.write"><a class="viewcode-back" href="../../index.html#wig.wig.wig.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.write"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="c1"># wrap fill and print to the file</span>
             <span class="n">intro</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">TextWrapper</span><span class="p">(</span><span class="n">initial_indent</span><span class="o">=</span><span class="s1">&#39;c &#39;</span><span class="p">,</span>
@@ -166,7 +166,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.render"><a class="viewcode-back" href="../../index.html#wig.wig.wig.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename_suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">render_target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">camera_location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.render"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename_suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">render_target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">camera_location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">render_target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">look_at</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">render_target</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">camera_location</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -179,11 +179,11 @@
         <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="wig.geo"><a class="viewcode-back" href="../../index.html#wig.wig.wig.geo">[docs]</a>    <span class="k">def</span> <span class="nf">geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.geo">[docs]</a>    <span class="k">def</span> <span class="nf">geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_geo</span><span class="p">(</span><span class="n">geos</span><span class="o">=</span><span class="n">geos</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../index.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="p">:</span>
@@ -203,7 +203,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="n">cells</span>
@@ -227,7 +227,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
                     <span class="k">print</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span>
                     <span class="k">for</span> <span class="n">plot_cmd</span><span class="p">,</span> <span class="n">plot_kwargs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">b_cmds</span><span class="p">,</span> <span class="n">cell</span><span class="o">.</span><span class="n">b_kwargs</span><span class="p">):</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot_cmd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -260,11 +260,10 @@
 
 
 
-<div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../index.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_matl</span><span class="p">(</span><span class="n">matls</span><span class="o">=</span><span class="n">matls</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="wig.add_matl"><a class="viewcode-back" href="../../index.html#wig.wig.wig.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.add_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">matl</span> <span class="ow">in</span> <span class="n">matls</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">matl</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="p">:</span>
                 <span class="c1"># print the comment</span>
@@ -279,7 +278,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">matl</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="wig.phys"><a class="viewcode-back" href="../../index.html#wig.wig.wig.phys">[docs]</a>    <span class="k">def</span> <span class="nf">phys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phys</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.phys">[docs]</a>    <span class="k">def</span> <span class="nf">phys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phys</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># print the comment</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">phys</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
         <span class="c1"># print the physics string</span>
@@ -287,8 +286,7 @@
         <span class="c1"># remove the last character (the new line)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="wig.tally"><a class="viewcode-back" href="../../index.html#wig.wig.wig.tally">[docs]</a>    <span class="k">def</span> <span class="nf">tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tallies</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-
+<div class="viewcode-block" id="wig.tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.tally">[docs]</a>    <span class="k">def</span> <span class="nf">tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tallies</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s2">&quot;prdmp j -15 1 4</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -323,13 +321,13 @@
                 <span class="c1"># increment matl num</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="wig.source"><a class="viewcode-back" href="../../index.html#wig.wig.wig.source">[docs]</a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.source"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.source">[docs]</a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
             <span class="c1"># print the source definition</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;sdef    &quot;</span>
             <span class="c1"># print the source string</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
                 <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">)</span></div></div>
 </pre></div>
 

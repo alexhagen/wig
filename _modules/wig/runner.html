@@ -42,34 +42,33 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">PIPE</span>
-<span class="kn">import</span> <span class="nn">notify2</span> <span class="kn">as</span> <span class="nn">n</span>
+<span class="c1"># import notify2 as n</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">import</span> <span class="nn">paramiko</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
-<div class="viewcode-block" id="runner"><a class="viewcode-back" href="../../index.html#wig.runner.runner">[docs]</a><span class="k">class</span> <span class="nc">runner</span><span class="p">:</span>
+
+<div class="viewcode-block" id="runner"><a class="viewcode-back" href="../../wig.html#wig.runner.runner">[docs]</a><span class="k">class</span> <span class="nc">runner</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span>
-                 <span class="n">renderer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">remote</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;solar system&#39;</span><span class="p">,</span> <span class="s1">&#39;Solar System&#39;</span><span class="p">,</span> <span class="s1">&#39;solar_system&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;solar sys&#39;</span><span class="p">]:</span>
-            <span class="k">pass</span>
+                 <span class="n">renderer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">solar_system</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mercury&#39;</span><span class="p">:</span> <span class="mi">2120</span><span class="p">,</span> <span class="s1">&#39;venus&#39;</span><span class="p">:</span> <span class="mi">2220</span><span class="p">,</span> <span class="s1">&#39;mars&#39;</span><span class="p">:</span> <span class="mi">2420</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">solar_system</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;128.46.92.228&quot;</span>
+            <span class="n">port</span> <span class="o">=</span> <span class="n">solar_system</span><span class="p">[</span><span class="n">remote</span><span class="p">]</span>
         <span class="c1"># check in the completed directory, and if there is an out file with</span>
         <span class="c1"># exactly the same infile, then, don&#39;t run</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">needs_to_run</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;polimi&#39;</span> <span class="ow">or</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;mcnpx&#39;</span><span class="p">:</span>
-            <span class="n">processors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;local&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+            <span class="n">processors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;local&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;mercury&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;venus&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;mars&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">processors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;local&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
-        <span class="c1"># Then, check the current processes to see if there are any instances</span>
-        <span class="c1"># running on this machine</span>
+            <span class="n">processors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;local&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;mercury&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;venus&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;mars&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
 
-        <span class="c1"># If there are, then we will run it on the solarsystem</span>
-
-        <span class="c1"># initialize a notification system</span>
-        <span class="n">n</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;MCNP&#39;</span><span class="p">)</span>
         <span class="c1"># construct the command</span>
         <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nohup&quot;</span><span class="p">]</span>
 
         <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">command</span><span class="p">])</span>
         <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;inp=&#39;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">])</span>
@@ -81,24 +80,60 @@
             <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;DUMN1=&#39;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;_polimi.out&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;tasks </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">processors</span><span class="p">[</span><span class="n">remote</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">remote</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">remote</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;local&#39;</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;&gt; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.nohup&#39;</span><span class="p">)])</span>
+            <span class="c1">#cmd.extend([&#39;&amp;&#39;])</span>
+            <span class="c1">#cmd.extend([&#39;&gt; /dev/null 2&gt;&amp;1 &amp;&#39;])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">blocking</span><span class="p">:</span>
             <span class="k">pass</span>
             <span class="c1"># cmd.extend([&#39;&amp;&#39;])</span>
         <span class="k">print</span> <span class="n">cmd</span>
         <span class="c1"># construct the notification</span>
-        <span class="n">notification</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">Notification</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="s1">&#39;Will now run </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
-        <span class="n">notification</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="c1"># check if there is an output file that has the EXACT same input and</span>
-        <span class="c1"># has completed</span>
-        <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">pass</span>
-            <span class="c1"># renderer.run()cd</span>
         <span class="c1"># now run the actual mcnp</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_to_run</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span><span class="c1">#, shell=True)</span>
-            <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
-                <span class="k">print</span> <span class="s2">&quot;waiting for the process to finish&quot;</span></div>
+            <span class="k">if</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">solar_system</span><span class="p">:</span>
+                <span class="n">ssh</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">SSHClient</span><span class="p">()</span>
+                <span class="k">print</span> <span class="s2">&quot;started paramiko&quot;</span>
+                <span class="n">ssh</span><span class="o">.</span><span class="n">set_missing_host_key_policy</span><span class="p">(</span><span class="n">paramiko</span><span class="o">.</span><span class="n">AutoAddPolicy</span><span class="p">())</span>
+                <span class="n">ssh</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="n">ip</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s1">&#39;inokuser&#39;</span><span class="p">,</span>
+                            <span class="n">password</span><span class="o">=</span><span class="s1">&#39;goldrush1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span>
+                <span class="k">print</span> <span class="s2">&quot;connected&quot;</span>
+                <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="s2">&quot;cd mcnp/active; rm -f *&quot;</span><span class="p">)</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">recv_exit_status</span><span class="p">()</span>
+                <span class="n">sftp_client</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">open_sftp</span><span class="p">()</span>
+                <span class="n">sftp_client</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;/home/inokuser/mcnp/active&#39;</span><span class="p">)</span>
+                <span class="n">sftp_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/mcnp/active/&#39;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">)</span>
+                <span class="c1">#sftp_client.close()</span>
+                <span class="c1">#chan = ssh.get_transport().open_session()</span>
+                <span class="c1">#print &quot;the ssh is %d connected.&quot; % ssh.get_transport().is_active()</span>
+                <span class="n">sshcommand</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="c1">#print sshcommand</span>
+                <span class="c1">#_, out, err = ssh.exec_command(&#39;cd mcnp/active&#39;)</span>
+                <span class="c1"># block until remote command completes</span>
+                <span class="c1">#status = out.channel.recv_exit_status()</span>
+                <span class="c1">#print status</span>
+                <span class="c1">#_, out, err = ssh.exec_command(&#39;ls -al&#39;)</span>
+                <span class="c1"># block until remote command completes</span>
+                <span class="c1">#status = out.channel.recv_exit_status()</span>
+                <span class="c1">#print status</span>
+                <span class="c1">#print out.readlines()</span>
+                <span class="n">sshcommand</span> <span class="o">=</span> <span class="s2">&quot;nohup bash -c &#39;source .profile; cd mcnp/active/; </span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">sshcommand</span>
+                <span class="k">print</span> <span class="n">sshcommand</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">sshcommand</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="c1">#status = out.channel.recv_exit_status()</span>
+                <span class="c1">#print status</span>
+                <span class="c1">#print out.readlines()</span>
+                <span class="c1">#print err.readlines()</span>
+                <span class="c1">#print &quot;exit status: %s&quot; % chan.recv_exit_status()</span>
+                <span class="n">sftp_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">ssh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span><span class="c1">#, shell=True)</span>
+                <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+                    <span class="k">print</span> <span class="s2">&quot;waiting for the process to finish&quot;</span></div>
         <span class="c1"># now start a daemon to watch the output file</span>
         <span class="c1"># checker = mcnpdaemon(&#39;/tmp/mcnpchecker.pid&#39;).set_notification_daemon(notification).start()</span>
         <span class="c1"># notify when it updates</span>
