@@ -3,8 +3,10 @@ import subprocess
 from subprocess import PIPE
 # import notify2 as n
 from os.path import expanduser
-import paramiko
 from time import sleep
+import paramiko
+import os
+
 
 class runner:
     def __init__(self, filename, command, remote="local", sys='linux',
@@ -20,22 +22,12 @@ class runner:
             processors = {"local": 1, "mercury": 1, "venus": 1, "mars": 1}
         else:
             processors = {"local": 3, "mercury": 2, "venus": 2, "mars": 2}
-        # Then, check the current processes to see if there are any instances
-        # running on this machine
 
-        # If there are, then we will run it on the solarsystem
-
-        # initialize a notification system
-        # n.init('MCNP')
         # construct the command
         if blocking:
             cmd = []
         else:
             cmd = ["nohup"]
-            # cmd = []
-        if remote:
-            if command == 'mcnp6':
-                command = 'mcnp6'
 
         cmd.extend([command])
         cmd.extend(['inp=' + filename + '.inp'])
@@ -47,7 +39,7 @@ class runner:
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])
         else:
             cmd.extend(['tasks %d' % processors[remote]])
-        if remote:
+        if remote is not None and remote is not 'local':
             cmd.extend(['> %s' % (filename + '.nohup')])
             #cmd.extend(['&'])
             #cmd.extend(['> /dev/null 2>&1 &'])
@@ -56,25 +48,17 @@ class runner:
             # cmd.extend(['&'])
         print cmd
         # construct the notification
-        # notification = n.Notification(command, 'Will now run %s.' % cmd)
-        # notification.show()
-        # check if there is an output file that has the EXACT same input and
-        # has completed
-        if renderer is not None:
-            pass
-            # renderer.run()cd
         # now run the actual mcnp
         if self.needs_to_run:
             if remote in solar_system:
                 ssh = paramiko.SSHClient()
                 print "started paramiko"
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                print "going to connect to the ip"
                 ssh.connect(hostname=ip, username='inokuser',
                             password='goldrush1', port=port)
                 print "connected"
                 if clean:
-                    _, out, err = ssh.exec_command("cd mcnp/active; rm *")
+                    _, out, err = ssh.exec_command("cd mcnp/active; rm -f *")
                     status = out.channel.recv_exit_status()
                 sftp_client = ssh.open_sftp()
                 sftp_client.chdir('/home/inokuser/mcnp/active')

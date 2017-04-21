@@ -7,7 +7,7 @@ class cell:
         self.b_cmds = []
         self.b_kwargs = []
 
-    def __init__(self, geo=None, matl=None, comment=None, show=True):
+    def __init__(self, geo=None, matl=None, color=None, alpha=1.0, comment=None, show=True):
         self.show = show
         if comment is None:
             self.comment = "c --- %s" % (geo.id)
@@ -23,11 +23,17 @@ class cell:
             else:
                 self.b_cmds = geo.b_cmds
                 self.b_kwargs = geo.b_kwargs
-            if matl.color is not None:
+            if matl.color is not None or color is not None:
                 self.b_cmds.extend([pyb.pyb.flat, pyb.pyb.set_matl])
-                self.b_kwargs.extend([{"name": matl.id, "color": matl.color,
-                                       "alpha": matl.alpha}, {"matl": matl.id,
-                                       "obj": self.id}])
+                if color is None:
+                    self.b_kwargs.extend([{"name": matl.id, "color": matl.color,
+                                           "alpha": matl.alpha}, {"matl": matl.id,
+                                           "obj": self.id}])
+                else:
+                    self.b_kwargs.extend([{"name": matl.id, "color": color,
+                                           "alpha": alpha}, {"matl": matl.id,
+                                           "obj": self.id}])
+
 
         self.cell_num = 0
 

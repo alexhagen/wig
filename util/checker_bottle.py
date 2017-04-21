@@ -129,6 +129,7 @@ def check():
     procs = []
     filenames = []
     mcnpservers = []
+    sysnames = []
     '''
     extra_servers = [server(type='remote', name='mercury',
                                         ip='128.46.92.228', port=2120,
@@ -172,8 +173,9 @@ def check():
         ctm_2 = None
         nps_2 = None
         filestring = ''
+        sysnames.extend([mcnpserver.name])
         print mcnpserver.name
-        if mcnpserver.type == 'local':
+        if mcnpserver.name == 'sputnik':
             filename = '/home/ahagen/mcnp/active/' + filename
             filelines = reversed(open(filename + '.out', 'r').readlines())
         else:
@@ -239,7 +241,7 @@ def check():
         if mcnpserver.type == 'remote':
             ssh.close()
     return filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
-        end_times, procs
+        end_times, procs, sysnames
 '''
 class cpu_progress(QProgressBar):
     def __init__(self):
@@ -390,9 +392,9 @@ def serve_picture():
 def all_prog():
     string = ""
     filenames, cpus, cpu_uses, npss, start_times, time_slopes, \
-        end_times, procs = check()
-    for filename, nps, st, ts, et, p in zip(filenames, npss, start_times, time_slopes, end_times, procs):
-        string += info(filename, st, ts, et, p)
+        end_times, procs, sysnames = check()
+    for filename, nps, st, ts, et, p, name in zip(filenames, npss, start_times, time_slopes, end_times, procs, sysnames):
+        string += info(filename, st, ts, et, p, name)
         string += prog_bar(100. * nps / 1.E9)
     return string
 
@@ -409,7 +411,7 @@ def prog_bar(perc):
     return string
 
 @app.route('/info', method='GET')
-def info(fname, start_time, time_slope, end_time, procs):
+def info(fname, start_time, time_slope, end_time, procs, sysname):
     string = ''
     string += "<p><b>Filename:</b> %s\n" % fname
     string += "<b>Start Time:</b> %s\n" % time.strftime(fmt,\
@@ -418,6 +420,7 @@ def info(fname, start_time, time_slope, end_time, procs):
         time.localtime(end_time))
     string += ("<b>Time Slope:</b> $%.2e \\mathrm{\\frac{n}{hour}}$</p>" % (time_slope * 3600.)).replace("e+0", r"\times 10^").replace("e-0", r"\times 10^")
     string += "<p><b>Processes:</b> %d</p>\n" % procs
+    string += "<p><b>System:</b> %s</p>\n" % sysname
     return string
 
 #run(app, host='128.46.92.223', port=8080)
