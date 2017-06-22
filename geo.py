@@ -53,6 +53,21 @@ class geo:
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left + right
 
+    def __mod__(self, right):
+        if right is None:
+            return pseudogeo(self)
+        if self.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            left = pseudogeo(self)
+        if right.__class__.__name__ is 'geo':
+            # convert the right argument to a pseudogeo
+            right = pseudogeo(right)
+        self.b_cmds.extend(right.b_cmds)
+        self.b_kwargs.extend(right.b_kwargs)
+        self.b_cmds.extend([pyb.pyb.intersect])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
+        return left % right
+
     def __or__(self, right):
         if right is None:
             return pseudogeo(self)
@@ -269,6 +284,29 @@ class pseudogeo:
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
+        return self
+
+    def __mod__(self, right):
+        if right is None:
+            return self
+        if right.__class__.__name__ is 'geo':
+            right = pseudogeo(right)
+        if type(right) is type(list()):
+            for _right in right:
+                __right = pseudogeo(_right)
+                self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
+                self.id += "_inter_%s" % __right.geo.id
+                self.b_cmds.extend(_right.b_cmds)
+                self.b_kwargs.extend([_right.b_kwargs])
+                self.b_cmds.extend([pyb.pyb.intersect])
+                self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
+        else:
+            self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
+            self.b_cmds.extend(right.b_cmds)
+            self.b_kwargs.extend(right.b_kwargs)
+            self.b_cmds.extend([pyb.pyb.intersect])
+            self.b_kwargs.extend([{"left": self.id, "right": right.id}])
+            self.id += "_inter_%s" % right.geo.id
         return self
 
     def __sub__(self, right):
