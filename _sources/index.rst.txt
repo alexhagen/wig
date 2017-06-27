@@ -5,31 +5,31 @@
 
 .. include:: README.rst
 
-.. include:: wig.rst
+.. include:: wig.inc
 
 Indices and tables
-******************
+==================
 
-Contents:
-=========
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
 
 Test Coverage
-=============
+-------------
 
 .. raw:: html
   :file: test_coverage.html
 
 Documentation Coverage
-======================
+----------------------
 
 .. raw:: html
    :file: docs_coverage.html
 
 ToDos
-=====
+-----
 
 .. todolist::
 

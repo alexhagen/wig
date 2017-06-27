@@ -1,0 +1,31 @@
+<style>
+  div.input_prompt {color: #9b703f;}
+  div.output_prompt {color: #142735;}
+  div.output_area pre {font-weight: normal; color: #142735;}
+  div.output_subarea {font-weight: normal; color: #142735;}
+  div.cell{
+    margin-left:auto;
+    margin-right:auto;
+    }
+    div.input_prompt{
+    width: 10ex;
+    padding-right: 1ex;
+    float: left;
+  }
+  div.input_prompt p {
+    padding-top: 1.2ex;
+    text-align: right;
+    vertical-align: middle;
+    }
+  div.inner-cell {
+    margin-left: 11ex;
+    display:inline-block;
+    float: right;
+  }
+  span.navbar-version {
+    margin-top: 18px;
+  }
+  .anchor-link {
+    display: none;
+  }
+</style>

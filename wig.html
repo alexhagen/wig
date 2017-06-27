@@ -1,6 +1,4 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -8,8 +6,10 @@
     
     <title>Main object &#8212; wig 0.0.1a documentation</title>
     
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="_static/extra.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -25,23 +25,122 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
   <body>
-  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+
+
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><span><img src="_static/wig.svg"></span>
+        wig</a>
+      <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+    </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
+          
+            <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Alex Hagen <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
             
+              <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#"> <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Main object</a><ul>
+<li><a class="reference internal" href="#wig-wig-object"><code class="docutils literal"><span class="pre">wig.wig</span></code> object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input-deck-creation-submodules">Input Deck Creation Submodules</a><ul>
+<li><a class="reference internal" href="#wig-geo-object">wig.geo object</a></li>
+<li><a class="reference internal" href="#wig-matl-object">wig.matl object</a></li>
+<li><a class="reference internal" href="#wig-cell-object">wig.cell object</a></li>
+<li><a class="reference internal" href="#wig-phys-object">wig.phys object</a></li>
+<li><a class="reference internal" href="#wig-source-object">wig.source object</a></li>
+<li><a class="reference internal" href="#wig-tally-object">wig.tally object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-and-runtime-submodules">Run and Runtime Submodules</a><ul>
+<li><a class="reference internal" href="#wig-renderer-object">wig.renderer object</a></li>
+<li><a class="reference internal" href="#wig-runner-object">wig.runner object</a></li>
+<li><a class="reference internal" href="#wig-mcnpdaemon-object">wig.mcnpdaemon object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#post-processing-submodules">Post-processing Submodules</a><ul>
+<li><a class="reference internal" href="#wig-analyze-object">wig.analyze object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#convenience-and-internal-submodules">Convenience and internal submodules</a><ul>
+<li><a class="reference internal" href="#wig-mcnp-string-object">wig.mcnp_string object</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+            
+          
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+          
+          
+            
+              
+            
+          
+          
+          
+          
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="http://alexhagen.github.io/" target="_blank">Alex Hagen</a></li>
+        </ul>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
   <div class="section" id="main-object">
 <h1>Main object<a class="headerlink" href="#main-object" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="wig-wig-object">
@@ -353,6 +452,92 @@ the directory in which the script started.</p>
 <h1>Input Deck Creation Submodules<a class="headerlink" href="#input-deck-creation-submodules" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="wig-geo-object">
 <h2>wig.geo object<a class="headerlink" href="#wig-geo-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="wig.geo.geo">
+<em class="property">class </em><code class="descclassname">wig.geo.</code><code class="descname">geo</code><a class="reference internal" href="_modules/wig/geo.html#geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo" title="Permalink to this definition">¶</a></dt>
+<dd><p>some docstring</p>
+<dl class="method">
+<dt id="wig.geo.geo.cell">
+<code class="descname">cell</code><span class="sig-paren">(</span><em>matl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>use <code class="docutils literal"><span class="pre">geo.cell(matl)</span></code> to return a cell of this geometry with
+material <code class="docutils literal"><span class="pre">matl</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mcnpm.matl</strong> (<a class="reference internal" href="#wig.wig.wig.matl" title="wig.wig.wig.matl"><em>matl</em></a>) – The material to make this cell</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnpce.cell</span></code> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.rpp">
+<code class="descname">rpp</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>id=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rpp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.box">
+<code class="descname">box</code><span class="sig-paren">(</span><em>v=None</em>, <em>a1=None</em>, <em>a2=None</em>, <em>a3=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.sph">
+<code class="descname">sph</code><span class="sig-paren">(</span><em>c=None</em>, <em>r=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.sph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.sph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.rcc">
+<code class="descname">rcc</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>r=None</em>, <em>id=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rcc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.gq">
+<code class="descname">gq</code><span class="sig-paren">(</span><em>A=None</em>, <em>B=None</em>, <em>C=None</em>, <em>D=None</em>, <em>E=None</em>, <em>F=None</em>, <em>G=None</em>, <em>H=None</em>, <em>J=None</em>, <em>K=None</em>, <em>coeffs=None</em>, <em>id=’gq’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.gq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.gq" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">gq</span></code> creates a generalized quadratic surface.</p>
+<p><code class="docutils literal"><span class="pre">gq</span></code> creates a generalized quadratic surface defined by the equation</p>
+<div class="math">
+\[\begin{split}Ax^{2}+By^{2}+Cz^{2}+Dxy+Eyz\\+Fzx+Gx+Hy+Jz+K=0\end{split}\]</div>
+<p>and takes inputs of either <span class="math">\(A\)</span>, <span class="math">\(B\)</span>, <span class="math">\(C\)</span>, <span class="math">\(D\)</span>,
+<span class="math">\(E\)</span>, <span class="math">\(F\)</span>, <span class="math">\(G\)</span>, <span class="math">\(H\)</span>, <span class="math">\(J\)</span>, <span class="math">\(K\)</span>, or an
+array <code class="docutils literal"><span class="pre">coeffs</span></code> which has the coefficients (all 10 of them) defined
+in alphabetical order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>A</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(A\)</span></li>
+<li><strong>B</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(B\)</span></li>
+<li><strong>C</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(C\)</span></li>
+<li><strong>D</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(D\)</span></li>
+<li><strong>E</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(E\)</span></li>
+<li><strong>F</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(F\)</span></li>
+<li><strong>G</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(G\)</span></li>
+<li><strong>H</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(H\)</span></li>
+<li><strong>J</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(J\)</span></li>
+<li><strong>K</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the coefficient <span class="math">\(K\)</span></li>
+<li><strong>coeffs</strong> (<em>list</em>) – a <code class="docutils literal"><span class="pre">(10,)</span></code> or <code class="docutils literal"><span class="pre">(1,10)</span></code> size array containing the
+coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</span>, respectively</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the generalized quadratic surface object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.cone">
+<code class="descname">cone</code><span class="sig-paren">(</span><em>c=None</em>, <em>dir=’+z’</em>, <em>h=None</em>, <em>r=None</em>, <em>r1=0.0</em>, <em>r2=0.0</em>, <em>lx=0.0</em>, <em>ly=0.0</em>, <em>lz=0.0</em>, <em>id=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="wig-matl-object">
 <h2>wig.matl object<a class="headerlink" href="#wig-matl-object" title="Permalink to this headline">¶</a></h2>
@@ -421,86 +606,21 @@ the directory in which the script started.</p>
 </div>
 
 
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/wig.svg" alt="Logo"/>
-            </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Main object</a><ul>
-<li><a class="reference internal" href="#wig-wig-object"><code class="docutils literal"><span class="pre">wig.wig</span></code> object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#input-deck-creation-submodules">Input Deck Creation Submodules</a><ul>
-<li><a class="reference internal" href="#wig-geo-object">wig.geo object</a></li>
-<li><a class="reference internal" href="#wig-matl-object">wig.matl object</a></li>
-<li><a class="reference internal" href="#wig-cell-object">wig.cell object</a></li>
-<li><a class="reference internal" href="#wig-phys-object">wig.phys object</a></li>
-<li><a class="reference internal" href="#wig-source-object">wig.source object</a></li>
-<li><a class="reference internal" href="#wig-tally-object">wig.tally object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#run-and-runtime-submodules">Run and Runtime Submodules</a><ul>
-<li><a class="reference internal" href="#wig-renderer-object">wig.renderer object</a></li>
-<li><a class="reference internal" href="#wig-runner-object">wig.runner object</a></li>
-<li><a class="reference internal" href="#wig-mcnpdaemon-object">wig.mcnpdaemon object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#post-processing-submodules">Post-processing Submodules</a><ul>
-<li><a class="reference internal" href="#wig-analyze-object">wig.analyze object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#convenience-and-internal-submodules">Convenience and internal submodules</a><ul>
-<li><a class="reference internal" href="#wig-mcnp-string-object">wig.mcnp_string object</a></li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/wig.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2016, Alex Hagen.
       
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
       
-      |
-      <a href="_sources/wig.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
+    </p>
+    <p>
+        &copy; Copyright 2016, Alex Hagen.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
+    </p>
+  </div>
+</footer>
   </body>
 </html>

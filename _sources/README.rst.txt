@@ -55,7 +55,3 @@ Example
 -------
 
 Let's learn by doing. Following is a cutesy little example:
-
-.. code:: python
-
-
