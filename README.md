@@ -48,7 +48,3 @@ render pretty pictures of your simulation.
 ## Example
 
 Let's learn by doing.  Following is a cutesy little example:
-
-```python
-
-```
