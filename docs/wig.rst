@@ -1,110 +1,100 @@
-wig package
+Main object
 ===========
 
-Submodules
-----------
+``wig.wig`` object
+~~~~~~~~~~~~~~~~~~
 
-wig.analyze module
-------------------
-
-.. automodule:: wig.analyze
+.. autoclass:: wig.wig.wig
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.cell module
----------------
+Input Deck Creation Submodules
+==============================
 
-.. automodule:: wig.cell
+wig.geo object
+~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.geo
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.geo module
---------------
+wig.matl object
+~~~~~~~~~~~~~~~
 
-.. automodule:: wig.geo
+.. autoclass:: wig.wig.matl
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.matl module
----------------
+wig.cell object
+~~~~~~~~~~~~~~~
 
-.. automodule:: wig.matl
+.. autoclass:: wig.wig.cell
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.mcnp_string module
-----------------------
+wig.phys object
+~~~~~~~~~~~~~~~
 
-.. automodule:: wig.mcnp_string
+.. autoclass:: wig.wig.phys
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.mcnpdaemon module
----------------------
+wig.source object
+~~~~~~~~~~~~~~~~~
 
-.. automodule:: wig.mcnpdaemon
+.. autoclass:: wig.wig.source
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.phys module
----------------
 
-.. automodule:: wig.phys
+wig.tally object
+~~~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.tally
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.renderer module
--------------------
+Run and Runtime Submodules
+==========================
 
-.. automodule:: wig.renderer
+wig.renderer object
+~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.renderer
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.runner module
------------------
 
-.. automodule:: wig.runner
+wig.runner object
+~~~~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.runner
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.source module
------------------
+wig.mcnpdaemon object
+~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: wig.source
+.. autoclass:: wig.wig.mcnpdaemon
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.tally module
-----------------
+Post-processing Submodules
+==========================
 
-.. automodule:: wig.tally
+wig.analyze object
+~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.analyze
     :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource
 
-wig.wig module
---------------
+Convenience and internal submodules
+===================================
 
-.. automodule:: wig.wig
+wig.mcnp_string object
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: wig.wig.mcnp_string
     :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: wig
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :member-order: bysource

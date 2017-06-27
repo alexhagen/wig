@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wig &mdash; wig 0.0.1a documentation</title>
+    <title>wig &#8212; wig 0.0.1a documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,20 +17,25 @@
         VERSION:     '0.0.1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="wig 0.0.1a documentation" href="index.html" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -42,11 +47,11 @@
 <p>MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
 for simulation of neutrons, photons, and electrons. I use it extensively
 for my research, and it does a great job at a very complex task.
-Unfortunately, it&#8217;s a nightmare to use. Basically uncompilable by real
+Unfortunately, it’s a nightmare to use. Basically uncompilable by real
 humans (and not experienced sys-admins), finicky about input decks and
 spaces, and almost completely text only (even though Vis-Ed has gotten
 steadily better), there are lots of improvements that could be made.</p>
-<p>I&#8217;ll be honest here, I&#8217;m writing <code class="docutils literal"><span class="pre">wig</span></code> to scratch my own itch. My itch
+<p>I’ll be honest here, I’m writing <code class="docutils literal"><span class="pre">wig</span></code> to scratch my own itch. My itch
 is that I need a way to:</p>
 <ul class="simple">
 <li>create repeatable input decks</li>
@@ -56,17 +61,17 @@ reusable</li>
 <li>add some sort of semantic meaning to the syntax of mcnp</li>
 <li>cite sources in input decks to remember where I got numbers and
 materials</li>
-<li>enable easy sending of input decks to be run on &#8220;clusters&#8221; through
+<li>enable easy sending of input decks to be run on “clusters” through
 <code class="docutils literal"><span class="pre">ssh</span></code></li>
 </ul>
 <p>The name is a nod to Eugene Wigner, particularly his contributions to
 nuclear structure and quantum mechanics, where he <strong>made use of the
 random matrix</strong> to describe cross-section structure. MCNP makes use of
-random numbers to help us experimenters know what&#8217;s physically going on,
-and I want <code class="docutils literal"><span class="pre">wig</span></code> to make use of the &#8220;random&#8221; syntax of MCNP for ease
+random numbers to help us experimenters know what’s physically going on,
+and I want <code class="docutils literal"><span class="pre">wig</span></code> to make use of the “random” syntax of MCNP for ease
 of use. So is pronounced <em>vig</em>.</p>
 <p>As of now, this package is in a really-really-really alpha stage. I
-think only I can use it because of it&#8217;s finickiness. But, it allows for
+think only I can use it because of it’s finickiness. But, it allows for
 quick (and semantic) development of MCNP decks using a <strong>pipeline</strong>
 method. The <strong>pipeline</strong> method will be familiar to those that use MCNP
 a lot. The steps in the pipeline are:</p>
@@ -74,9 +79,9 @@ a lot. The steps in the pipeline are:</p>
 <li>Geometry (create <code class="docutils literal"><span class="pre">geo</span></code>s)</li>
 <li>Materials (create <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
 <li>Cells (combine <code class="docutils literal"><span class="pre">geo</span></code>s as needed and apply <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
-<li>Physics (there&#8217;s a pretty hands off way to define the common physics)</li>
+<li>Physics (there’s a pretty hands off way to define the common physics)</li>
 <li>Sources (create <code class="docutils literal"><span class="pre">source</span></code>)</li>
-<li>Tallies (there&#8217;s pretty hands off way for some tally specs now)</li>
+<li>Tallies (there’s pretty hands off way for some tally specs now)</li>
 <li>Run</li>
 </ol>
 <p>The pipeline method means that this package is very semantic, so instead
@@ -88,7 +93,7 @@ you have the proper requirements, render pretty pictures of your
 simulation.</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s learn by doing. Following is a cutesy little example:</p>
+<p>Let’s learn by doing. Following is a cutesy little example:</p>
 </div>
 </div>
 
@@ -118,21 +123,18 @@ simulation.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/README.txt"
+      <li><a href="_sources/README.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -143,11 +145,11 @@ simulation.</p>
       &copy;2016, Alex Hagen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/README.txt"
+      <a href="_sources/README.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
