@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>wig.wig &mdash; wig 0.0.1a documentation</title>
+    <title>wig.wig &#8212; wig 0.0.1a documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -17,21 +17,25 @@
         VERSION:     '0.0.1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="wig 0.0.1a documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
    
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -39,16 +43,16 @@
           <div class="body" role="main">
             
   <h1>Source code for wig.wig</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
-<span class="kn">from</span> <span class="nn">runner</span> <span class="kn">import</span> <span class="n">runner</span>
-<span class="kn">from</span> <span class="nn">pyg</span> <span class="kn">import</span> <span class="n">threed</span>
-<span class="kn">from</span> <span class="nn">mcnp_string</span> <span class="kn">import</span> <span class="n">mstring</span>
-<span class="kn">from</span> <span class="nn">renderer</span> <span class="kn">import</span> <span class="n">renderer</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
-<span class="kn">import</span> <span class="nn">geo</span> <span class="kn">as</span> <span class="nn">mcnpg</span>
+<span class="kn">from</span> <span class="nn">runner</span> <span class="k">import</span> <span class="n">runner</span>
+<span class="kn">from</span> <span class="nn">pyg</span> <span class="k">import</span> <span class="n">threed</span>
+<span class="kn">from</span> <span class="nn">mcnp_string</span> <span class="k">import</span> <span class="n">mstring</span>
+<span class="kn">from</span> <span class="nn">renderer</span> <span class="k">import</span> <span class="n">renderer</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">expanduser</span>
+<span class="kn">import</span> <span class="nn">geo</span> <span class="k">as</span> <span class="nn">mcnpg</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pyb</span> <span class="kn">import</span> <span class="n">pyb</span>
+<span class="kn">from</span> <span class="nn">pyb</span> <span class="k">import</span> <span class="n">pyb</span>
 
 <div class="viewcode-block" id="wig"><a class="viewcode-back" href="../../wig.html#wig.wig.wig">[docs]</a><span class="k">class</span> <span class="nc">wig</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; The ``wig`` object is the base object for an MCNP setup.</span>
@@ -66,16 +70,18 @@
 <span class="sd">    :param str flavor: &#39;6&#39; for ``mcnp6``, &#39;5&#39; for ``mcnp5``, &#39;x&#39; for ``mcnpx``,</span>
 <span class="sd">        or &#39;polimi&#39; for ``mcnpx-polimi``.  Make sure you alias the binaries to</span>
 <span class="sd">        those commands or the runner wont work.</span>
+<span class="sd">    :param bool render: defines whether to render the scene using</span>
+<span class="sd">        ``blender`` before running it</span>
 <span class="sd">    :return: the ``wig`` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_render</span> <span class="o">=</span> <span class="n">render</span>
         <span class="k">if</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;6&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;mcnp6&#39;</span>
@@ -103,89 +109,42 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="wig.go_home"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.go_home">[docs]</a>    <span class="k">def</span> <span class="nf">go_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span><span class="p">)</span></div>
+    <span class="c1"># --------------------------- File Methods ---------------------------------</span>
 
 <div class="viewcode-block" id="wig.set_filename"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.set_filename">[docs]</a>    <span class="k">def</span> <span class="nf">set_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``set_filename`` sets the base of the filenames that will be created</span>
+
+<span class="sd">            :param str filename: the base of the filename</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/mcnp/active/&#39;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span></div>
 
 <div class="viewcode-block" id="wig.set_comment"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.set_comment">[docs]</a>    <span class="k">def</span> <span class="nf">set_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``set_comment`` writes the first line of the ``mcnp`` file, which is</span>
+<span class="sd">            a comment describing the file. Be descriptive but not too long.</span>
+
+<span class="sd">            :param str comment: the first line of the ``mcnp`` file - limit is</span>
+<span class="sd">                80 characters.  ``wig`` manually strips newlines, so feel free</span>
+<span class="sd">                to make this a triple quoted (``&#39;&#39;&#39;``) string with as many</span>
+<span class="sd">                returns as you like.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="wig.refresh_data"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_data">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+<span class="c1"># --------------------------------- Block Methods ------------------------------</span>
 
-<div class="viewcode-block" id="wig.refresh_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_geo">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+<div class="viewcode-block" id="wig.geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.geo">[docs]</a>    <span class="k">def</span> <span class="nf">geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``geo`` adds all defined ``wig.geo`` objects to an input deck</span>
 
-<div class="viewcode-block" id="wig.refresh_cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_cell">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">sun</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="wig.refresh_phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_phys">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
-
-<div class="viewcode-block" id="wig.refresh_tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
-
-<div class="viewcode-block" id="wig.refresh_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_matl">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
-
-<div class="viewcode-block" id="wig.run"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span>
-                              <span class="n">renderer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="wig.write"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="c1"># wrap fill and print to the file</span>
-            <span class="n">intro</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">TextWrapper</span><span class="p">(</span><span class="n">initial_indent</span><span class="o">=</span><span class="s1">&#39;c &#39;</span><span class="p">,</span>
-                                         <span class="n">subsequent_indent</span><span class="o">=</span><span class="s1">&#39;c &#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intro_block</span><span class="p">))</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># write the cells block</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Cells &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># write the geometry block</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Geometry &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># write the data block</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Data &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Physics &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Tallies &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Materials &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="wig.render"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename_suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">render_target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">camera_location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">render_target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">look_at</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">render_target</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">camera_location</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">camera_location</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">camera_location</span><span class="o">=</span><span class="n">camera_location</span><span class="p">,</span>
-                        <span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="n">filename_suffix</span> <span class="o">+</span> <span class="s1">&#39;_setup.png&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="n">render</span><span class="p">,</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">proj_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">proj_matrix</span>
-        <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="wig.geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.geo">[docs]</a>    <span class="k">def</span> <span class="nf">geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="sd">            :param list geos: the ``wig.geo`` objects to be added to the input</span>
+<span class="sd">                deck. Make sure this includes a universe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_geo</span><span class="p">(</span><span class="n">geos</span><span class="o">=</span><span class="n">geos</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="p">:</span>
                     <span class="c1"># print the comment</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
@@ -203,12 +162,18 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``cell`` adds all the ``wig.cell``s in a list to an input deck.</span>
+
+<span class="sd">            :param list cells: the list of ``wig.cell``s to be added to the</span>
+<span class="sd">                input deck.  If you don&#39;t have a cell named ``&#39;universe&#39;``, this</span>
+<span class="sd">                method will make one for you, but you might night like it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="n">cells</span>
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># print the comment</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
                 <span class="c1"># now print the cell number</span>
@@ -219,23 +184,23 @@
                 <span class="c1"># now print the density</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%15.10E</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="o">-</span><span class="n">cell</span><span class="o">.</span><span class="n">matl</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span>
                 <span class="c1"># now print the sense</span>
-                <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;geo&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;geo&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">sense</span> <span class="o">*</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;pseudogeo&#39;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;pseudogeo&#39;</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">nums</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span>
+                    <span class="nb">print</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span>
                     <span class="k">for</span> <span class="n">plot_cmd</span><span class="p">,</span> <span class="n">plot_kwargs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">b_cmds</span><span class="p">,</span> <span class="n">cell</span><span class="o">.</span><span class="n">b_kwargs</span><span class="p">):</span>
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot_cmd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                             <span class="n">plot_cmd</span> <span class="o">=</span> <span class="n">plot_cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                            <span class="k">print</span> <span class="n">plot_cmd</span>
+                            <span class="nb">print</span> <span class="n">plot_cmd</span>
                         <span class="n">plot_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">)</span>
-                        <span class="k">print</span> <span class="n">plot_cmd</span>
-                        <span class="k">print</span> <span class="n">plot_kwargs</span>
+                        <span class="nb">print</span> <span class="n">plot_cmd</span>
+                        <span class="nb">print</span> <span class="n">plot_kwargs</span>
                 <span class="c1"># increment the cell num</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; imp:n=1</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">+=</span> <span class="mi">10</span>
@@ -248,22 +213,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;                 &quot;</span>
         <span class="c1"># now search for the universe cell</span>
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="s1">&#39;universe&#39;</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;geo&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;geo&#39;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span><span class="p">))</span>
-                    <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;pseudogeo&#39;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;pseudogeo&#39;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;imp:n=0</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
 
 
-<div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``matl`` adds all the ``wig.matl``s to the input deck</span>
+
+<span class="sd">            :param list matls: the materials to add to the input deck</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_matl</span><span class="p">(</span><span class="n">matls</span><span class="o">=</span><span class="n">matls</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wig.add_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.add_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.add_matl">[docs]</a>    <span class="k">def</span> <span class="nf">add_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">matl</span> <span class="ow">in</span> <span class="n">matls</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">matl</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="p">:</span>
                 <span class="c1"># print the comment</span>
@@ -278,7 +247,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">matl</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="wig.phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.phys">[docs]</a>    <span class="k">def</span> <span class="nf">phys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phys</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.phys">[docs]</a>    <span class="k">def</span> <span class="nf">phys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``phys`` adds all ``wig.phys`` blocks to the model</span>
+
+<span class="sd">            :param wig.phys phys: the ``wig.phys`` block to be added to the</span>
+<span class="sd">                model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print the comment</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">phys</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
         <span class="c1"># print the physics string</span>
@@ -286,12 +260,17 @@
         <span class="c1"># remove the last character (the new line)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="wig.tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.tally">[docs]</a>    <span class="k">def</span> <span class="nf">tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tallies</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.tally">[docs]</a>    <span class="k">def</span> <span class="nf">tally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tallies</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``tally`` adds all ``wig.tally`` b&#39;ocks to the model</span>
+
+<span class="sd">            :param list tallies: the ``wig.tally`` blocks to be added to the</span>
+<span class="sd">                model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s2">&quot;prdmp j -15 1 4</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">tallies</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">tally</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tally</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># print the tally type card</span>
                 <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">mesh</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fmesh</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
@@ -321,14 +300,164 @@
                 <span class="c1"># increment matl num</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="wig.source"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.source">[docs]</a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.source"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.source">[docs]</a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``source`` adds the ``wig.source`` object to the model</span>
+
+<span class="sd">            :param list sources: the ``wig.source`` blocks (defining sources and</span>
+<span class="sd">                distributions) to be added to the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
             <span class="c1"># print the source definition</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;sdef    &quot;</span>
             <span class="c1"># print the source string</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
-                <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">)</span></div></div>
+            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
+                <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">)</span></div>
+
+    <span class="c1"># --------------------------- Running methods ------------------------------</span>
+
+<div class="viewcode-block" id="wig.run"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``run`` (of course) runs the deck.</span>
+
+<span class="sd">            ``run`` first writes the input deck, including rendering with</span>
+<span class="sd">            whatever additional keyword args you pass, and then opens an</span>
+<span class="sd">            instance of a ``wig.runner``, and passes commands to it.</span>
+
+<span class="sd">            :param str remote: The ip address of the remote system you want to</span>
+<span class="sd">                run this on, or ``&#39;local&#39;`` if on this system.  The remote</span>
+<span class="sd">                system must be set for passwordless ssh login and have ``mcnp``</span>
+<span class="sd">                on path (whatever flavor you&#39;re using). Default: ``&#39;local&#39;``</span>
+<span class="sd">            :param str sys: The type of system that the remote runs on.</span>
+<span class="sd">                Currently, this is useless, as I&#39;ve only made it run on linux.</span>
+<span class="sd">                Default: ``&#39;linux&#39;``</span>
+<span class="sd">            :param bool blocking: Whether to wait on the deck to finish running</span>
+<span class="sd">                before continuing or not.  Useful to block if you want to run</span>
+<span class="sd">                many decks depending on the previous result (optimization), or</span>
+<span class="sd">                if you only have a certain number of processors. Default:</span>
+<span class="sd">                ``False``</span>
+<span class="sd">            :param bool clean: Whether to clean up the running files in the</span>
+<span class="sd">                ``~/mcnp/active`` directory or not. Keep the files if storage</span>
+<span class="sd">                isn&#39;t a concern and you&#39;re unsure if your deck will run</span>
+<span class="sd">                correctly. Default: ``False``</span>
+<span class="sd">            :param dict **kwargs: ``run`` passes the rest of the commands to</span>
+<span class="sd">                ``write``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span>
+                              <span class="n">renderer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="wig.write"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``write`` writes the input deck and renders the input deck</span>
+
+<span class="sd">            :param dict **kwargs: keyword arguments to pass to ``render``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># wrap fill and print to the file</span>
+            <span class="n">intro</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">TextWrapper</span><span class="p">(</span><span class="n">initial_indent</span><span class="o">=</span><span class="s1">&#39;c &#39;</span><span class="p">,</span>
+                                         <span class="n">subsequent_indent</span><span class="o">=</span><span class="s1">&#39;c &#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">intro</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intro_block</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># write the cells block</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Cells &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># write the geometry block</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Geometry &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># write the data block</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Data &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Physics &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Tallies &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;c &quot;</span> <span class="o">+</span> <span class="s2">&quot; Materials &quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">78</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span><span class="p">)</span><span class="o">.</span><span class="n">flow</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="wig.render"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename_suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">render_target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">camera_location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``render`` passes the input deck to ``pyb``, a simplified renderer</span>
+<span class="sd">            that uses ``blender`` as the backend</span>
+
+<span class="sd">            :param str filename_suffix: suffix to put after the filename when we</span>
+<span class="sd">                save the rendering. Default: ``&#39;&#39;``</span>
+<span class="sd">            :param tuple render_target: a point for the camera to look at when</span>
+<span class="sd">                rendering. Default: ``(0, 0, 0)``</span>
+<span class="sd">            :param tuple camera_location: a point from which the camera looks.</span>
+<span class="sd">                Default: based on the size of the scene, isotropic placement.</span>
+<span class="sd">            :param bool render: Whether or not to actually run the render. This</span>
+<span class="sd">                method will always save a blender file, regardless of if we do a</span>
+<span class="sd">                full render. Default: ``True``</span>
+<span class="sd">            :param dict **kwargs: Other arguments to pass to ``pyb.render``.</span>
+<span class="sd">                See ``pyb`` for options, such as ``samples`` or ``res``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">render_target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">look_at</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">render_target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">camera_location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">camera_location</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">camera_location</span><span class="o">=</span><span class="n">camera_location</span><span class="p">,</span>
+                        <span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="n">filename_suffix</span> <span class="o">+</span> <span class="s1">&#39;_setup.png&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="n">render</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">proj_matrix</span>
+        <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+    <span class="c1"># ---------------------------- Refresh Methods -----------------------------</span>
+
+<div class="viewcode-block" id="wig.refresh_data"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_data">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_data`` resets the data block to nothing. Useful if you&#39;re</span>
+<span class="sd">            reusing a model and want to reset sources or materials or something.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="wig.refresh_geo"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_geo">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_geo`` resets the geometry block to nothing. Useful if</span>
+<span class="sd">            you&#39;re changing geometry, although this probably shouldn&#39;t be used</span>
+<span class="sd">            without also refreshing the cells. But I don&#39;t know you, live your</span>
+<span class="sd">            life.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="wig.refresh_cell"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_cell">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_cell`` resets the cell block to nothing.  Again, useful</span>
+<span class="sd">            for changing up cell definitions or materials.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">sun</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="wig.refresh_phys"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_phys">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_phys`` resets the physics block to nothing.  This is a</span>
+<span class="sd">            subset of the ``refresh_data`` method, so use whichever one is more</span>
+<span class="sd">            useful.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="wig.refresh_tally"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_tally`` resets the tally block to nothing.  This is</span>
+<span class="sd">            probably not useful, unless you&#39;re changing other things, too. If</span>
+<span class="sd">            the model is still the name, just add the all the tallies in one</span>
+<span class="sd">            input file and run it, it&#39;s faster that way.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="wig.refresh_matl"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.refresh_matl">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_matl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_matl`` resets the materials block to nothing. Super useful</span>
+<span class="sd">            if you&#39;re messing around with shielding, or reactions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matl_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+    <span class="c1"># ---------------------------- Convenience Methods -------------------------</span>
+
+<div class="viewcode-block" id="wig.go_home"><a class="viewcode-back" href="../../wig.html#wig.wig.wig.go_home">[docs]</a>    <span class="k">def</span> <span class="nf">go_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``wig`` runs in the directory ``~/mcnp/active``. ``go_home`` goes to</span>
+<span class="sd">            the directory in which the script started.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -350,14 +479,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -368,8 +494,8 @@
       &copy;2016, Alex Hagen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>
 
