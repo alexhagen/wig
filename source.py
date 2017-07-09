@@ -2,7 +2,29 @@ from colour import Color
 from pyb import pyb
 
 class source():
+    """ ``source`` is an object that defines an MCNP source. Currently there are
+        only a few implemented type of sources:
 
+        - point source: use ``pos`` or ``x``, ``y``, and ``z``
+        - disk source: use ``pos``, ``shape = 'disk'``, and ``direction``
+        - cell source: use ``cell`` and an enclosing disk
+        - energy spectrum: use ``spectrum`` and a ``dist`` object
+        - intensity distribution:
+
+        :param str particle: one of 'n', 'p', or 'fission'
+        :param tup pos: position of the source
+        :param float x, y, z: position of the source - alternate method
+        :param spectrum: either a distribution or a two-d list to create an
+            energy distribution
+        :param str shape: right now, can only be ``'disk'``, more coming.
+        :param str direction: one of '+x' or '-x', '+y' or '-y', or '+z' or '-z'
+        :param str id: an identifying string
+        :param float radius: the radius of a disk source
+        :param wig.cell cell: the cell for a volumetric source
+        :param bool show: whether the source should be rendered or not
+
+        .. todo:: implement the whole MCNP Primer of sources
+    """
     def __init__(self, particle='n', pos=None, x=None, y=None, z=None,
                  spectrum=None, shape=None, direction=None, id=None,
                  radius=None, cell=None, show=True, spectrum_type='C',
@@ -88,8 +110,24 @@ class source():
             self.string += _dist.dist_string
         self.string = self.string[:-1]
 
+
 class dist():
-    def __init__(self, x=None, y=None, dist_num=None, spectrum_type=None, format=None):
+    """ ``dist`` creates a distribution that MCNP uses for its source energy,
+        or position, or intensity
+
+        :param list x: the independent variable values of the distribution
+        :param list y: the dependent variable values of the distribution
+        :param int dist_num: the identifying number, usually assigned
+            automatically by ``wig.source``
+        :param str spectrum_type: can be ``'C'``, ``'Maxwellian'``, ``'Watt'``
+        :param str format: currently can be ``'d'`` to use only integers in the
+            distribution
+
+        .. todo:: implement more distribution types
+        .. todo:: make semantic names for the distribution types
+    """
+    def __init__(self, x=None, y=None, dist_num=None, spectrum_type=None,
+                 format=None):
         self.dist_num = dist_num
         self.dist_string = ''
         if spectrum_type is None or len(spectrum_type) == 1:

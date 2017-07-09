@@ -1,9 +1,21 @@
 import textwrap
 class mstring:
+    """ ``mstring`` are strings that can be printed in MCNP files.  MCNP is so
+        finicky, and same with Python (with respect to indentation), that it's
+        easier to just remove all newlines and split everything into 80
+        character blocks.
+
+        :param str string: a string, formatted however, that will be converted
+            to MCNP format
+    """
     def __init__(self, string):
         self.string = string
 
     def flow(self):
+        """ ``flow`` actually converts the string to MCNP format.
+
+        :return str string: a string with newlines in 80 character blocks
+        """
         newstr = ''
         for line in self.string.splitlines():
             # if the line is longer than 80 characters

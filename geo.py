@@ -7,21 +7,38 @@ from pyb import pyb
 import cell as mcnpce
 
 class geo:
-    """ some docstring
+    """ a ``wig.geo`` instance is a single geometric primative for creation of
+        the geometry block for MCNP.  Where possible, I've used macrobodies
+        instead of surfaces; this decision may be problematic for purists,
+        but surfaces are so convoluted to use.
     """
     def __init__(self):
         self.bstring = ''
         self.b_cmds = []
         self.b_kwargs = []
 
-    def cell(self, matl):
-        """ use ``geo.cell(matl)`` to return a cell of this geometry with
-            material ``matl``
+    def boolean(self, right, operation):
+        """ ``wig.geo`` implements some of the boolean geometry used by MCNP.
+            The operators usable are:
 
-            :param matl mcnpm.matl: The material to make this cell
-            :returns: ``mcnpce.cell`` object
+            - ``+`` - implements a geometric boolean union operator between the two objects
+            - ``-`` - implements a geometric boolean difference operator between the two objects
+            - ``|`` - implements a geometric boolean union operator between the two objects
+            - ``%`` - implements a geometric boolean intersection operator between the two objects
+
+            For example, the following creates a cube on a stick
+
+            .. code-block:: python
+                :linenos:
+
+                cube = wig.geo().rpp(x=[0., 5.], y=[0., 5.], z=[0., 5.], id='1')
+                stick = wig.geo().rcc(c=(2.5, 2.5, -5.), r=1., lz=5., id='2')
+                cube_on_a_stick = cube + stick
+                cube_on_a_stick_cell = cube_on_a_stick.cell(some_material)
+
+            .. todo:: Implement more boolean operators
         """
-        return mcnpce.cell(self, matl)
+        pass
 
     def __sub__(self, right):
         if right is None:
@@ -83,7 +100,24 @@ class geo:
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
         return left | right
 
-    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None, name=None):
+    def rpp(self, c=None, l=None, x=None, y=None, z=None, id=None):
+        """ ``rpp`` is the same as the MCNP macrobody, a right parallelpiped.
+
+            ``rpp`` has two ways to define it:
+
+            - center (``c``) and length (``l``)
+            - :math:`x` extents (``x``), :math:`y` extents (``y``) and :math:`z` extents (``z``)
+
+            :param tuple c: the center of the right parallelpiped
+            :param tuple l: the length of each side, centered at ``c``
+            :param list x: the :math:`x` extents of the right parallelpiped,
+                always with the lowest number first.
+            :param list y: the :math:`y` extents of the right parallelpiped,
+                always with the lowest number first.
+            :param list z: the :math:`z` extents of the right parallelpiped,
+                always with the lowest number first.
+            :param str id: an identifying string with no spaces
+        """
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -122,6 +156,20 @@ class geo:
         return self
 
     def box(self, v=None, a1=None, a2=None, a3=None, id=None):
+        """ ``box`` is similar to ``rpp``, but is not oriented to the cartesian
+            axes.  Instead, you must define three axes, which are orthagonal to
+            each other, as well as the corner (``v``).
+
+            :param tuple v: The corner of the ``box``
+            :param tuple a1: the vector defining one edge emanating from ``v``
+            :param tuple a2: the vector defining one edge emanating from ``v``
+            :param tuple a3: the vector defining one edge emanating from ``v``
+            :param str id: an identifying string with no spaces
+
+            .. todo:: calculate the ``a3`` from ``a1`` and ``a2``, if given
+
+            .. todo:: calculate the box from three points
+        """
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -145,6 +193,12 @@ class geo:
         return self
 
     def sph(self, c=None, r=None, id=None):
+        """ ``sph`` defines a sphere with radius ``r`` at ``c``
+
+            :param tuple c: the center of the sphere
+            :param float r: the radius of the sphere
+            :param str id: an identifying string with no spaces
+        """
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -157,7 +211,19 @@ class geo:
         self.blender_cmd_args = {"c": c, "r": r, "name": id}
         return self
 
-    def rcc(self, c=None, l=None, r=None, id=None, lx=None, ly=None, lz=None):
+    def rcc(self, c=None, r=None, id=None, lx=None, ly=None, lz=None):
+        """ ``rcc`` defines a right circular cylinder.  The geometry can be
+            specified by defining the **center of the base** ``c``, radius
+            ``r``, and one of ``lx``, ``ly``, or ``lz`` which is the height in
+            one of those ordinal directions.
+
+            :param tuple c: center of the base of the cylinder
+            :param float r: radius of the circular base
+            :param float lx, ly, lz: height in one of the ordinal directions
+            :param str id: an identifying string with no spaces
+
+            .. todo:: allow a vector ``l`` to define slanted cylinders
+        """
         self.sense = -1
         h = [0, 0, 0]
         if lx is not None:
@@ -180,9 +246,10 @@ class geo:
 
     def gq(self, A=None, B=None, C=None, D=None, E=None, F=None, G=None,
            H=None, J=None, K=None, coeffs=None, id='gq'):
-        r""" ``gq`` creates a generalized quadratic surface.
+        r""" `gq`` creates a generalized quadratic surface defined by the
+            equation
 
-        ``gq`` creates a generalized quadratic surface defined by the equation
+            .. warning :: This is not implemented as of yet. Just a placeholder.
 
         .. math::
 
@@ -206,6 +273,8 @@ class geo:
         :param list coeffs: a ``(10,)`` or ``(1,10)`` size array containing the
             coefficients :math:`A` through :math:`K`, respectively
         :returns: the generalized quadratic surface object
+
+        .. todo:: Implement the gq surface
         """
         self.sense = -1
         self.id = id
@@ -222,6 +291,21 @@ class geo:
 
     def cone(self, c=None, dir='+z', h=None, r=None, r1=0.0, r2=0.0,
              lx=0.0, ly=0.0, lz=0.0, id=0.0):
+        """ ``cone`` makes a truncated cone. It allows for specifications of the
+            cone in two ways:
+
+            - base center ``c``, radii ``r1`` and ``r2``, height ``h`` in direction ``dir``
+            - base center ``c``, radii ``r1`` and ``r2``, height ``lx``, ``ly``, or ``lz`` in the implied direction
+
+            :param tuple c: the base center of the cone
+            :param str dir: one of ``+x``, ``-x``, ``+y``, ``-y``, ``+z``, ``-z``
+            :param float h: height of the cone
+            :param float r1: base radius
+            :param float r2: top radius
+            :param list r: size two list of base and top radius, respectively
+            :param float lx, ly, lz: height in respective direction
+            :param str id: an identifying string with no spaces
+        """
         self.sense = -1
         self.id = id
         self.geo_num = 0
@@ -250,6 +334,15 @@ class geo:
                                  "h": np.max(h), "direction": blender_dir,
                                  "name": id}
         return self
+
+    def cell(self, matl):
+        """ ``geo.cell(matl)`` returns a cell of this geometry with
+            material ``matl``
+
+            :param wig.matl.matl matl: The material to make this cell
+            :returns: ``mcnpce.cell`` object
+        """
+        return mcnpce.cell(self, matl)
 
 class pseudogeo:
     def __init__(self, geo):

@@ -118,9 +118,9 @@ class wig:
                     self.geo_comments.extend([geo.comment])
 
     def cell(self, cells=None):
-        """ ``cell`` adds all the ``wig.cell``s in a list to an input deck.
+        """ ``cell`` adds all the ``wig.cell`` in a list to an input deck.
 
-            :param list cells: the list of ``wig.cell``s to be added to the
+            :param list cells: the list of ``wig.cell`` to be added to the
                 input deck.  If you don't have a cell named ``'universe'``, this
                 method will make one for you, but you might night like it.
         """
@@ -181,7 +181,7 @@ class wig:
 
 
     def matl(self, matls=None):
-        """ ``matl`` adds all the ``wig.matl``s to the input deck
+        """ ``matl`` adds all the ``wig.matl`` to the input deck
 
             :param list matls: the materials to add to the input deck
         """
@@ -277,7 +277,7 @@ class wig:
 
             ``run`` first writes the input deck, including rendering with
             whatever additional keyword args you pass, and then opens an
-            instance of a ``wig.runner``, and passes commands to it.
+            instance of a ``wig.runner`` , and passes commands to it.
 
             :param str remote: The ip address of the remote system you want to
                 run this on, or ``'local'`` if on this system.  The remote
@@ -295,17 +295,17 @@ class wig:
                 ``~/mcnp/active`` directory or not. Keep the files if storage
                 isn't a concern and you're unsure if your deck will run
                 correctly. Default: ``False``
-            :param dict **kwargs: ``run`` passes the rest of the commands to
+            :param dict kwargs: ``run`` passes the rest of the commands to
                 ``write``
         """
         self.write(**kwargs)
         self._runner = runner(self.filename, self.command, remote, sys,
-                              renderer=self.renderer, blocking=blocking, clean=clean)
+                              blocking=blocking, clean=clean)
 
     def write(self, **kwargs):
         """ ``write`` writes the input deck and renders the input deck
 
-            :param dict **kwargs: keyword arguments to pass to ``render``
+            :param dict kwargs: keyword arguments to pass to ``render``
         """
         with open(self.filename + '.inp', 'w') as f:
             # wrap fill and print to the file
@@ -346,7 +346,7 @@ class wig:
             :param bool render: Whether or not to actually run the render. This
                 method will always save a blender file, regardless of if we do a
                 full render. Default: ``True``
-            :param dict **kwargs: Other arguments to pass to ``pyb.render``.
+            :param dict kwargs: Other arguments to pass to ``pyb.render``.
                 See ``pyb`` for options, such as ``samples`` or ``res``.
         """
         if render_target is not None:

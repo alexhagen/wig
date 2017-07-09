@@ -9,8 +9,8 @@ humans (and not experienced sys-admins), finicky about input decks and
 spaces, and almost completely text only (even though Vis-Ed has gotten
 steadily better), there are lots of improvements that could be made.
 
-I'll be honest here, I'm writing ``wig`` to scratch my own itch. My itch
-is that I need a way to:
+I'll be honest here, I'm writing ``wig`` to scratch my own itch. I need
+a way to:
 
 -  create repeatable input decks
 -  automatically create publication worthy figures
@@ -27,7 +27,7 @@ nuclear structure and quantum mechanics, where he **made use of the
 random matrix** to describe cross-section structure. MCNP makes use of
 random numbers to help us experimenters know what's physically going on,
 and I want ``wig`` to make use of the "random" syntax of MCNP for ease
-of use. So is pronounced *vig*.
+of use. So it's pronounced *vig*.
 
 As of now, this package is in a really-really-really alpha stage. I
 think only I can use it because of it's finickiness. But, it allows for
@@ -50,8 +50,3 @@ python, for example if you wanted to move a source throughout a bunch of
 different simulations for time dependence. Finally, this code will, if
 you have the proper requirements, render pretty pictures of your
 simulation.
-
-Example
--------
-
-Let's learn by doing. Following is a cutesy little example:

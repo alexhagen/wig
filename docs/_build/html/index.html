@@ -78,10 +78,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">wig</a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">wig</a></li>
 <li><a class="reference internal" href="#main-object">Main object</a><ul>
 <li><a class="reference internal" href="#wig-wig-object"><code class="docutils literal"><span class="pre">wig.wig</span></code> object</a></li>
 </ul>
@@ -96,7 +93,6 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#run-and-runtime-submodules">Run and Runtime Submodules</a><ul>
-<li><a class="reference internal" href="#wig-renderer-object">wig.renderer object</a></li>
 <li><a class="reference internal" href="#wig-runner-object">wig.runner object</a></li>
 <li><a class="reference internal" href="#wig-mcnpdaemon-object">wig.mcnpdaemon object</a></li>
 </ul>
@@ -111,8 +107,7 @@
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
 <li><a class="reference internal" href="#contents">Contents</a></li>
-<li><a class="reference internal" href="#test-coverage">Test Coverage</a></li>
-<li><a class="reference internal" href="#documentation-coverage">Documentation Coverage</a></li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
 <li><a class="reference internal" href="#todos">ToDos</a></li>
 </ul>
 </li>
@@ -161,8 +156,8 @@ Unfortunately, it’s a nightmare to use. Basically uncompilable by real
 humans (and not experienced sys-admins), finicky about input decks and
 spaces, and almost completely text only (even though Vis-Ed has gotten
 steadily better), there are lots of improvements that could be made.</p>
-<p>I’ll be honest here, I’m writing <code class="docutils literal"><span class="pre">wig</span></code> to scratch my own itch. My itch
-is that I need a way to:</p>
+<p>I’ll be honest here, I’m writing <code class="docutils literal"><span class="pre">wig</span></code> to scratch my own itch. I need
+a way to:</p>
 <ul class="simple">
 <li>create repeatable input decks</li>
 <li>automatically create publication worthy figures</li>
@@ -179,7 +174,7 @@ nuclear structure and quantum mechanics, where he <strong>made use of the
 random matrix</strong> to describe cross-section structure. MCNP makes use of
 random numbers to help us experimenters know what’s physically going on,
 and I want <code class="docutils literal"><span class="pre">wig</span></code> to make use of the “random” syntax of MCNP for ease
-of use. So is pronounced <em>vig</em>.</p>
+of use. So it’s pronounced <em>vig</em>.</p>
 <p>As of now, this package is in a really-really-really alpha stage. I
 think only I can use it because of it’s finickiness. But, it allows for
 quick (and semantic) development of MCNP decks using a <strong>pipeline</strong>
@@ -201,10 +196,6 @@ python, for example if you wanted to move a source throughout a bunch of
 different simulations for time dependence. Finally, this code will, if
 you have the proper requirements, render pretty pictures of your
 simulation.</p>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p>Let’s learn by doing. Following is a cutesy little example:</p>
-</div>
 </div>
 <div class="section" id="main-object">
 <h1>Main object<a class="headerlink" href="#main-object" title="Permalink to this headline">¶</a></h1>
@@ -296,13 +287,13 @@ deck. Make sure this includes a universe</td>
 <dl class="method">
 <dt id="wig.wig.wig.cell">
 <code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">cell</span></code> adds all the <a href="#id1"><span class="problematic" id="id2">``</span></a>wig.cell“s in a list to an input deck.</p>
+<dd><p><code class="docutils literal"><span class="pre">cell</span></code> adds all the <code class="docutils literal"><span class="pre">wig.cell</span></code> in a list to an input deck.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cells</strong> (<em>list</em>) – the list of <code class="docutils literal"><span class="pre">wig.cell``s</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">added</span> <span class="pre">to</span> <span class="pre">the</span>
-<span class="pre">input</span> <span class="pre">deck.</span>&#160; <span class="pre">If</span> <span class="pre">you</span> <span class="pre">don't</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">cell</span> <span class="pre">named</span> <span class="pre">``'universe'</span></code>, this
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cells</strong> (<em>list</em>) – the list of <code class="docutils literal"><span class="pre">wig.cell</span></code> to be added to the
+input deck.  If you don’t have a cell named <code class="docutils literal"><span class="pre">'universe'</span></code>, this
 method will make one for you, but you might night like it.</td>
 </tr>
 </tbody>
@@ -312,7 +303,7 @@ method will make one for you, but you might night like it.</td>
 <dl class="method">
 <dt id="wig.wig.wig.matl">
 <code class="descname">matl</code><span class="sig-paren">(</span><em>matls=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.matl" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">matl</span></code> adds all the <a href="#id3"><span class="problematic" id="id4">``</span></a>wig.matl“s to the input deck</p>
+<dd><p><code class="docutils literal"><span class="pre">matl</span></code> adds all the <code class="docutils literal"><span class="pre">wig.matl</span></code> to the input deck</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -379,7 +370,7 @@ distributions) to be added to the model.</td>
 <dd><p><code class="docutils literal"><span class="pre">run</span></code> (of course) runs the deck.</p>
 <p><code class="docutils literal"><span class="pre">run</span></code> first writes the input deck, including rendering with
 whatever additional keyword args you pass, and then opens an
-instance of a <code class="docutils literal"><span class="pre">wig.runner</span></code>, and passes commands to it.</p>
+instance of a <code class="docutils literal"><span class="pre">wig.runner</span></code> , and passes commands to it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -401,9 +392,8 @@ if you only have a certain number of processors. Default:
 <code class="docutils literal"><span class="pre">~/mcnp/active</span></code> directory or not. Keep the files if storage
 isn’t a concern and you’re unsure if your deck will run
 correctly. Default: <code class="docutils literal"><span class="pre">False</span></code></li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <p><code class="docutils literal"><span class="pre">run</span></code> passes the rest of the commands to
-<code class="docutils literal"><span class="pre">write</span></code></p>
-</li>
+<li><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <code class="docutils literal"><span class="pre">run</span></code> passes the rest of the commands to
+<code class="docutils literal"><span class="pre">write</span></code></li>
 </ul>
 </td>
 </tr>
@@ -419,8 +409,7 @@ correctly. Default: <code class="docutils literal"><span class="pre">False</span
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <p>keyword arguments to pass to <code class="docutils literal"><span class="pre">render</span></code></p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – keyword arguments to pass to <code class="docutils literal"><span class="pre">render</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -445,9 +434,8 @@ Default: based on the size of the scene, isotropic placement.</li>
 <li><strong>render</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – Whether or not to actually run the render. This
 method will always save a blender file, regardless of if we do a
 full render. Default: <code class="docutils literal"><span class="pre">True</span></code></li>
-<li><strong>**kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <p>Other arguments to pass to <code class="docutils literal"><span class="pre">pyb.render</span></code>.
-See <code class="docutils literal"><span class="pre">pyb</span></code> for options, such as <code class="docutils literal"><span class="pre">samples</span></code> or <code class="docutils literal"><span class="pre">res</span></code>.</p>
-</li>
+<li><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – Other arguments to pass to <code class="docutils literal"><span class="pre">pyb.render</span></code>.
+See <code class="docutils literal"><span class="pre">pyb</span></code> for options, such as <code class="docutils literal"><span class="pre">samples</span></code> or <code class="docutils literal"><span class="pre">res</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -520,49 +508,156 @@ the directory in which the script started.</p>
 <dl class="class">
 <dt id="wig.geo.geo">
 <em class="property">class </em><code class="descclassname">wig.geo.</code><code class="descname">geo</code><a class="reference internal" href="_modules/wig/geo.html#geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo" title="Permalink to this definition">¶</a></dt>
-<dd><p>some docstring</p>
+<dd><p>a <code class="docutils literal"><span class="pre">wig.geo</span></code> instance is a single geometric primative for creation of
+the geometry block for MCNP.  Where possible, I’ve used macrobodies
+instead of surfaces; this decision may be problematic for purists,
+but surfaces are so convoluted to use.</p>
 <dl class="method">
-<dt id="wig.geo.geo.cell">
-<code class="descname">cell</code><span class="sig-paren">(</span><em>matl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>use <code class="docutils literal"><span class="pre">geo.cell(matl)</span></code> to return a cell of this geometry with
-material <code class="docutils literal"><span class="pre">matl</span></code></p>
+<dt id="wig.geo.geo.boolean">
+<code class="descname">boolean</code><span class="sig-paren">(</span><em>right</em>, <em>operation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.boolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">wig.geo</span></code> implements some of the boolean geometry used by MCNP.
+The operators usable are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">+</span></code> - implements a geometric boolean union operator between the two objects</li>
+<li><code class="docutils literal"><span class="pre">-</span></code> - implements a geometric boolean difference operator between the two objects</li>
+<li><code class="docutils literal"><span class="pre">|</span></code> - implements a geometric boolean union operator between the two objects</li>
+<li><code class="docutils literal"><span class="pre">%</span></code> - implements a geometric boolean intersection operator between the two objects</li>
+</ul>
+<p>For example, the following creates a cube on a stick</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">wig</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rpp</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">stick</span> <span class="o">=</span> <span class="n">wig</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+<span class="n">cube_on_a_stick</span> <span class="o">=</span> <span class="n">cube</span> <span class="o">+</span> <span class="n">stick</span>
+<span class="n">cube_on_a_stick_cell</span> <span class="o">=</span> <span class="n">cube_on_a_stick</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">some_material</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Implement more boolean operators</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.rpp">
+<code class="descname">rpp</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rpp" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">rpp</span></code> is the same as the MCNP macrobody, a right parallelpiped.</p>
+<p><code class="docutils literal"><span class="pre">rpp</span></code> has two ways to define it:</p>
+<ul class="simple">
+<li>center (<code class="docutils literal"><span class="pre">c</span></code>) and length (<code class="docutils literal"><span class="pre">l</span></code>)</li>
+<li><span class="math">\(x\)</span> extents (<code class="docutils literal"><span class="pre">x</span></code>), <span class="math">\(y\)</span> extents (<code class="docutils literal"><span class="pre">y</span></code>) and <span class="math">\(z\)</span> extents (<code class="docutils literal"><span class="pre">z</span></code>)</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mcnpm.matl</strong> (<a class="reference internal" href="#wig.matl.matl" title="wig.matl.matl"><em>matl</em></a>) – The material to make this cell</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnpce.cell</span></code> object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>c</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the center of the right parallelpiped</li>
+<li><strong>l</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the length of each side, centered at <code class="docutils literal"><span class="pre">c</span></code></li>
+<li><strong>x</strong> (<em>list</em>) – the <span class="math">\(x\)</span> extents of the right parallelpiped,
+always with the lowest number first.</li>
+<li><strong>y</strong> (<em>list</em>) – the <span class="math">\(y\)</span> extents of the right parallelpiped,
+always with the lowest number first.</li>
+<li><strong>z</strong> (<em>list</em>) – the <span class="math">\(z\)</span> extents of the right parallelpiped,
+always with the lowest number first.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="wig.geo.geo.rpp">
-<code class="descname">rpp</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>id=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rpp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rpp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="wig.geo.geo.box">
 <code class="descname">box</code><span class="sig-paren">(</span><em>v=None</em>, <em>a1=None</em>, <em>a2=None</em>, <em>a3=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.box" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">box</span></code> is similar to <code class="docutils literal"><span class="pre">rpp</span></code>, but is not oriented to the cartesian
+axes.  Instead, you must define three axes, which are orthagonal to
+each other, as well as the corner (<code class="docutils literal"><span class="pre">v</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>v</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – The corner of the <code class="docutils literal"><span class="pre">box</span></code></li>
+<li><strong>a1</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the vector defining one edge emanating from <code class="docutils literal"><span class="pre">v</span></code></li>
+<li><strong>a2</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the vector defining one edge emanating from <code class="docutils literal"><span class="pre">v</span></code></li>
+<li><strong>a3</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the vector defining one edge emanating from <code class="docutils literal"><span class="pre">v</span></code></li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">calculate the <code class="docutils literal"><span class="pre">a3</span></code> from <code class="docutils literal"><span class="pre">a1</span></code> and <code class="docutils literal"><span class="pre">a2</span></code>, if given</p>
+</div>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">calculate the box from three points</p>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.geo.geo.sph">
 <code class="descname">sph</code><span class="sig-paren">(</span><em>c=None</em>, <em>r=None</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.sph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.sph" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">sph</span></code> defines a sphere with radius <code class="docutils literal"><span class="pre">r</span></code> at <code class="docutils literal"><span class="pre">c</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>c</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the center of the sphere</li>
+<li><strong>r</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the radius of the sphere</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.geo.geo.rcc">
-<code class="descname">rcc</code><span class="sig-paren">(</span><em>c=None</em>, <em>l=None</em>, <em>r=None</em>, <em>id=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rcc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">rcc</code><span class="sig-paren">(</span><em>c=None</em>, <em>r=None</em>, <em>id=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.rcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.rcc" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">rcc</span></code> defines a right circular cylinder.  The geometry can be
+specified by defining the <strong>center of the base</strong> <code class="docutils literal"><span class="pre">c</span></code>, radius
+<code class="docutils literal"><span class="pre">r</span></code>, and one of <code class="docutils literal"><span class="pre">lx</span></code>, <code class="docutils literal"><span class="pre">ly</span></code>, or <code class="docutils literal"><span class="pre">lz</span></code> which is the height in
+one of those ordinal directions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>c</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – center of the base of the cylinder</li>
+<li><strong>r</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – radius of the circular base</li>
+<li><strong>lx</strong><strong>, </strong><strong>ly</strong><strong>, </strong><strong>lz</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – height in one of the ordinal directions</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<p class="last">allow a vector <code class="docutils literal"><span class="pre">l</span></code> to define slanted cylinders</p>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.geo.geo.gq">
 <code class="descname">gq</code><span class="sig-paren">(</span><em>A=None</em>, <em>B=None</em>, <em>C=None</em>, <em>D=None</em>, <em>E=None</em>, <em>F=None</em>, <em>G=None</em>, <em>H=None</em>, <em>J=None</em>, <em>K=None</em>, <em>coeffs=None</em>, <em>id=’gq’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.gq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.gq" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">gq</span></code> creates a generalized quadratic surface.</p>
-<p><code class="docutils literal"><span class="pre">gq</span></code> creates a generalized quadratic surface defined by the equation</p>
+<dd><dl class="docutils">
+<dt><cite>gq`</cite> creates a generalized quadratic surface defined by the</dt>
+<dd><p class="first">equation</p>
+<div class="last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This is not implemented as of yet. Just a placeholder.</p>
+</div>
+</dd>
+</dl>
 <div class="math">
 \[\begin{split}Ax^{2}+By^{2}+Cz^{2}+Dxy+Eyz\\+Fzx+Gx+Hy+Jz+K=0\end{split}\]</div>
 <p>and takes inputs of either <span class="math">\(A\)</span>, <span class="math">\(B\)</span>, <span class="math">\(C\)</span>, <span class="math">\(D\)</span>,
@@ -594,12 +689,57 @@ coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</s
 </tr>
 </tbody>
 </table>
+<div class="admonition-todo admonition" id="index-4">
+<p class="first admonition-title">Todo</p>
+<p class="last">Implement the gq surface</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="wig.geo.geo.cone">
 <code class="descname">cone</code><span class="sig-paren">(</span><em>c=None</em>, <em>dir=’+z’</em>, <em>h=None</em>, <em>r=None</em>, <em>r1=0.0</em>, <em>r2=0.0</em>, <em>lx=0.0</em>, <em>ly=0.0</em>, <em>lz=0.0</em>, <em>id=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cone" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">cone</span></code> makes a truncated cone. It allows for specifications of the
+cone in two ways:</p>
+<ul class="simple">
+<li>base center <code class="docutils literal"><span class="pre">c</span></code>, radii <code class="docutils literal"><span class="pre">r1</span></code> and <code class="docutils literal"><span class="pre">r2</span></code>, height <code class="docutils literal"><span class="pre">h</span></code> in direction <code class="docutils literal"><span class="pre">dir</span></code></li>
+<li>base center <code class="docutils literal"><span class="pre">c</span></code>, radii <code class="docutils literal"><span class="pre">r1</span></code> and <code class="docutils literal"><span class="pre">r2</span></code>, height <code class="docutils literal"><span class="pre">lx</span></code>, <code class="docutils literal"><span class="pre">ly</span></code>, or <code class="docutils literal"><span class="pre">lz</span></code> in the implied direction</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>c</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) – the base center of the cone</li>
+<li><strong>dir</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of <code class="docutils literal"><span class="pre">+x</span></code>, <code class="docutils literal"><span class="pre">-x</span></code>, <code class="docutils literal"><span class="pre">+y</span></code>, <code class="docutils literal"><span class="pre">-y</span></code>, <code class="docutils literal"><span class="pre">+z</span></code>, <code class="docutils literal"><span class="pre">-z</span></code></li>
+<li><strong>h</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – height of the cone</li>
+<li><strong>r1</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – base radius</li>
+<li><strong>r2</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – top radius</li>
+<li><strong>r</strong> (<em>list</em>) – size two list of base and top radius, respectively</li>
+<li><strong>lx</strong><strong>, </strong><strong>ly</strong><strong>, </strong><strong>lz</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – height in respective direction</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.geo.geo.cell">
+<code class="descname">cell</code><span class="sig-paren">(</span><em>matl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/geo.html#geo.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.geo.geo.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">geo.cell(matl)</span></code> returns a cell of this geometry with
+material <code class="docutils literal"><span class="pre">matl</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matl</strong> (<a class="reference internal" href="#wig.matl.matl" title="wig.matl.matl"><em>wig.matl.matl</em></a>) – The material to make this cell</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnpce.cell</span></code> object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -609,19 +749,68 @@ coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</s
 <dl class="class">
 <dt id="wig.matl.matl">
 <em class="property">class </em><code class="descclassname">wig.matl.</code><code class="descname">matl</code><span class="sig-paren">(</span><em>rho</em>, <em>atom_perc=None</em>, <em>mass_perc=None</em>, <em>id=None</em>, <em>color=None</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/matl.html#matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.matl.matl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">matl</span></code> defines a material for the MCNP format with definitions in
+either mass or atom percent.  The list passed to <code class="docutils literal"><span class="pre">atom_perc</span></code> or
+<code class="docutils literal"><span class="pre">mass_perc</span></code> is formatted as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">steel_atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;C-12&#39;</span><span class="p">,</span> <span class="mf">0.022831</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">,</span> <span class="mf">0.995000</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>note that the isotope convention <code class="docutils literal"><span class="pre">'C-12'</span></code> evaluates to ZAID <code class="docutils literal"><span class="pre">006012</span></code>
+and the element convention <code class="docutils literal"><span class="pre">'Fe'</span></code> just evaluates to ZAID <code class="docutils literal"><span class="pre">026000</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the density of the material in <span class="math">\(\frac{g}{cm^{3}}\)</span></li>
+<li><strong>atom_perc</strong> (<em>list</em>) – list formatted as above of atom percentages</li>
+<li><strong>mass_perc</strong> (<em>list</em>) – list formatted as above of mass percentages</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string with no spaces</li>
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the color of the material for rendering, in hex format
+<code class="docutils literal"><span class="pre">'#RRGGBB'</span></code></li>
+<li><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the opacity of the material for rendering, from
+<code class="docutils literal"><span class="pre">0.0</span></code> to <code class="docutils literal"><span class="pre">1.0</span></code>. Default: <code class="docutils literal"><span class="pre">1.0</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-5">
+<p class="first admonition-title">Todo</p>
+<p class="last">define an asset based materials import system</p>
+</div>
+</dd></dl>
 
 </div>
 <div class="section" id="wig-cell-object">
 <h2>wig.cell object<a class="headerlink" href="#wig-cell-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.cell.cell">
-<em class="property">class </em><code class="descclassname">wig.cell.</code><code class="descname">cell</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em>, <em>color=None</em>, <em>alpha=1.0</em>, <em>comment=None</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="wig.cell.cell.refresh">
-<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<em class="property">class </em><code class="descclassname">wig.cell.</code><code class="descname">cell</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em>, <em>comment=None</em>, <em>color=None</em>, <em>alpha=1.0</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <code class="docutils literal"><span class="pre">cell</span></code> is a combination of geometric primitives (single or
+combined using <code class="docutils literal"><span class="pre">geo</span></code> operators) and the material applied to that
+section of geometry.  The easiest way to get a <code class="docutils literal"><span class="pre">cell</span></code> is to simply
+call <code class="docutils literal"><span class="pre">geo().cell(matl)</span></code> on the geometry object, but for more
+explicit uses, instantiation of this class can be useful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>geo</strong> (<a class="reference internal" href="#wig.wig.wig.geo" title="wig.wig.wig.geo"><em>wig.geo</em></a>) – the geometry object, whether singular or combined</li>
+<li><strong>matl</strong> (<a class="reference internal" href="#wig.wig.wig.matl" title="wig.wig.wig.matl"><em>wig.matl</em></a>) – the material object</li>
+<li><strong>comment</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a comment that will be printed beside the cell</li>
+<li><strong>show</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether or not the object will be shown in the
+rendering</li>
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the color for the material in the rendering, in
+hex format (‘#RRGGBB’)</li>
+<li><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the opacity of the object in the rendering, from
+0.0 to 1.0, Default: <code class="docutils literal"><span class="pre">1.0</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="staticmethod">
 <dt id="wig.cell.cell.air">
 <em class="property">static </em><code class="descname">air</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.air" title="Permalink to this definition">¶</a></dt>
@@ -630,25 +819,33 @@ coefficients <span class="math">\(A\)</span> through <span class="math">\(K\)</s
 air material for use as universe materials, or others.  It should be
 decided whether to use this class or the materials class as a
 repository for materials.</p>
-<div class="admonition-todo admonition" id="index-0">
+<div class="admonition-todo admonition" id="index-6">
 <p class="first admonition-title">Todo</p>
-<p class="last">use this or materials class for repo for pnnl defined
-materials?</p>
+<p class="last">define an assets system for this.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">mcnp_companion.materials.air</span></code></td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="wig.cell.cell.universe">
 <code class="descname">universe</code><span class="sig-paren">(</span><em>scene</em>, <em>matl=&lt;staticmethod object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.universe" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">universe</span></code> defines a programatically defined universe around all
+your geometry</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">this is not currently implemented, just a placeholder.</p>
+</div>
+<div class="admonition-todo admonition" id="index-7">
+<p class="first admonition-title">Todo</p>
+<p class="last">implement the universe</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.cell.cell.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">refresh</span></code> removes all of the blender commands from the cell.
+Useful for if you are changing cells with new geometry or color.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -658,25 +855,89 @@ materials?</p>
 <dl class="class">
 <dt id="wig.phys.phys">
 <em class="property">class </em><code class="descclassname">wig.phys.</code><code class="descname">phys</code><span class="sig-paren">(</span><em>particles=None</em>, <em>sources=None</em>, <em>maxE=None</em>, <em>minE=None</em>, <em>nps=None</em>, <em>ctme=None</em>, <em>polimi=False</em>, <em>polimi_cells=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p><code class="docutils literal"><span class="pre">phys</span></code> defines all of the options for physics in the MCNP model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>particles</strong> (<em>list</em>) – list of particles included, such as <code class="docutils literal"><span class="pre">['p',</span> <span class="pre">'n']</span></code></li>
+<li><strong>sources</strong> (<em>list</em>) – Not implemented</li>
+<li><strong>maxE</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – maximum energy (in <span class="math">\(MeV\)</span>) to model</li>
+<li><strong>minE</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – minimum energy (in <span class="math">\(MeV\)</span>) to model</li>
+<li><strong>nps</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – number of particles to simulate</li>
+<li><strong>ctme</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – number of minutes to run the model</li>
+<li><strong>polimi</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether this is an MCNP-Polimi deck. Do not use
+when not using <code class="docutils literal"><span class="pre">wig.flavor</span> <span class="pre">=</span> <span class="pre">'polimi'</span></code>.</li>
+<li><strong>polimi_cells</strong> (<em>list</em>) – cells in which to transport neutrons/photos
+using MCNP-Polimi</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="wig.phys.phys.nps">
 <code class="descname">nps</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.nps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.nps" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">nps</span></code> is a convenience method to change the number of particles to
+simulate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – number of particles, maximum around <code class="docutils literal"><span class="pre">2E9</span></code> unless
+you’ve compiled MCNP with 64-bit integers</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.phys.phys.ctme">
 <code class="descname">ctme</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.ctme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.ctme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">ctme</span></code> is a convenience method to change the number of minutes to
+run the deck.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – number of minutes to run.  Beware that if the number
+of particles exceeds the maximum integer, the simulation will
+fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.phys.phys.no_fission">
 <code class="descname">no_fission</code><span class="sig-paren">(</span><em>cells=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.no_fission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.no_fission" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">no_fission</span></code> removes creation of neutrons from fission in certain
+cells using MCNP’s <code class="docutils literal"><span class="pre">nonu</span></code> directive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cells</strong> (<em>list</em>) – list of <code class="docutils literal"><span class="pre">cell</span></code> in which to remove fission</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.phys.phys.polimi">
 <code class="descname">polimi</code><span class="sig-paren">(</span><em>cells</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys.polimi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys.polimi" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">polimi</span></code> is a convenience method to use MCNP-Polimi to transport
+particles through the cells in <code class="docutils literal"><span class="pre">cells</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cells</strong> (<em>list</em>) – list of <code class="docutils literal"><span class="pre">cell</span></code> to use MCNP-Polimi for transport</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -686,7 +947,41 @@ materials?</p>
 <dl class="class">
 <dt id="wig.source.source">
 <em class="property">class </em><code class="descclassname">wig.source.</code><code class="descname">source</code><span class="sig-paren">(</span><em>particle=’n’</em>, <em>pos=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>spectrum=None</em>, <em>shape=None</em>, <em>direction=None</em>, <em>id=None</em>, <em>radius=None</em>, <em>cell=None</em>, <em>show=True</em>, <em>spectrum_type=’C’</em>, <em>axis=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/source.html#source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.source.source" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">source</span></code> is an object that defines an MCNP source. Currently there are
+only a few implemented type of sources:</p>
+<ul class="simple">
+<li>point source: use <code class="docutils literal"><span class="pre">pos</span></code> or <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, and <code class="docutils literal"><span class="pre">z</span></code></li>
+<li>disk source: use <code class="docutils literal"><span class="pre">pos</span></code>, <code class="docutils literal"><span class="pre">shape</span> <span class="pre">=</span> <span class="pre">'disk'</span></code>, and <code class="docutils literal"><span class="pre">direction</span></code></li>
+<li>cell source: use <code class="docutils literal"><span class="pre">cell</span></code> and an enclosing disk</li>
+<li>energy spectrum: use <code class="docutils literal"><span class="pre">spectrum</span></code> and a <code class="docutils literal"><span class="pre">dist</span></code> object</li>
+<li>intensity distribution:</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>particle</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of ‘n’, ‘p’, or ‘fission’</li>
+<li><strong>pos</strong> (<em>tup</em>) – position of the source</li>
+<li><strong>x</strong><strong>, </strong><strong>y</strong><strong>, </strong><strong>z</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – position of the source - alternate method</li>
+<li><strong>spectrum</strong> – either a distribution or a two-d list to create an
+energy distribution</li>
+<li><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – right now, can only be <code class="docutils literal"><span class="pre">'disk'</span></code>, more coming.</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of ‘+x’ or ‘-x’, ‘+y’ or ‘-y’, or ‘+z’ or ‘-z’</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – an identifying string</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – the radius of a disk source</li>
+<li><strong>cell</strong> (<a class="reference internal" href="#wig.wig.wig.cell" title="wig.wig.wig.cell"><em>wig.cell</em></a>) – the cell for a volumetric source</li>
+<li><strong>show</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether the source should be rendered or not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-8">
+<p class="first admonition-title">Todo</p>
+<p class="last">implement the whole MCNP Primer of sources</p>
+</div>
+</dd></dl>
 
 </div>
 <div class="section" id="wig-tally-object">
@@ -694,35 +989,63 @@ materials?</p>
 <dl class="class">
 <dt id="wig.tally.tally">
 <em class="property">class </em><code class="descclassname">wig.tally.</code><code class="descname">tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>a <code class="docutils literal"><span class="pre">tally</span></code> object defines one of several types of MCNP tallies:</p>
+<ul class="simple">
+<li>flux tally (<code class="docutils literal"><span class="pre">f4</span></code>)</li>
+<li>current tally (<code class="docutils literal"><span class="pre">f1</span></code>)</li>
+<li>fission tally (<code class="docutils literal"><span class="pre">f7</span></code>)</li>
+<li>mesh tally (<code class="docutils literal"><span class="pre">fmesh4</span></code>)</li>
+</ul>
+<p>The best pratice is to pass energies and comments to the initializer and
+to use the convenience methods to continue from there</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Es</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0E-4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">]</span>
+<span class="n">meshtal1</span> <span class="o">=</span> <span class="n">wig</span><span class="o">.</span><span class="n">tally</span><span class="p">(</span><span class="n">comment</span><span class="o">=</span><span class="s1">&#39;a mesh tally for demo purposes&#39;</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">Es</span><span class="p">)</span>                <span class="o">.</span><span class="n">mesh_tally</span><span class="p">(</span><span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">ijk</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="method">
 <dt id="wig.tally.tally.flux_tally">
 <code class="descname">flux_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.flux_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.flux_tally" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">flux_tally</span></code> is a tally calculating the flux through a cell. Pass
+keywords <code class="docutils literal"><span class="pre">energy</span></code>, <code class="docutils literal"><span class="pre">cell</span></code>, and <code class="docutils literal"><span class="pre">particle</span></code></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.mesh_tally">
 <code class="descname">mesh_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.mesh_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.mesh_tally" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">mesh_tally</span></code> is a tally finding the mesh in many voxels.  Pass
+keywords <code class="docutils literal"><span class="pre">xmin</span></code>, <code class="docutils literal"><span class="pre">xmax</span></code>, <code class="docutils literal"><span class="pre">ymin</span></code>, <code class="docutils literal"><span class="pre">ymax</span></code>, <code class="docutils literal"><span class="pre">zmin</span></code>, <code class="docutils literal"><span class="pre">zmax</span></code>,
+and list <code class="docutils literal"><span class="pre">ijk</span></code> or <code class="docutils literal"><span class="pre">i</span></code>, <code class="docutils literal"><span class="pre">j</span></code>, and <code class="docutils literal"><span class="pre">k</span></code>, which are the number of
+voxels in the <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, and <code class="docutils literal"><span class="pre">z</span></code> directions, respectively</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.add_multiplier">
 <code class="descname">add_multiplier</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.add_multiplier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.add_multiplier" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">add_multiplier</span></code> adds the multiplier defined by <code class="docutils literal"><span class="pre">mt</span></code> in keywords
+on material from keyword <code class="docutils literal"><span class="pre">mat</span></code>.  You can also add a constant <code class="docutils literal"><span class="pre">C</span></code>
+or leave that to default <code class="docutils literal"><span class="pre">1</span></code>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.current_tally">
 <code class="descname">current_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.current_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.current_tally" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">current_tally</span></code> is a tally calculating the current through a
+surface. Pass keywords <code class="docutils literal"><span class="pre">energy</span></code>, <code class="docutils literal"><span class="pre">surfaces</span></code>, and <code class="docutils literal"><span class="pre">particle</span></code></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.fission_tally">
 <code class="descname">fission_tally</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.fission_tally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.fission_tally" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">fission_tally</span></code> is a tally calculating the fissions in a cell.
+Pass keyword <code class="docutils literal"><span class="pre">cell</span></code>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.process_energy">
 <code class="descname">process_energy</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.process_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.process_energy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">process_energy</span></code> prints the energies in keyword <code class="docutils literal"><span class="pre">energy</span></code> into
+MCNP notation</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -730,35 +1053,51 @@ materials?</p>
 </div>
 <div class="section" id="run-and-runtime-submodules">
 <h1>Run and Runtime Submodules<a class="headerlink" href="#run-and-runtime-submodules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="wig-renderer-object">
-<h2>wig.renderer object<a class="headerlink" href="#wig-renderer-object" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="wig.renderer.renderer">
-<em class="property">class </em><code class="descclassname">wig.renderer.</code><code class="descname">renderer</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="wig.renderer.renderer.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="wig.renderer.renderer.add_geo">
-<code class="descname">add_geo</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.add_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.add_geo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="wig.renderer.renderer.add_matl">
-<code class="descname">add_matl</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/renderer.html#renderer.add_matl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.renderer.renderer.add_matl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="wig-runner-object">
 <h2>wig.runner object<a class="headerlink" href="#wig-runner-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.runner.runner">
-<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote=’local’</em>, <em>sys=’linux’</em>, <em>renderer=None</em>, <em>blocking=False</em>, <em>clean=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote=’local’</em>, <em>sys=’linux’</em>, <em>blocking=False</em>, <em>clean=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">runner</span></code> is an object that ssh’s to a remote (or local) system and
+starts a <code class="docutils literal"><span class="pre">wig</span></code> job, assume that it is set up completely and correctly.
+You can define your systems to run this on in ‘~/.wig/config.py’ as the
+dict <code class="docutils literal"><span class="pre">systems</span></code> with structure</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">systems</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tianhe-2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;255.255.255.255&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+                        <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;nscwadmin&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;procs&quot;</span><span class="p">:</span> <span class="mi">10649600</span><span class="p">},</span>
+           <span class="s2">&quot;titan&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;255.255.255.255&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+                     <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;ornladmin&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;123&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;procs&quot;</span><span class="p">:</span> <span class="mi">560640</span><span class="p">},</span>
+           <span class="s2">&quot;local&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;procs&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="index-9">
+<p class="first admonition-title">Todo</p>
+<p class="last">write article/todo on how to setup this</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – base name of the file to run</li>
+<li><strong>command</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – command which will call the desired flavor of MCNP</li>
+<li><strong>remote</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – string identifying the remote system</li>
+<li><strong>sys</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – type of system this will run on, currently only
+supported for <code class="docutils literal"><span class="pre">'linux'</span></code>, although <code class="docutils literal"><span class="pre">'OSX'</span></code> would probably be easy</li>
+<li><strong>blocking</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether to wait for the MCNP run to finish before
+continuing.  Default <code class="docutils literal"><span class="pre">False</span></code>.</li>
+<li><strong>clean</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether to clean the old files with the same base
+filename from <code class="docutils literal"><span class="pre">filename</span></code> from directory <code class="docutils literal"><span class="pre">~/mcnp/active/</span></code>.
+Useful if you’ve screwed something up and want to start fresh</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="wig-mcnpdaemon-object">
@@ -766,7 +1105,11 @@ materials?</p>
 <dl class="class">
 <dt id="wig.mcnpdaemon.mcnpdaemon">
 <em class="property">class </em><code class="descclassname">wig.mcnpdaemon.</code><code class="descname">mcnpdaemon</code><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><div class="admonition-todo admonition" id="index-10">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make a daemon to watch this, using Flask</p>
+</div>
+<dl class="method">
 <dt id="wig.mcnpdaemon.mcnpdaemon.set_notification_daemon">
 <code class="descname">set_notification_daemon</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon.set_notification_daemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon.set_notification_daemon" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -797,7 +1140,7 @@ materials?</p>
 the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
 tally file through mcnp.  Tallies printed on the <code class="docutils literal"><span class="pre">.out</span></code> file currently do
 not have support.</p>
-<div class="admonition-todo admonition" id="index-1">
+<div class="admonition-todo admonition" id="index-11">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
 </div>
@@ -830,10 +1173,33 @@ not have support.</p>
 <dl class="class">
 <dt id="wig.mcnp_string.mstring">
 <em class="property">class </em><code class="descclassname">wig.mcnp_string.</code><code class="descname">mstring</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnp_string.html#mstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnp_string.mstring" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p><code class="docutils literal"><span class="pre">mstring</span></code> are strings that can be printed in MCNP files.  MCNP is so
+finicky, and same with Python (with respect to indentation), that it’s
+easier to just remove all newlines and split everything into 80
+character blocks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a string, formatted however, that will be converted
+to MCNP format</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="wig.mcnp_string.mstring.flow">
 <code class="descname">flow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/mcnp_string.html#mstring.flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnp_string.mstring.flow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal"><span class="pre">flow</span></code> actually converts the string to MCNP format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return str string:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">a string with newlines in 80 character blocks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -846,25 +1212,80 @@ not have support.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
-<div class="section" id="test-coverage">
-<h2>Test Coverage<a class="headerlink" href="#test-coverage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-todo admonition" id="index-12">
+<p class="first admonition-title">Todo</p>
+<p class="last">write tests</p>
 </div>
-<div class="section" id="documentation-coverage">
-<h2>Documentation Coverage<a class="headerlink" href="#documentation-coverage" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="todos">
 <h2>ToDos<a class="headerlink" href="#todos" title="Permalink to this headline">¶</a></h2>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
-<p class="last">use this or materials class for repo for pnnl defined
-materials?</p>
+<p class="last">Implement more boolean operators</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-0"><em>original entry</em></a> is located in /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-0"><em>original entry</em></a> is located in /home/ahagen/code/wig/geo.py:docstring of wig.geo.geo.boolean, line 19.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">calculate the <code class="docutils literal"><span class="pre">a3</span></code> from <code class="docutils literal"><span class="pre">a1</span></code> and <code class="docutils literal"><span class="pre">a2</span></code>, if given</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-1"><em>original entry</em></a> is located in /home/ahagen/code/wig/geo.py:docstring of wig.geo.geo.box, line 11.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">calculate the box from three points</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-2"><em>original entry</em></a> is located in /home/ahagen/code/wig/geo.py:docstring of wig.geo.geo.box, line 13.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">allow a vector <code class="docutils literal"><span class="pre">l</span></code> to define slanted cylinders</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-3"><em>original entry</em></a> is located in /home/ahagen/code/wig/geo.py:docstring of wig.geo.geo.rcc, line 11.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">Implement the gq surface</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-4"><em>original entry</em></a> is located in /home/ahagen/code/wig/geo.py:docstring of wig.geo.geo.gq, line 29.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">define an asset based materials import system</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-5"><em>original entry</em></a> is located in /home/ahagen/code/wig/matl.py:docstring of wig.matl.matl, line 21.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">define an assets system for this.</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-6"><em>original entry</em></a> is located in /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">implement the universe</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-7"><em>original entry</em></a> is located in /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.universe, line 6.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">implement the whole MCNP Primer of sources</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-8"><em>original entry</em></a> is located in /home/ahagen/code/wig/source.py:docstring of wig.source.source, line 22.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">write article/todo on how to setup this</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-9"><em>original entry</em></a> is located in /home/ahagen/code/wig/runner.py:docstring of wig.runner.runner, line 18.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make a daemon to watch this, using Flask</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-10"><em>original entry</em></a> is located in /home/ahagen/code/wig/mcnpdaemon.py:docstring of wig.mcnpdaemon.mcnpdaemon, line 1.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-1"><em>original entry</em></a> is located in /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-11"><em>original entry</em></a> is located in /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
+<div class="admonition-todo admonition">
+<p class="first admonition-title">Todo</p>
+<p class="last">write tests</p>
+</div>
+<p class="todo-source">(The <a class="reference internal" href="#index-12"><em>original entry</em></a> is located in /home/ahagen/code/wig/docs/index.rst, line 22.)</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>

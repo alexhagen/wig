@@ -43,8 +43,13 @@ wig.source object
 -----------------
 
 .. autoclass:: wig.source.source
-    :members:
-    :member-order: bysource
+  :members:
+  :member-order: bysource
+
+
+.. autoclass: wig.source.dist
+  :members:
+  :member-order: bysource
 
 
 wig.tally object
@@ -56,13 +61,6 @@ wig.tally object
 
 Run and Runtime Submodules
 ==========================
-
-wig.renderer object
--------------------
-
-.. autoclass:: wig.renderer.renderer
-    :members:
-    :member-order: bysource
 
 
 wig.runner object

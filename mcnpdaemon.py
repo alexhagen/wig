@@ -2,6 +2,9 @@ import time
 import notify2 as n
 
 class mcnpdaemon():
+    """
+        .. todo:: Make a daemon to watch this, using Flask
+    """
     def set_notification_daemon(self, notification):
         notification.show()
         return self

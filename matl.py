@@ -24,6 +24,28 @@ periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
                   "Uuo": 118}
 
 class matl:
+    r""" ``matl`` defines a material for the MCNP format with definitions in
+        either mass or atom percent.  The list passed to ``atom_perc`` or
+        ``mass_perc`` is formatted as:
+
+        .. code-block:: python
+
+            steel_atom_perc = [('C-12', 0.022831), ('Fe', 0.995000)]
+
+        note that the isotope convention ``'C-12'`` evaluates to ZAID ``006012``
+        and the element convention ``'Fe'`` just evaluates to ZAID ``026000``.
+
+        :param float rho: the density of the material in :math:`\frac{g}{cm^{3}}`
+        :param list atom_perc: list formatted as above of atom percentages
+        :param list mass_perc: list formatted as above of mass percentages
+        :param str id: an identifying string with no spaces
+        :param str color: the color of the material for rendering, in hex format
+            ``'#RRGGBB'``
+        :param float alpha: the opacity of the material for rendering, from
+            ``0.0`` to ``1.0``. Default: ``1.0``
+
+        .. todo:: define an asset based materials import system
+    """
     def __init__(self, rho, atom_perc=None, mass_perc=None, id=None,
                  color=None, alpha=1.0):
         self.bstring = ''

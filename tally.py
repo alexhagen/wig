@@ -4,6 +4,22 @@ import cell
 
 
 class tally():
+    """ a ``tally`` object defines one of several types of MCNP tallies:
+
+        - flux tally (``f4``)
+        - current tally (``f1``)
+        - fission tally (``f7``)
+        - mesh tally (``fmesh4``)
+
+        The best pratice is to pass energies and comments to the initializer and
+        to use the convenience methods to continue from there
+
+        .. code-block:: python
+
+            Es = [1.0E-4, 1.0, 100.0]
+            meshtal1 = wig.tally(comment='a mesh tally for demo purposes', energy=Es)\
+                .mesh_tally(xmin=0.0, xmax=10.0, ymin=0.0, ymax=10.0, zmin=0.0, zmax=10.0, ijk=(10, 10, 10))
+    """
     def __init__(self, **kwargs):
         tally.num = None
         self.mesh = False
@@ -18,6 +34,9 @@ class tally():
             self.particle = kwargs["particle"]
 
     def flux_tally(self, **kwargs):
+        """ ``flux_tally`` is a tally calculating the flux through a cell. Pass
+            keywords ``energy``, ``cell``, and ``particle``
+        """
         self.card = 4
         if not self.energies:
             self.process_energy(**kwargs)
@@ -30,54 +49,66 @@ class tally():
         return self
 
     def mesh_tally(self, **kwargs):
+        """ ``mesh_tally`` is a tally finding the mesh in many voxels.  Pass
+            keywords ``xmin``, ``xmax``, ``ymin``, ``ymax``, ``zmin``, ``zmax``,
+            and list ``ijk`` or ``i``, ``j``, and ``k``, which are the number of
+            voxels in the ``x``, ``y``, and ``z`` directions, respectively
+        """
         self.card = 4
         self.mesh = True
         #if not self.energies:
         #    self.process_energy(**kwargs)
         origin = [0, 0, 0]
-        if "xmin" in kwargs:
-            origin[0] = kwargs["xmin"]
-        if "ymin" in kwargs:
-            origin[1] = kwargs["ymin"]
-        if "zmin" in kwargs:
-            origin[2] = kwargs["zmin"]
-        if "origin" in kwargs:
-            origin = kwargs["origin"]
-        xmin = origin[0]
-        ymin = origin[1]
-        zmin = origin[2]
-        if "xmax" in kwargs:
-            xmax = kwargs["xmax"]
-        if "ymax" in kwargs:
-            ymax = kwargs["ymax"]
-        if "zmax" in kwargs:
-            zmax = kwargs["zmax"]
-        if "corner" in kwargs:
-            xmax, ymax, zmax = kwargs["corner"]
-        deltax = xmax - xmin
-        deltay = ymax - ymin
-        deltaz = zmax - zmin
-        if "ijk" in kwargs:
-            dx = kwargs["ijk"] + 1
-            dy = kwargs["ijk"] + 1
-            dz = kwargs["ijk"] + 1
-        if "i" in kwargs:
-            dx = kwargs["i"] + 1
-        if "j" in kwargs:
-            dy = kwargs["j"] + 1
-        if "k" in kwargs:
-            dz = kwargs["k"] + 1
-        imesh = np.linspace(xmin, xmax, dx)
-        jmesh = np.linspace(ymin, ymax, dy)
-        kmesh = np.linspace(zmin, zmax, dz)
-        self.string = (":%s geom=%s origin=%6.4f %6.4f %6.4f" % \
-            (self.particle, 'xyz', origin[0], origin[1], origin[2])) + \
-            " imesh=" + " ".join(["%6.4f" % i for i in imesh[1:]]) + \
-            " jmesh=" + " ".join(["%6.4f" % j for j in jmesh[1:]]) + \
-            " kmesh=" + " ".join(["%6.4f" % k for k in kmesh[1:]])
-        return self
+        if 'geom' not in kwargs:
+            if "xmin" in kwargs:
+                origin[0] = kwargs["xmin"]
+            if "ymin" in kwargs:
+                origin[1] = kwargs["ymin"]
+            if "zmin" in kwargs:
+                origin[2] = kwargs["zmin"]
+            if "origin" in kwargs:
+                origin = kwargs["origin"]
+            xmin = origin[0]
+            ymin = origin[1]
+            zmin = origin[2]
+            if "xmax" in kwargs:
+                xmax = kwargs["xmax"]
+            if "ymax" in kwargs:
+                ymax = kwargs["ymax"]
+            if "zmax" in kwargs:
+                zmax = kwargs["zmax"]
+            if "corner" in kwargs:
+                xmax, ymax, zmax = kwargs["corner"]
+            deltax = xmax - xmin
+            deltay = ymax - ymin
+            deltaz = zmax - zmin
+            if "ijk" in kwargs:
+                dx = kwargs["ijk"] + 1
+                dy = kwargs["ijk"] + 1
+                dz = kwargs["ijk"] + 1
+            if "i" in kwargs:
+                dx = kwargs["i"] + 1
+            if "j" in kwargs:
+                dy = kwargs["j"] + 1
+            if "k" in kwargs:
+                dz = kwargs["k"] + 1
+            imesh = np.linspace(xmin, xmax, dx)
+            jmesh = np.linspace(ymin, ymax, dy)
+            kmesh = np.linspace(zmin, zmax, dz)
+            self.string = (":%s geom=%s origin=%6.4f %6.4f %6.4f" % \
+                (self.particle, 'xyz', origin[0], origin[1], origin[2])) + \
+                " imesh=" + " ".join(["%6.4f" % i for i in imesh[1:]]) + \
+                " jmesh=" + " ".join(["%6.4f" % j for j in jmesh[1:]]) + \
+                " kmesh=" + " ".join(["%6.4f" % k for k in kmesh[1:]])
+            return self
+        elif kwargs['geom'] == 'cyl':
+            return self
 
     def add_multiplier(self, **kwargs):
+        """ ``add_multiplier`` adds the multiplier defined by ``mt`` in keywords
+            on material from keyword ``mat``.  You can also add a constant ``C``
+            or leave that to default ``1``.
+        """
         self.multiplier = True
         if "mat" in kwargs:
             self.mat = kwargs["mat"]
@@ -91,6 +122,9 @@ class tally():
         return self
 
     def current_tally(self, **kwargs):
+        """ ``current_tally`` is a tally calculating the current through a
+            surface. Pass keywords ``energy``, ``surfaces``, and ``particle``
+        """
         self.card = 1
         if not self.energies:
             self.process_energy(**kwargs)
@@ -112,6 +146,9 @@ class tally():
         return self
 
     def fission_tally(self, **kwargs):
+        """ ``fission_tally`` is a tally calculating the fissions in a cell.
+            Pass keyword ``cell``.
+        """
         self.card = 7
         if not self.energies:
             self.process_energy(**kwargs)
@@ -123,8 +160,11 @@ class tally():
         return self
 
     def process_energy(self, **kwargs):
+        """ ``process_energy`` prints the energies in keyword ``energy`` into
+            MCNP notation
+        """
         if "energy" not in kwargs:
-            self.energy_string = '1e-8 99log 20'
+            self.energy_string = '1e-8 99i 20'
         else:
-            self.energy_string = '%e 99log %e' % (np.min(kwargs["energy"]),
+            self.energy_string = '%e 99i %e' % (np.min(kwargs["energy"]),
                                                 np.max(kwargs["energy"]))
