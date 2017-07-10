@@ -118,11 +118,24 @@
 <span class="kn">from</span> <span class="nn">pyb</span> <span class="k">import</span> <span class="n">pyb</span>
 
 <div class="viewcode-block" id="cell"><a class="viewcode-back" href="../../index.html#wig.cell.cell">[docs]</a><span class="k">class</span> <span class="nc">cell</span><span class="p">:</span>
-<div class="viewcode-block" id="cell.refresh"><a class="viewcode-back" href="../../index.html#wig.cell.cell.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="p">[]</span></div>
+    <span class="sd">&quot;&quot;&quot; a ``cell`` is a combination of geometric primitives (single or</span>
+<span class="sd">        combined using ``geo`` operators) and the material applied to that</span>
+<span class="sd">        section of geometry.  The easiest way to get a ``cell`` is to simply</span>
+<span class="sd">        call ``geo().cell(matl)`` on the geometry object, but for more</span>
+<span class="sd">        explicit uses, instantiation of this class can be useful.</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="sd">        :param wig.geo geo: the geometry object, whether singular or combined</span>
+<span class="sd">        :param wig.matl matl: the material object</span>
+<span class="sd">        :param str comment: a comment that will be printed beside the cell</span>
+<span class="sd">        :param bool show: whether or not the object will be shown in the</span>
+<span class="sd">            rendering</span>
+<span class="sd">        :param str color: the color for the material in the rendering, in</span>
+<span class="sd">            hex format (&#39;#RRGGBB&#39;)</span>
+<span class="sd">        :param float alpha: the opacity of the object in the rendering, from</span>
+<span class="sd">            0.0 to 1.0, Default: ``1.0``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">show</span> <span class="o">=</span> <span class="n">show</span>
         <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;c --- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -161,10 +174,7 @@
 <span class="sd">        decided whether to use this class or the materials class as a</span>
 <span class="sd">        repository for materials.</span>
 
-<span class="sd">        .. todo:: use this or materials class for repo for pnnl defined</span>
-<span class="sd">            materials?</span>
-
-<span class="sd">        :returns: ``mcnp_companion.materials.air``</span>
+<span class="sd">        .. todo:: define an assets system for this.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">mcnpm</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.001205</span><span class="p">,</span> <span class="n">atom_perc</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">0.000151</span><span class="p">),</span>
                                                    <span class="p">(</span><span class="s1">&#39;N-14&#39;</span><span class="p">,</span> <span class="mf">0.784437</span><span class="p">),</span>
@@ -172,6 +182,13 @@
                                                    <span class="p">(</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="mf">0.004671</span><span class="p">)],</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;air&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="cell.universe"><a class="viewcode-back" href="../../index.html#wig.cell.cell.universe">[docs]</a>    <span class="k">def</span> <span class="nf">universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="n">air</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``universe`` defines a programatically defined universe around all</span>
+<span class="sd">            your geometry</span>
+
+<span class="sd">            .. warning:: this is not currently implemented, just a placeholder.</span>
+
+<span class="sd">            .. todo:: implement the universe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get all the geometry added to the scene</span>
         <span class="c1"># then, iterate through and subtract all the geometry that isnt an</span>
         <span class="c1"># inner wall</span>
@@ -180,7 +197,14 @@
                 <span class="n">pg</span> <span class="o">-=</span> <span class="n">current_geo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="n">pg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span></div>
+
+<div class="viewcode-block" id="cell.refresh"><a class="viewcode-back" href="../../index.html#wig.cell.cell.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh`` removes all of the blender commands from the cell.</span>
+<span class="sd">            Useful for if you are changing cells with new geometry or color.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="p">[]</span></div></div>
 </pre></div>
 
     </div>

@@ -114,6 +114,19 @@
       
   <h1>Source code for wig.phys</h1><div class="highlight"><pre>
 <div class="viewcode-block" id="phys"><a class="viewcode-back" href="../../index.html#wig.phys.phys">[docs]</a><span></span><span class="k">class</span> <span class="nc">phys</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; ``phys`` defines all of the options for physics in the MCNP model</span>
+
+<span class="sd">        :param list particles: list of particles included, such as ``[&#39;p&#39;, &#39;n&#39;]``</span>
+<span class="sd">        :param list sources: Not implemented</span>
+<span class="sd">        :param float maxE: maximum energy (in :math:`MeV`) to model</span>
+<span class="sd">        :param float minE: minimum energy (in :math:`MeV`) to model</span>
+<span class="sd">        :param int nps: number of particles to simulate</span>
+<span class="sd">        :param int ctme: number of minutes to run the model</span>
+<span class="sd">        :param bool polimi: whether this is an MCNP-Polimi deck. Do not use</span>
+<span class="sd">            when not using ``wig.flavor = &#39;polimi&#39;``.</span>
+<span class="sd">        :param list polimi_cells: cells in which to transport neutrons/photos</span>
+<span class="sd">            using MCNP-Polimi</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">particles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxE</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minE</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">nps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">polimi</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">polimi_cells</span><span class="o">=</span><span class="p">[]):</span>
         <span class="c1"># if we&#39;ve defined nothing, then we&#39;re going to just go ahead and make</span>
@@ -145,19 +158,42 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">polimi</span><span class="p">(</span><span class="n">cells</span><span class="o">=</span><span class="n">polimi_cells</span><span class="p">)</span>
 
 <div class="viewcode-block" id="phys.nps"><a class="viewcode-back" href="../../index.html#wig.phys.phys.nps">[docs]</a>    <span class="k">def</span> <span class="nf">nps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``nps`` is a convenience method to change the number of particles to</span>
+<span class="sd">            simulate</span>
+
+<span class="sd">            :param int num: number of particles, maximum around ``2E9`` unless</span>
+<span class="sd">                you&#39;ve compiled MCNP with 64-bit integers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;nps </span><span class="si">%e</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="phys.ctme"><a class="viewcode-back" href="../../index.html#wig.phys.phys.ctme">[docs]</a>    <span class="k">def</span> <span class="nf">ctme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``ctme`` is a convenience method to change the number of minutes to</span>
+<span class="sd">            run the deck.</span>
+
+<span class="sd">            :param int num: number of minutes to run.  Beware that if the number</span>
+<span class="sd">                of particles exceeds the maximum integer, the simulation will</span>
+<span class="sd">                fail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;ctme </span><span class="si">%e</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="phys.no_fission"><a class="viewcode-back" href="../../index.html#wig.phys.phys.no_fission">[docs]</a>    <span class="k">def</span> <span class="nf">no_fission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``no_fission`` removes creation of neutrons from fission in certain</span>
+<span class="sd">            cells using MCNP&#39;s ``nonu`` directive.</span>
+
+<span class="sd">            :param list cells: list of ``cell`` in which to remove fission</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;nonu</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="phys.polimi"><a class="viewcode-back" href="../../index.html#wig.phys.phys.polimi">[docs]</a>    <span class="k">def</span> <span class="nf">polimi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``polimi`` is a convenience method to use MCNP-Polimi to transport</span>
+<span class="sd">            particles through the cells in ``cells``.</span>
+
+<span class="sd">            :param list cells: list of ``cell`` to use MCNP-Polimi for transport</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;ipol 0 0 0 0 2J </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>

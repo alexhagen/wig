@@ -117,7 +117,29 @@
 <span class="kn">from</span> <span class="nn">pyb</span> <span class="k">import</span> <span class="n">pyb</span>
 
 <div class="viewcode-block" id="source"><a class="viewcode-back" href="../../index.html#wig.source.source">[docs]</a><span class="k">class</span> <span class="nc">source</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; ``source`` is an object that defines an MCNP source. Currently there are</span>
+<span class="sd">        only a few implemented type of sources:</span>
 
+<span class="sd">        - point source: use ``pos`` or ``x``, ``y``, and ``z``</span>
+<span class="sd">        - disk source: use ``pos``, ``shape = &#39;disk&#39;``, and ``direction``</span>
+<span class="sd">        - cell source: use ``cell`` and an enclosing disk</span>
+<span class="sd">        - energy spectrum: use ``spectrum`` and a ``dist`` object</span>
+<span class="sd">        - intensity distribution:</span>
+
+<span class="sd">        :param str particle: one of &#39;n&#39;, &#39;p&#39;, or &#39;fission&#39;</span>
+<span class="sd">        :param tup pos: position of the source</span>
+<span class="sd">        :param float x, y, z: position of the source - alternate method</span>
+<span class="sd">        :param spectrum: either a distribution or a two-d list to create an</span>
+<span class="sd">            energy distribution</span>
+<span class="sd">        :param str shape: right now, can only be ``&#39;disk&#39;``, more coming.</span>
+<span class="sd">        :param str direction: one of &#39;+x&#39; or &#39;-x&#39;, &#39;+y&#39; or &#39;-y&#39;, or &#39;+z&#39; or &#39;-z&#39;</span>
+<span class="sd">        :param str id: an identifying string</span>
+<span class="sd">        :param float radius: the radius of a disk source</span>
+<span class="sd">        :param wig.cell cell: the cell for a volumetric source</span>
+<span class="sd">        :param bool show: whether the source should be rendered or not</span>
+
+<span class="sd">        .. todo:: implement the whole MCNP Primer of sources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">spectrum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">spectrum_type</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span>
@@ -151,6 +173,9 @@
         <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;+x&#39;</span> <span class="ow">or</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;x+&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;vec=1 0 0 dir=1 &quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;+y&#39;</span> <span class="ow">or</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;y+&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;vec=0 1 0 dir=1 &quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;+z&#39;</span> <span class="ow">and</span> <span class="n">lz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>
@@ -203,8 +228,24 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">+=</span> <span class="n">_dist</span><span class="o">.</span><span class="n">dist_string</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">string</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../wig.html#wig.source.dist">[docs]</a><span class="k">class</span> <span class="nc">dist</span><span class="p">():</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dist_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spectrum_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">dist</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; ``dist`` creates a distribution that MCNP uses for its source energy,</span>
+<span class="sd">        or position, or intensity</span>
+
+<span class="sd">        :param list x: the independent variable values of the distribution</span>
+<span class="sd">        :param list y: the dependent variable values of the distribution</span>
+<span class="sd">        :param int dist_num: the identifying number, usually assigned</span>
+<span class="sd">            automatically by ``wig.source``</span>
+<span class="sd">        :param str spectrum_type: can be ``&#39;C&#39;``, ``&#39;Maxwellian&#39;``, ``&#39;Watt&#39;``</span>
+<span class="sd">        :param str format: currently can be ``&#39;d&#39;`` to use only integers in the</span>
+<span class="sd">            distribution</span>
+
+<span class="sd">        .. todo:: implement more distribution types</span>
+<span class="sd">        .. todo:: make semantic names for the distribution types</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dist_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spectrum_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist_num</span> <span class="o">=</span> <span class="n">dist_num</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist_string</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">spectrum_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">spectrum_type</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -230,7 +271,7 @@
             <span class="n">a</span> <span class="o">=</span> <span class="mf">0.988</span>
             <span class="n">b</span> <span class="o">=</span> <span class="mf">2.249</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dist_string</span> <span class="o">+=</span> <span class="s1">&#39;sp</span><span class="si">%d</span><span class="s1"> -3 </span><span class="si">%e</span><span class="s1"> </span><span class="si">%e</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_num</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dist_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dist_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 </pre></div>
 
     </div>

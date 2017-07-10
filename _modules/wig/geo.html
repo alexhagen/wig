@@ -122,21 +122,38 @@
 <span class="kn">import</span> <span class="nn">cell</span> <span class="k">as</span> <span class="nn">mcnpce</span>
 
 <div class="viewcode-block" id="geo"><a class="viewcode-back" href="../../index.html#wig.geo.geo">[docs]</a><span class="k">class</span> <span class="nc">geo</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; some docstring</span>
+    <span class="sd">&quot;&quot;&quot; a ``wig.geo`` instance is a single geometric primative for creation of</span>
+<span class="sd">        the geometry block for MCNP.  Where possible, I&#39;ve used macrobodies</span>
+<span class="sd">        instead of surfaces; this decision may be problematic for purists,</span>
+<span class="sd">        but surfaces are so convoluted to use.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bstring</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="geo.cell"><a class="viewcode-back" href="../../index.html#wig.geo.geo.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matl</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; use ``geo.cell(matl)`` to return a cell of this geometry with</span>
-<span class="sd">            material ``matl``</span>
+<div class="viewcode-block" id="geo.boolean"><a class="viewcode-back" href="../../index.html#wig.geo.geo.boolean">[docs]</a>    <span class="k">def</span> <span class="nf">boolean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``wig.geo`` implements some of the boolean geometry used by MCNP.</span>
+<span class="sd">            The operators usable are:</span>
 
-<span class="sd">            :param matl mcnpm.matl: The material to make this cell</span>
-<span class="sd">            :returns: ``mcnpce.cell`` object</span>
+<span class="sd">            - ``+`` - implements a geometric boolean union operator between the two objects</span>
+<span class="sd">            - ``-`` - implements a geometric boolean difference operator between the two objects</span>
+<span class="sd">            - ``|`` - implements a geometric boolean union operator between the two objects</span>
+<span class="sd">            - ``%`` - implements a geometric boolean intersection operator between the two objects</span>
+
+<span class="sd">            For example, the following creates a cube on a stick</span>
+
+<span class="sd">            .. code-block:: python</span>
+<span class="sd">                :linenos:</span>
+
+<span class="sd">                cube = wig.geo().rpp(x=[0., 5.], y=[0., 5.], z=[0., 5.], id=&#39;1&#39;)</span>
+<span class="sd">                stick = wig.geo().rcc(c=(2.5, 2.5, -5.), r=1., lz=5., id=&#39;2&#39;)</span>
+<span class="sd">                cube_on_a_stick = cube + stick</span>
+<span class="sd">                cube_on_a_stick_cell = cube_on_a_stick.cell(some_material)</span>
+
+<span class="sd">            .. todo:: Implement more boolean operators</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">mcnpce</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matl</span><span class="p">)</span></div>
+        <span class="k">pass</span></div>
 
     <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -198,7 +215,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="n">left</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">right</span><span class="o">.</span><span class="n">id</span><span class="p">}])</span>
         <span class="k">return</span> <span class="n">left</span> <span class="o">|</span> <span class="n">right</span>
 
-<div class="viewcode-block" id="geo.rpp"><a class="viewcode-back" href="../../index.html#wig.geo.geo.rpp">[docs]</a>    <span class="k">def</span> <span class="nf">rpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="geo.rpp"><a class="viewcode-back" href="../../index.html#wig.geo.geo.rpp">[docs]</a>    <span class="k">def</span> <span class="nf">rpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``rpp`` is the same as the MCNP macrobody, a right parallelpiped.</span>
+
+<span class="sd">            ``rpp`` has two ways to define it:</span>
+
+<span class="sd">            - center (``c``) and length (``l``)</span>
+<span class="sd">            - :math:`x` extents (``x``), :math:`y` extents (``y``) and :math:`z` extents (``z``)</span>
+
+<span class="sd">            :param tuple c: the center of the right parallelpiped</span>
+<span class="sd">            :param tuple l: the length of each side, centered at ``c``</span>
+<span class="sd">            :param list x: the :math:`x` extents of the right parallelpiped,</span>
+<span class="sd">                always with the lowest number first.</span>
+<span class="sd">            :param list y: the :math:`y` extents of the right parallelpiped,</span>
+<span class="sd">                always with the lowest number first.</span>
+<span class="sd">            :param list z: the :math:`z` extents of the right parallelpiped,</span>
+<span class="sd">                always with the lowest number first.</span>
+<span class="sd">            :param str id: an identifying string with no spaces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">0</span>
@@ -237,6 +271,20 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="geo.box"><a class="viewcode-back" href="../../index.html#wig.geo.geo.box">[docs]</a>    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``box`` is similar to ``rpp``, but is not oriented to the cartesian</span>
+<span class="sd">            axes.  Instead, you must define three axes, which are orthagonal to</span>
+<span class="sd">            each other, as well as the corner (``v``).</span>
+
+<span class="sd">            :param tuple v: The corner of the ``box``</span>
+<span class="sd">            :param tuple a1: the vector defining one edge emanating from ``v``</span>
+<span class="sd">            :param tuple a2: the vector defining one edge emanating from ``v``</span>
+<span class="sd">            :param tuple a3: the vector defining one edge emanating from ``v``</span>
+<span class="sd">            :param str id: an identifying string with no spaces</span>
+
+<span class="sd">            .. todo:: calculate the ``a3`` from ``a1`` and ``a2``, if given</span>
+
+<span class="sd">            .. todo:: calculate the box from three points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">0</span>
@@ -260,6 +308,12 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="geo.sph"><a class="viewcode-back" href="../../index.html#wig.geo.geo.sph">[docs]</a>    <span class="k">def</span> <span class="nf">sph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``sph`` defines a sphere with radius ``r`` at ``c``</span>
+
+<span class="sd">            :param tuple c: the center of the sphere</span>
+<span class="sd">            :param float r: the radius of the sphere</span>
+<span class="sd">            :param str id: an identifying string with no spaces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">0</span>
@@ -272,7 +326,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">blender_cmd_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="geo.rcc"><a class="viewcode-back" href="../../index.html#wig.geo.geo.rcc">[docs]</a>    <span class="k">def</span> <span class="nf">rcc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="geo.rcc"><a class="viewcode-back" href="../../index.html#wig.geo.geo.rcc">[docs]</a>    <span class="k">def</span> <span class="nf">rcc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``rcc`` defines a right circular cylinder.  The geometry can be</span>
+<span class="sd">            specified by defining the **center of the base** ``c``, radius</span>
+<span class="sd">            ``r``, and one of ``lx``, ``ly``, or ``lz`` which is the height in</span>
+<span class="sd">            one of those ordinal directions.</span>
+
+<span class="sd">            :param tuple c: center of the base of the cylinder</span>
+<span class="sd">            :param float r: radius of the circular base</span>
+<span class="sd">            :param float lx, ly, lz: height in one of the ordinal directions</span>
+<span class="sd">            :param str id: an identifying string with no spaces</span>
+
+<span class="sd">            .. todo:: allow a vector ``l`` to define slanted cylinders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">lx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -295,9 +361,10 @@
 
 <div class="viewcode-block" id="geo.gq"><a class="viewcode-back" href="../../index.html#wig.geo.geo.gq">[docs]</a>    <span class="k">def</span> <span class="nf">gq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
            <span class="n">H</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coeffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;gq&#39;</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; ``gq`` creates a generalized quadratic surface.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; `gq`` creates a generalized quadratic surface defined by the</span>
+<span class="sd">            equation</span>
 
-<span class="sd">        ``gq`` creates a generalized quadratic surface defined by the equation</span>
+<span class="sd">            .. warning :: This is not implemented as of yet. Just a placeholder.</span>
 
 <span class="sd">        .. math::</span>
 
@@ -321,6 +388,8 @@
 <span class="sd">        :param list coeffs: a ``(10,)`` or ``(1,10)`` size array containing the</span>
 <span class="sd">            coefficients :math:`A` through :math:`K`, respectively</span>
 <span class="sd">        :returns: the generalized quadratic surface object</span>
+
+<span class="sd">        .. todo:: Implement the gq surface</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -337,6 +406,21 @@
 
 <div class="viewcode-block" id="geo.cone"><a class="viewcode-back" href="../../index.html#wig.geo.geo.cone">[docs]</a>    <span class="k">def</span> <span class="nf">cone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;+z&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
              <span class="n">lx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``cone`` makes a truncated cone. It allows for specifications of the</span>
+<span class="sd">            cone in two ways:</span>
+
+<span class="sd">            - base center ``c``, radii ``r1`` and ``r2``, height ``h`` in direction ``dir``</span>
+<span class="sd">            - base center ``c``, radii ``r1`` and ``r2``, height ``lx``, ``ly``, or ``lz`` in the implied direction</span>
+
+<span class="sd">            :param tuple c: the base center of the cone</span>
+<span class="sd">            :param str dir: one of ``+x``, ``-x``, ``+y``, ``-y``, ``+z``, ``-z``</span>
+<span class="sd">            :param float h: height of the cone</span>
+<span class="sd">            :param float r1: base radius</span>
+<span class="sd">            :param float r2: top radius</span>
+<span class="sd">            :param list r: size two list of base and top radius, respectively</span>
+<span class="sd">            :param float lx, ly, lz: height in respective direction</span>
+<span class="sd">            :param str id: an identifying string with no spaces</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sense</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">0</span>
@@ -364,9 +448,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">blender_cmd_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;r1&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;r2&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                  <span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">h</span><span class="p">),</span> <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="n">blender_dir</span><span class="p">,</span>
                                  <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="pseudogeo"><a class="viewcode-back" href="../../wig.html#wig.geo.pseudogeo">[docs]</a><span class="k">class</span> <span class="nc">pseudogeo</span><span class="p">:</span>
+<div class="viewcode-block" id="geo.cell"><a class="viewcode-back" href="../../index.html#wig.geo.geo.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matl</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``geo.cell(matl)`` returns a cell of this geometry with</span>
+<span class="sd">            material ``matl``</span>
+
+<span class="sd">            :param wig.matl.matl matl: The material to make this cell</span>
+<span class="sd">            :returns: ``mcnpce.cell`` object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">mcnpce</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matl</span><span class="p">)</span></div></div>
+
+<span class="k">class</span> <span class="nc">pseudogeo</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;cell&#39;</span><span class="p">:</span>
             <span class="n">geo</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span>
@@ -458,10 +551,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="o">.</span><span class="n">union</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">right</span><span class="o">.</span><span class="n">id</span><span class="p">}])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">+=</span> <span class="s2">&quot;_plus_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">right</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">id</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
 
 
-<div class="viewcode-block" id="group"><a class="viewcode-back" href="../../wig.html#wig.geo.group">[docs]</a><span class="k">class</span> <span class="nc">group</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">group</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -506,7 +599,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">b_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b_cmds</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="o">.</span><span class="n">union</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b_kwargs</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">right</span><span class="o">.</span><span class="n">id</span><span class="p">}])</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
 </pre></div>
 
     </div>

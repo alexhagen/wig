@@ -233,9 +233,9 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``cell`` adds all the ``wig.cell``s in a list to an input deck.</span>
+        <span class="sd">&quot;&quot;&quot; ``cell`` adds all the ``wig.cell`` in a list to an input deck.</span>
 
-<span class="sd">            :param list cells: the list of ``wig.cell``s to be added to the</span>
+<span class="sd">            :param list cells: the list of ``wig.cell`` to be added to the</span>
 <span class="sd">                input deck.  If you don&#39;t have a cell named ``&#39;universe&#39;``, this</span>
 <span class="sd">                method will make one for you, but you might night like it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -296,7 +296,7 @@
 
 
 <div class="viewcode-block" id="wig.matl"><a class="viewcode-back" href="../../index.html#wig.wig.wig.matl">[docs]</a>    <span class="k">def</span> <span class="nf">matl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``matl`` adds all the ``wig.matl``s to the input deck</span>
+        <span class="sd">&quot;&quot;&quot; ``matl`` adds all the ``wig.matl`` to the input deck</span>
 
 <span class="sd">            :param list matls: the materials to add to the input deck</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -337,7 +337,7 @@
 <span class="sd">                model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># initialize a counter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s2">&quot;prdmp j -15 1 4</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">tallies</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">tally</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -392,7 +392,7 @@
 
 <span class="sd">            ``run`` first writes the input deck, including rendering with</span>
 <span class="sd">            whatever additional keyword args you pass, and then opens an</span>
-<span class="sd">            instance of a ``wig.runner``, and passes commands to it.</span>
+<span class="sd">            instance of a ``wig.runner`` , and passes commands to it.</span>
 
 <span class="sd">            :param str remote: The ip address of the remote system you want to</span>
 <span class="sd">                run this on, or ``&#39;local&#39;`` if on this system.  The remote</span>
@@ -410,17 +410,17 @@
 <span class="sd">                ``~/mcnp/active`` directory or not. Keep the files if storage</span>
 <span class="sd">                isn&#39;t a concern and you&#39;re unsure if your deck will run</span>
 <span class="sd">                correctly. Default: ``False``</span>
-<span class="sd">            :param dict **kwargs: ``run`` passes the rest of the commands to</span>
+<span class="sd">            :param dict kwargs: ``run`` passes the rest of the commands to</span>
 <span class="sd">                ``write``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span>
-                              <span class="n">renderer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span></div>
+                              <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="wig.write"><a class="viewcode-back" href="../../index.html#wig.wig.wig.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``write`` writes the input deck and renders the input deck</span>
 
-<span class="sd">            :param dict **kwargs: keyword arguments to pass to ``render``</span>
+<span class="sd">            :param dict kwargs: keyword arguments to pass to ``render``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.inp&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="c1"># wrap fill and print to the file</span>
@@ -461,7 +461,7 @@
 <span class="sd">            :param bool render: Whether or not to actually run the render. This</span>
 <span class="sd">                method will always save a blender file, regardless of if we do a</span>
 <span class="sd">                full render. Default: ``True``</span>
-<span class="sd">            :param dict **kwargs: Other arguments to pass to ``pyb.render``.</span>
+<span class="sd">            :param dict kwargs: Other arguments to pass to ``pyb.render``.</span>
 <span class="sd">                See ``pyb`` for options, such as ``samples`` or ``res``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">render_target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
