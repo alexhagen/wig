@@ -480,7 +480,7 @@ simulation.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">capture</span>
-bullet_cell = cell.cell(bocyl + bosph + bocone - bicyl - bisph - bicone - 
+bullet_cell = cell.cell(bocyl + bosph + bocone - bicyl - bisph - bicone -
                         pholebrass1 - pholebrass2 - pholebrass3, aluminum)
 wood_cell = cell.cell(woodcyl - pholebrass1, wood)
 window_1_b = cell.cell(pholebrass1 - phole1 - bicyl, brass)
@@ -574,10 +574,10 @@ scene.cell([bullet_cell, wood_cell,
 <div class="output_html rendered_html output_subarea ">
 
 				<div class='pygfigure' name='solspec' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='solar_spectrum.svg?606607760' />
+					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/solar_spectrum.svg?606607760' />
 					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> The solar spectrum from Wehrli 1985 in energy units</div>
 				</div>
-			
+
 </div>
 
 </div>
@@ -593,7 +593,7 @@ scene.cell([bullet_cell, wood_cell,
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># add the source</span>
 <span class="n">sun</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">particle</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.0</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">6.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;sun&#39;</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;disk&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;+y&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">12.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> 
+                    <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;disk&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;+y&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">12.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span>
                     <span class="n">spectrum</span><span class="o">=</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">irradiance</span><span class="p">])</span>
 <span class="n">scene</span><span class="o">.</span><span class="n">source</span><span class="p">([</span><span class="n">sun</span><span class="p">])</span>
 </pre></div>
@@ -668,7 +668,7 @@ scene.cell([bullet_cell, wood_cell,
 
 
 <div class="output_html rendered_html output_subarea ">
-<img src="/files/mcnp/active/brender_01.png?356356724" \/>
+<img src="_static/brender_01.png" \/>
 </div>
 
 </div>
@@ -700,8 +700,6 @@ scene.run(render=False)
 </div>
 
 </div>
- 
-
 </div>
 <div class="section" id="main-object">
 <h1>Main object<a class="headerlink" href="#main-object" title="Permalink to this headline">¶</a></h1>
