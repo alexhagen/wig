@@ -222,7 +222,7 @@ class wig:
                 model.
         """
         # initialize a counter
-        self.tally_nums = {"1": 1, "4": 1, "7": 1}
+        self.tally_nums = {"1": 1, "4": 1, "7": 1, "6": 1}
         self.tally_block = "prdmp j -15 1 4\n"
         for tally in tallies:
             if tally is not None:

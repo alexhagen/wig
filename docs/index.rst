@@ -5,6 +5,9 @@
 
 .. include:: README.rst
 
+.. raw:: html
+  :file: example.html
+
 .. include:: wig.inc
 
 Indices and tables

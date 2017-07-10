@@ -58,6 +58,9 @@ class source():
         elif direction == '+x' or direction == 'x+':
             self.string += "vec=1 0 0 dir=1 "
             self.axis = (1, 0, 0)
+        elif direction == '+y' or direction == 'y+':
+            self.string += "vec=0 1 0 dir=1 "
+            self.axis = (0, 1, 0)
         if axis is not None:
             if axis == '+z' and lz is not None:
                 direction = 'z'
