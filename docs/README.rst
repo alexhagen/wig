@@ -1,13 +1,15 @@
 wig
 ===
 
+|image1| |image2| |image3|
+
 MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
 for simulation of neutrons, photons, and electrons. I use it extensively
 for my research, and it does a great job at a very complex task.
 Unfortunately, it's a nightmare to use. Basically uncompilable by real
-humans (and not experienced sys-admins), finicky about input decks and
-spaces, and almost completely text only (even though Vis-Ed has gotten
-steadily better), there are lots of improvements that could be made.
+humans, finicky about input decks and spaces, and almost completely text
+only (even though Vis-Ed has gotten steadily better), there are lots of
+improvements that could be made.
 
 I'll be honest here, I'm writing ``wig`` to scratch my own itch. I need
 a way to:
@@ -50,3 +52,10 @@ python, for example if you wanted to move a source throughout a bunch of
 different simulations for time dependence. Finally, this code will, if
 you have the proper requirements, render pretty pictures of your
 simulation.
+
+.. |image1| image:: _static/brender_01.png
+   :height: 320px
+.. |image2| image:: _static/eal_threshold_test_cutaway.png
+   :width: 320px
+.. |image3| image:: _static/eal_threshold_test_setup.png
+   :width: 320px

@@ -1,5 +1,9 @@
 # wig
 
+![image1](_static/brender_01.png){height=320px}
+![image2](_static/eal_threshold_test_cutaway.png){width=320px}
+![image3](_static/eal_threshold_test_setup.png){width=320px}
+
 MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool for
 simulation of neutrons, photons, and electrons.  I use it extensively for my
 research, and it does a great job at a very complex task.  Unfortunately, it's a
