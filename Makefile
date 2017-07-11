@@ -9,8 +9,8 @@ docs: FORCE
 	make html
 
 example: tests/example_wig.ipynb
-	jupyter nbconvert ../tests/example_wig.ipynb --to html --template=basic --execute; \
-	mv ../tests/example_wig.html example.html; \
+	jupyter nbconvert tests/example_wig.ipynb --to html --template=basic --execute; \
+	mv tests/example_wig.html docs/example.html; \
 
 publish: FORCE
 	MSG="$(shell git log -1 --pretty=%B | tr -d '\n')"
