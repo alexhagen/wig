@@ -210,7 +210,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I've waffled on what example to use for <code>wig</code>/<code>MCNP</code> for a while.  All the nuclear stuff that isn't boring is, in general, classified or difficult.  So, I went for something interesting, but completely unrealistic: Jules Verne's <em>The Moon Voyage</em>.  In the book, Mr. Verne describes launching a bullet shaped projectile from Tampa to the moon.  I think it'd be interesting to see, among other reasons why the inhabitants would surely be unable to survive, how much radiation dose they would get on their trip.  <code>MCNP</code> is great for neutral particles, and not so great for continuum interactions, so I'll ignore the cosmic protons here (which are admittedly a huge part of solar radiation), but I will take into account solar photons with their spectrum.</p>
+<p>I've waffled on what example to use for <code>wig</code>/<code>MCNP</code> for a while.  All the nuclear stuff that isn't boring is, in general, classified or difficult.  So, I went for something interesting, but completely unrealistic: Jules Verne's <em>The Moon Voyage</em>.  In the book, Mr. Verne describes launching a bullet shaped projectile from Tampa to the moon.  I think it'd be interesting to see, among other reasons why the inhabitants would surely be unable to survive, how much radiation dose they would get on their trip.  <code>MCNP</code> is great for neutral particles, and not so great for continuum interactions, so we'll ignore the cosmic protons here (which are admittedly a huge part of solar radiation), but we will take into account solar photons with their spectrum.</p>
 
 </div>
 </div>
@@ -219,7 +219,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The first thing we have to do to start the simulation is to import <code>wig</code>.  This is reasonably simple: <code>wig</code> has a main class, called <code>wig.wig</code> and then seven other classes, imported below, named (hopefully) self-explanatorially. I'm also importing <code>numpy</code>, because I can't imagine life without it.</p>
+<p>The first thing we have to do to start the simulation is to import <code>wig</code>.  This is reasonably simple: <code>wig</code> has a main class, called <code>wig.wig</code> and then seven other classes, imported below, named (hopefully) self-explanatorially. We should also import <code>numpy</code>, because I can't imagine life without it.  And finally, we import some functions that convert imperial units to centimeters, because Mr. Verne didn't know any better than to use them.</p>
 
 </div>
 </div>
@@ -231,6 +231,8 @@ simulation.</p>
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">wig</span> <span class="kn">import</span> <span class="n">wig</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">matl</span><span class="p">,</span> <span class="n">phys</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">tally</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c1"># I know this is bad form, but I want to use feet(9) instead of units.feet(9), it&#39;s just easier</span>
+<span class="kn">from</span> <span class="nn">units</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 
 </div>
@@ -269,18 +271,8 @@ simulation.</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Next, we'll make the geometry.  Note that <code>MCNP</code> splits geometry and cells into two modules - you'll have to first define geometries and then combine them into cells.  <code>wig</code> attempts to make this more semantic, but it definitely could still use some help.  Note also that <code>wig</code> does not have to be written in order.  You could write materials, then physics, then sources, then geometry and cells; however, the geometry and materials <strong>must</strong> be defined before the cells - but that's just basic programming, you have to define variables before you use them.</p>
 <p>So below, we'll generate a reasonably complex geometry, as Verne describes the projectile as:</p>
-<blockquote><p>The projectile outside was nine feet wide and twelve feet high. In order not to pass the weight assigned the sides had been made a little less thick and the bottom thicker...</p>
+<blockquote><p>...a cylindro-conical projectile... The projectile outside was nine feet wide and twelve feet high. ...under the wadding were four thick lenticular footlights, two let into the circular wall of the projectile, the third in its lower part...</p>
 </blockquote>
-<p>and</p>
-<blockquote><p>The entrance to this tower of metal was a narrow opening in the wall of the cone, like the "man-hole" of steam boilers... ...under the wadding were four thick lenticular footlights, two let into the circular wall of the projectile, the third in its lower part, and the fourth in its cone.</p>
-</blockquote>
-<p>As far as the interior goes, it gets quite complex, mainly because the character Michel Ardan brings all sorts of things, but we'll make it a spartan interior room with a simple divan.  The room itself is described by:</p>
-<blockquote><p>The projectile was to be filled to the depth of three feet with water destined to support a water-tight wooden disc, which easily worked within the walls of the projectile. It was upon this raft that the travellers were to take their place.</p>
-</blockquote>
-<p>And finally, to determine the wall thickness, we find a description of the water weight:</p>
-<blockquote><p>...three feet on a surface of 541 square feet...</p>
-</blockquote>
-<p>We won't include the water in the model as it was ejected before the projectile reached space.</p>
 <p>So now let's get to modeling. First, we need the outer surfaces of the bullet.  We'll create a cylinder for the base, a cone for the top, and we'll use a sphere to soften the connection between the cylinder and cone.</p>
 
 </div>
@@ -325,7 +317,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now, we can add the hollow section, which the book claims is 12" thick in most places.  I'm making the bottom 18" thick, because it was noted to be thicker at the bottom.</p>
+<p>Now, we can add the hollow section, which the book claims is 12" thick in most places.  We should make the bottom 18" thick, because it was noted to be thicker at the bottom.</p>
 
 </div>
 </div>
@@ -335,14 +327,14 @@ simulation.</p>
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">bullet_ir</span> <span class="o">=</span> <span class="mf">3.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span>
-<span class="n">bullet_ih</span> <span class="o">=</span> <span class="mf">8.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span>
-<span class="n">bullet_idz</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">*</span> <span class="mf">2.540</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">bullet_ir</span> <span class="o">=</span> <span class="n">feet</span><span class="p">(</span><span class="mf">3.5</span><span class="p">)</span> <span class="c1">#3.5 * 12. * 2.540</span>
+<span class="n">bullet_ih</span> <span class="o">=</span> <span class="n">feet</span><span class="p">(</span><span class="mf">8.5</span><span class="p">)</span> <span class="c1">#8.5 * 12. * 2.540</span>
+<span class="n">bullet_idz</span> <span class="o">=</span> <span class="o">-</span><span class="n">inches</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#-1. * 2.540</span>
 <span class="n">bicyl</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">bullet_idz</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">bullet_ir</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="n">bullet_ih</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;bullet_inner_cyl&#39;</span><span class="p">)</span>
 <span class="c1"># the sphere to soften the curve - must hit tangent at the top of the cylinder</span>
 <span class="n">bisph</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">sph</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">bullet_dz</span> <span class="o">+</span> <span class="n">bullet_h</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">bullet_ir</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;bullet_inner_fillet&#39;</span><span class="p">)</span>
 <span class="c1"># Now the cone going from a point on the sphere, tangent to the sphere, up to a point</span>
-<span class="n">dz</span> <span class="o">=</span> <span class="n">bullet_point_z</span> <span class="o">-</span> <span class="n">bullet_h</span> <span class="o">-</span> <span class="p">(</span><span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">)</span>
+<span class="n">dz</span> <span class="o">=</span> <span class="n">bullet_point_z</span> <span class="o">-</span> <span class="n">bullet_h</span> <span class="o">-</span> <span class="n">feet</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># (12. * 2.540)</span>
 <span class="n">dz1</span> <span class="o">=</span> <span class="p">((</span><span class="n">dz</span> <span class="o">*</span> <span class="n">dz</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">bullet_ir</span> <span class="o">*</span> <span class="n">bullet_ir</span><span class="p">))</span> <span class="o">/</span> <span class="n">dz</span>
 <span class="n">dz2</span> <span class="o">=</span> <span class="n">dz</span> <span class="o">-</span> <span class="n">dz1</span>
 <span class="n">icone_bottom_h</span> <span class="o">=</span> <span class="n">dz2</span>
@@ -360,7 +352,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There were at least three portholes, each with brass surround and glass.</p>
+<p>There were at least three portholes, each with a brass surround and glass.</p>
 
 </div>
 </div>
@@ -370,15 +362,15 @@ simulation.</p>
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">phole1</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">19.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">5.5</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mf">20.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;phole1&#39;</span><span class="p">)</span>
-<span class="n">pholebrass1</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">19.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">6.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mf">20.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span>
-                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pholebrass1&#39;</span><span class="p">)</span>
-<span class="n">phole2</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">40.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">5.5</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">lx</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;phole2&#39;</span><span class="p">)</span>
-<span class="n">pholebrass2</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">40.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">6.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">lx</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span>
-                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pholebrass2&#39;</span><span class="p">)</span>
-<span class="n">phole3</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">40.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">5.5</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;phole3&#39;</span><span class="p">)</span>
-<span class="n">pholebrass3</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">40.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">6.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span>
-                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pholebrass3&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">phole1</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span> <span class="n">inches</span><span class="p">(</span><span class="mi">19</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mf">5.5</span><span class="p">),</span> <span class="n">lz</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;porthole1&#39;</span><span class="p">)</span>
+<span class="n">pholebrass1</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span> <span class="n">inches</span><span class="p">(</span><span class="mi">19</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">lz</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;portholebrass1&#39;</span><span class="p">)</span>
+<span class="n">phole2</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">inches</span><span class="p">(</span><span class="mi">40</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mf">5.5</span><span class="p">),</span> <span class="n">lx</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;porthole2&#39;</span><span class="p">)</span>
+<span class="n">pholebrass2</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">inches</span><span class="p">(</span><span class="mi">40</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">lx</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;portholebrass2&#39;</span><span class="p">)</span>
+<span class="n">phole3</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">inches</span><span class="p">(</span><span class="mi">40</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mf">5.5</span><span class="p">),</span> <span class="n">ly</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;porthole3&#39;</span><span class="p">)</span>
+<span class="n">pholebrass3</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">inches</span><span class="p">(</span><span class="mi">40</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">ly</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;portholebrass3&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -390,7 +382,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The book calls that there is a plank of wood holding the room which the inhabitants live in.  This is hermetically sealed around the bottom of the inside of the cylinder.</p>
+<p>The book states that there is a plank of wood holding the room which the inhabitants live in.  This is hermetically sealed around the bottom of the inside of the cylinder.</p>
 
 </div>
 </div>
@@ -400,7 +392,7 @@ simulation.</p>
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">woodcyl</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">bullet_ir</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;wood_disk&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">woodcyl</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">rcc</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">inches</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">r</span><span class="o">=</span><span class="n">bullet_ir</span><span class="p">,</span> <span class="n">lz</span><span class="o">=</span><span class="n">inches</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;wood_disk&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -422,7 +414,7 @@ simulation.</p>
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">uni</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">sph</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">15.0</span> <span class="o">*</span> <span class="mf">12.0</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">uni</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo</span><span class="p">()</span><span class="o">.</span><span class="n">sph</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;universe&#39;</span><span class="p">)</span>
 <span class="n">scene</span><span class="o">.</span><span class="n">geo</span><span class="p">([</span><span class="n">bocyl</span><span class="p">,</span> <span class="n">bosph</span><span class="p">,</span> <span class="n">bocone</span><span class="p">,</span> <span class="n">bicyl</span><span class="p">,</span> <span class="n">bisph</span><span class="p">,</span> <span class="n">bicone</span><span class="p">,</span>
            <span class="n">woodcyl</span><span class="p">,</span>
            <span class="n">phole1</span><span class="p">,</span> <span class="n">phole2</span><span class="p">,</span> <span class="n">phole3</span><span class="p">,</span>
@@ -439,7 +431,7 @@ simulation.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We need to define some materials for this model, right now let's use just air, and hair.</p>
+<p>Next, we need to define some materials for this model.  All of these come from the PNNL Compendium.</p>
 
 </div>
 </div>
@@ -449,14 +441,26 @@ simulation.</p>
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># air from the PNNL compendium</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># air for the insides of the cabin</span>
 <span class="n">air</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.001205</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;air&#39;</span><span class="p">,</span> <span class="n">mass_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mf">0.000124</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;N-14&#39;</span><span class="p">,</span> <span class="mf">0.755268</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;O-16&#39;</span><span class="p">,</span> <span class="mf">0.231781</span><span class="p">),</span>
                                                      <span class="p">(</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="mf">0.012827</span><span class="p">)])</span>
-<span class="c1"># aluminum</span>
-<span class="n">aluminum</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;aluminum&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888888&#39;</span><span class="p">,</span> <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Al-27&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
-<span class="n">wood</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;wood&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#966F33&#39;</span><span class="p">,</span> <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
-<span class="n">glass</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;glass&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7299c6&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
-<span class="n">brass</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;brass&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#b5a642&#39;</span><span class="p">,</span> <span class="n">atom_perc</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
+<span class="c1"># aluminum - note that aluminum alloys were terrible in Jules Verne&#39;s time, so I&#39;ll just</span>
+<span class="c1"># assume that its pure</span>
+<span class="n">aluminum</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">2.6989</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;aluminum&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888888&#39;</span><span class="p">,</span> <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Al-27&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
+<span class="c1"># The only wood that PNNL gives us is southern pine - but the book is set in Florida,</span>
+<span class="c1"># which is pretty southern, I guess</span>
+<span class="n">wood</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.640</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;wood&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#966F33&#39;</span><span class="p">,</span>
+                 <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;H-1&#39;</span><span class="p">,</span> <span class="mf">0.462423</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mf">0.323389</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;N-14&#39;</span><span class="p">,</span> <span class="mf">0.002773</span><span class="p">),</span>
+                              <span class="p">(</span><span class="s1">&#39;O-16&#39;</span><span class="p">,</span> <span class="mf">0.208779</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Mg&#39;</span><span class="p">,</span> <span class="mf">0.000639</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="mf">0.001211</span><span class="p">),</span>
+                              <span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="mf">0.000397</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Ca&#39;</span><span class="p">,</span> <span class="mf">0.000388</span><span class="p">)])</span>
+<span class="c1"># Plate glass for the windows - who knows if they can be casted that thick</span>
+<span class="n">glass</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;glass&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7299c6&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                  <span class="n">atom_perc</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;O-16&#39;</span><span class="p">,</span> <span class="mf">0.603858</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Na-23&#39;</span><span class="p">,</span> <span class="mf">0.088145</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="mf">0.251791</span><span class="p">),</span>
+                               <span class="p">(</span><span class="s1">&#39;Ca&#39;</span><span class="p">,</span> <span class="mf">0.056205</span><span class="p">)])</span>
+<span class="c1"># Brass for the surrounds on the outside of the windows</span>
+<span class="n">brass</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;brass&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#b5a642&#39;</span><span class="p">,</span>
+                  <span class="n">atom_perc</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Fe&#39;</span><span class="p">,</span> <span class="mf">0.001002</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="mf">0.674918</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Zn&#39;</span><span class="p">,</span> <span class="mf">0.320956</span><span class="p">),</span>
+                             <span class="p">(</span><span class="s1">&#39;Sn&#39;</span><span class="p">,</span> <span class="mf">0.001451</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Pb&#39;</span><span class="p">,</span> <span class="mf">0.001673</span><span class="p">)])</span>
 <span class="n">void</span> <span class="o">=</span> <span class="n">matl</span><span class="o">.</span><span class="n">matl</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;void&#39;</span><span class="p">,</span> <span class="n">mass_perc</span> <span class="o">=</span> <span class="p">[])</span>
 <span class="n">scene</span><span class="o">.</span><span class="n">matl</span><span class="p">([</span><span class="n">air</span><span class="p">,</span> <span class="n">aluminum</span><span class="p">,</span> <span class="n">wood</span><span class="p">,</span> <span class="n">glass</span><span class="p">,</span> <span class="n">brass</span><span class="p">])</span>
 </pre></div>
@@ -481,7 +485,7 @@ simulation.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">capture</span>
-bullet_cell = cell.cell(bocyl + bosph + bocone - bicyl - bisph - bicone -
+bullet_cell = cell.cell(bocyl + bosph + bocone - bicyl - bisph - bicone - 
                         pholebrass1 - pholebrass2 - pholebrass3, aluminum)
 wood_cell = cell.cell(woodcyl - pholebrass1, wood)
 window_1_b = cell.cell(pholebrass1 - phole1 - bicyl, brass)
@@ -507,7 +511,7 @@ scene.cell([bullet_cell, wood_cell,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that we have the geometry built, we need some details about the physics.  I'm only going to take into account photons for now, and their energies need to span a huge range - we'll span the entire range of the Solar Irradiance dataset from Wehrli 1985, which is $199.5\mathrm{nm}$ to $10075.0\mathrm{nm}$ (or $.123\mathrm{eV}$  to $6.2\mathrm{eV}$.</p>
+<p>Now that we have the geometry built, we need some details about the physics.  We're only going to take into account photons for now, and their energies need to span a huge range - we'll span the entire range of the solar irradiance dataset from Wehrli 1985, which is $199.5\mathrm{nm}$ to $10075.0\mathrm{nm}$ (or $.123\mathrm{eV}$  to $6.2\mathrm{eV}$).</p>
 
 </div>
 </div>
@@ -531,7 +535,7 @@ scene.cell([bullet_cell, wood_cell,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now, we'll add a source.  The projectile is far enough from the sun to assume that the sun is a plane source.  We'll add a source covering the projectile to the $-x$ direction in our model.  The spectrum is taken from the ASTM E490-0 AM0 old Spectrum from NREL and Wehrli.  I've downloaded a text file from NREL and will use it to plot the spectrum below.</p>
+<p>Now, we'll add a source.  The projectile is far enough from the sun to assume that the sun is a plane source.  We'll add a source covering the projectile to the $-x$ direction in our model.  The spectrum is taken from the ASTM E490-0 AM0 old Spectrum from NREL and Wehrli.  I've downloaded a text file from NREL and will use it to plot the spectrum below. Then, we'll have to convert this to flux instead of irradiance using the formula $$F\left(\lambda\right) = \Phi E \frac{1}{\Delta \lambda}$$ and by solving for $\Phi$ $$\Phi = F\left(\lambda\right)\frac{\Delta\lambda}{E}$$ We're using a couple libraries I maintain for data analysis and plotting called <a href="https://alexhagen.github.io/pym"><code>pym</code></a> and <a href="http://alexhagen.github.io/pyg"><code>pyg</code></a>, respectively.</p>
 
 </div>
 </div>
@@ -543,18 +547,22 @@ scene.cell([bullet_cell, wood_cell,
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pym</span> <span class="kn">import</span> <span class="n">func</span> <span class="k">as</span> <span class="n">pym</span>
 <span class="kn">from</span> <span class="nn">pyg</span> <span class="kn">import</span> <span class="n">twod</span> <span class="k">as</span> <span class="n">pyg2d</span>
-
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="c1"># Wehrli gives irradiance in W/m^2/nm</span>
 <span class="n">wavelength</span><span class="p">,</span> <span class="n">irradiance</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
     <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">+</span> <span class="s1">&#39;/wehrli85.txt&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">h</span> <span class="o">=</span> <span class="mf">4.135668E-15</span> <span class="c1"># planck&#39;s constant in eV s</span>
 <span class="n">c</span> <span class="o">=</span> <span class="mf">2.998E+17</span> <span class="c1">#speed of light in nm/s</span>
 <span class="n">E</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wavelength</span><span class="p">))</span>
-
-<span class="n">solar_spectrum</span> <span class="o">=</span> <span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">irradiance</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;solar_spectrum&#39;</span><span class="p">)</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">solar_spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="c1"># Conversion to flux (and converting eV to J)</span>
+<span class="n">Phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">irradiance</span> <span class="o">/</span> <span class="p">(</span><span class="n">E</span> <span class="o">*</span> <span class="mf">1.6E-19</span><span class="p">))</span> <span class="o">*</span> <span class="n">wavelength</span>
+<span class="n">flux_spectrum</span> <span class="o">=</span> <span class="n">pym</span><span class="o">.</span><span class="n">curve</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">Phi</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;solar_flux_spectrum&#39;</span><span class="p">)</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">flux_spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Photon Energy ($E$) [$\mathrm{eV}$]&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Irradiance ($\phi$) [$\mathrm{\frac{W}{m^{2}}}$]&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Flux ($\Phi$) [$\mathrm{\frac{\text{photon}}{m^{2} \cdot s}}$]&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">markers_off</span><span class="p">()</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;solar_spectrum&#39;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s1">&#39;silver&#39;</span><span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;solar_spectrum.svg&#39;</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">+</span> <span class="s1">&#39;/solar_spectrum.svg&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;The solar spectrum from Wehrli 1985 in energy units&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;solspec&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -575,10 +583,10 @@ scene.cell([bullet_cell, wood_cell,
 <div class="output_html rendered_html output_subarea ">
 
 				<div class='pygfigure' name='solspec' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
-					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='_static/solar_spectrum.svg?606607760' />
+					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='solar_spectrum.svg?606473794' />
 					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 1:</b> The solar spectrum from Wehrli 1985 in energy units</div>
 				</div>
-
+			
 </div>
 
 </div>
@@ -593,9 +601,9 @@ scene.cell([bullet_cell, wood_cell,
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># add the source</span>
-<span class="n">sun</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">particle</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.0</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span> <span class="mf">6.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;sun&#39;</span><span class="p">,</span>
-                    <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;disk&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;+y&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">12.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">,</span>
-                    <span class="n">spectrum</span><span class="o">=</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">irradiance</span><span class="p">])</span>
+<span class="n">sun</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">particle</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">feet</span><span class="p">(</span><span class="mi">6</span><span class="p">)),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;sun&#39;</span><span class="p">,</span>
+                    <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;disk&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;+y&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span> 
+                    <span class="n">spectrum</span><span class="o">=</span><span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">Phi</span><span class="p">])</span>
 <span class="n">scene</span><span class="o">.</span><span class="n">source</span><span class="p">([</span><span class="n">sun</span><span class="p">])</span>
 </pre></div>
 
@@ -620,9 +628,9 @@ scene.cell([bullet_cell, wood_cell,
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># add some tallys</span>
 <span class="n">mesh_tally</span> <span class="o">=</span> <span class="n">tally</span><span class="o">.</span><span class="n">tally</span><span class="p">(</span><span class="n">comment</span><span class="o">=</span><span class="s1">&#39;compartment_mesh&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">mesh_tally</span><span class="p">(</span><span class="n">xmin</span><span class="o">=-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="mi">12</span><span class="p">,</span>
-                <span class="n">ymin</span><span class="o">=-</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">4.5</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="mi">12</span><span class="p">,</span>
-                <span class="n">zmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mf">10.0</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="mi">12</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">mesh_tally</span><span class="p">(</span><span class="n">xmin</span><span class="o">=-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">xmax</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="mi">12</span><span class="p">,</span>
+                <span class="n">ymin</span><span class="o">=-</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">ymax</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mf">4.5</span><span class="p">),</span> <span class="n">j</span><span class="o">=</span><span class="mi">9</span><span class="o">*</span><span class="mi">12</span><span class="p">,</span>
+                <span class="n">zmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="n">feet</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">energy_tally</span> <span class="o">=</span> <span class="n">tally</span><span class="o">.</span><span class="n">tally</span><span class="p">(</span><span class="n">comment</span><span class="o">=</span><span class="s1">&#39;aluminum_heating&#39;</span><span class="p">,</span> <span class="n">particle</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="p">[</span><span class="mf">0.123E-6</span><span class="p">,</span> <span class="mf">6.2E-6</span><span class="p">])</span>\
     <span class="o">.</span><span class="n">energy_tally</span><span class="p">(</span><span class="n">tally_cell</span><span class="o">=</span><span class="n">bullet_cell</span><span class="p">)</span>
 
@@ -649,9 +657,37 @@ scene.cell([bullet_cell, wood_cell,
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">scene2</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">bscene</span>
-<span class="n">scene2</span><span class="o">.</span><span class="n">cutaway</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="mf">8.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="mf">200.</span><span class="p">,</span> <span class="mf">200.</span><span class="p">,</span> <span class="mf">20.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">))</span>
-<span class="n">scene2</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="p">[</span><span class="mi">1080</span><span class="p">,</span> <span class="mi">1920</span><span class="p">],</span> <span class="n">samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">6.</span> <span class="o">*</span> <span class="mf">12.</span> <span class="o">*</span> <span class="mf">2.540</span><span class="p">),</span> <span class="n">camera_location</span><span class="o">=</span><span class="p">(</span><span class="mf">750.</span><span class="p">,</span> <span class="mf">750.</span><span class="p">,</span> <span class="mf">400.</span><span class="p">))</span>
-<span class="n">scene2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">scene2</span><span class="o">.</span><span class="n">cutaway</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">feet</span><span class="p">(</span><span class="mi">8</span><span class="p">)),</span> <span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="mf">200.</span><span class="p">,</span> <span class="mf">200.</span><span class="p">,</span> <span class="n">feet</span><span class="p">(</span><span class="mi">20</span><span class="p">)))</span>
+<span class="n">scene2</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="p">[</span><span class="mi">1080</span><span class="p">,</span> <span class="mi">1920</span><span class="p">],</span> <span class="n">samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+           <span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">feet</span><span class="p">(</span><span class="mi">6</span><span class="p">)),</span> <span class="n">camera_location</span><span class="o">=</span><span class="p">(</span><span class="mf">700.</span><span class="p">,</span> <span class="mf">700.</span><span class="p">,</span> <span class="mf">375.</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">pyg</span> <span class="kn">import</span> <span class="n">three2twod</span> <span class="k">as</span> <span class="n">pyg32d</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;brender_01.png&#39;</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">+</span> <span class="s1">&#39;/moon_voyage.png&#39;</span><span class="p">)</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">pyg32d</span><span class="o">.</span><span class="n">ann_im</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">+</span> <span class="s1">&#39;/moon_voyage.png&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">add_data_pointer</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">feet</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">feet</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="n">feet</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span>
+                      <span class="n">string</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;Sun (disk photon source)&#39;</span><span class="p">,</span>
+                      <span class="n">place</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">200.</span><span class="p">,</span> <span class="mf">200.</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">add_legend_entry</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888888&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Aluminum&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">add_legend_entry</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#b5a642&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Brass&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">add_legend_entry</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7299c6&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Glass&#39;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">add_legend_entry</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#966F33&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Wood&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;moon_voyage&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s1">&#39;invgolden&#39;</span><span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s1">&#39;moon_voyage.svg&#39;</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">+</span> <span class="s1">&#39;/moon_voyage.svg&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;Depiction of the Moon Voyage</span><span class="se">\&#39;</span><span class="s1">s cylindo-conical projectile&#39;</span><span class="p">,</span>
+          <span class="n">label</span><span class="o">=</span><span class="s1">&#39;moonvoyageprojectile&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -669,7 +705,12 @@ scene.cell([bullet_cell, wood_cell,
 
 
 <div class="output_html rendered_html output_subarea ">
-<img src="_static/brender_01.png" \/>
+
+				<div class='pygfigure' name='moonvoyageprojectile' style='text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;'>
+					<img style='margin: auto; max-width:100%; width:1250.000000px; height: auto;' src='moon_voyage.svg?1509050085' />
+					<div style='margin: auto; text-align: center;' class='figurecaption'><b>Figure 2:</b> Depiction of the Moon Voyage's cylindo-conical projectile</div>
+				</div>
+			
 </div>
 
 </div>
@@ -689,11 +730,11 @@ scene.cell([bullet_cell, wood_cell,
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">capture</span>
-scene.run(render=False)
+#scene.run(render=False)
 </pre></div>
 
 </div>
@@ -701,6 +742,8 @@ scene.run(render=False)
 </div>
 
 </div>
+ 
+
 </div>
 <div class="section" id="main-object">
 <h1>Main object<a class="headerlink" href="#main-object" title="Permalink to this headline">¶</a></h1>
