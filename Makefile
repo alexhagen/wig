@@ -8,7 +8,7 @@ docs: FORCE
 	cd ~/code/wig/docs/; \
 	make html
 
-example: example_wig.ipynb
+example: tests/example_wig.ipynb
 	jupyter nbconvert ../tests/example_wig.ipynb --to html --template=basic --execute; \
 	mv ../tests/example_wig.html example.html; \
 
