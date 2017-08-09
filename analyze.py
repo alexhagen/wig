@@ -97,7 +97,7 @@ class analyze(object):
 
     :param str filename: filename of the ``tallies.out`` file
     """
-    def __init__(self, filename):
+    def __init__(self, filename, nps=None):
         orig_filename = filename
         if '_tallies.out' not in filename and 'meshtal' not in filename:
             filename = filename + '_tallies.out'
@@ -108,7 +108,14 @@ class analyze(object):
         strings = file_string.split('tally')
         # print strings[0].split()
         if '_tallies.out' in filename:
-            self.nps = float(strings[0].split()[5])
+            if nps is None:
+                try:
+                    self.nps = float(strings[0].split()[5])
+                except ValueError:
+                    self.nps = 1.0
+                    print "could not get nps, defaulting to 1.0"
+            else:
+                self.nps = nps
         elif 'meshtal' in filename:
             #self.nps = float(strings[0].split()[19])
             self.nps = 1.0e9
