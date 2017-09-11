@@ -48,7 +48,7 @@ class tally():
         self.string = ":%s %d" % (kwargs["particle"], self.cell)
         return self
 
-    def energy_tally(self, energy=None, tally_cell=None, particle='n'):
+    def energy_tally(self, **kwargs):
         """ ``energy_tally`` is a tally calculating the energy deposited in a
             cell per unit mass.
 
@@ -60,13 +60,13 @@ class tally():
         """
         self.card = 6
         if not self.energies:
-            self.process_energy(energy)
-        if isinstance(tally_cell, cell.cell):
-            self.cell = tally_cell.cell_num
+            self.process_energy(**kwargs)
+        if isinstance(kwargs["cell"], cell.cell):
+            self.cell = kwargs["cell"].cell_num
         else:
-            self.cell = tally_cell
-        self.particle = particle
-        self.string = ":%s %d" % (particle, self.cell)
+            self.cell = kwargs["cell"]
+        self.particle = kwargs["particle"]
+        self.string = ":%s %d" % (kwargs["particle"], self.cell)
         return self
 
     def mesh_tally(self, **kwargs):
