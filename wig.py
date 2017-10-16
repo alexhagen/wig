@@ -46,6 +46,8 @@ class wig:
             self.command = 'mcnpx'
         elif flavor is 'polimi':
             self.command = 'polimi'
+        elif flavor is 'mcuned':
+            self.command = 'mcuned'
         # initialize all of our blocks
         self.intro_block = ''
         self.geo_block = ''
