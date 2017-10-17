@@ -1,5 +1,10 @@
 # wig
 
+``wig`` has a couple parts.  Click the links below or just read through if
+you're new here.
+
+[MCNP Compilation Help](mcnp_compilation)
+
 ![image1](_static/brender_01.png){height=320px}
 ![image2](_static/eal_threshold_test_cutaway.png){width=320px}
 ![image3](_static/eal_threshold_test_setup.png){width=320px}
