@@ -35,6 +35,21 @@ class phys():
         if 'n' in particles:
             self.string += "phys:n %e\n" % (maxE)
             self.string += "cut:n j %e\n" % (minE)
+        if 'd' in particles:
+            self.string += "phys:d %e\n" % (maxE)
+            self.string += "cut:d j %e\n" % (minE)
+        if 't' in particles:
+            self.string += "phys:t %e\n" % (maxE)
+            self.string += "cut:t j %e\n" % (minE)
+        if 'h' in particles:
+            self.string += "phys:h %e\n" % (maxE)
+            self.string += "cut:h j %e\n" % (minE)
+        if 's' in particles:
+            self.string += "phys:s %e\n" % (maxE)
+            self.string += "cut:s j %e\n" % (minE)
+        if 'a' in particles:
+            self.string += "phys:a %e\n" % (maxE)
+            self.string += "cut:a j %e\n" % (minE)
         if nps is not None:
             self.nps(nps)
         if ctme is not None:
@@ -87,5 +102,6 @@ class phys():
                 self.string += "%d " % cell.cell_num
         self.string = self.string[:-1]
         self.string += "\n"
+        self.string += "rpol 1.0e-8 0 0 1 J\n"
         self.string += "files 21 DUMN1\n"
         return self

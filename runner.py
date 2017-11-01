@@ -48,13 +48,15 @@ class runner:
             ip = system['ip']
             port = system['port']
             procs = system['procs']
+            username = system['username']
+            password = system['password']
         # check in the completed directory, and if there is an out file with
         # exactly the same infile, then, don't run
         self.needs_to_run = True
-        if command == 'polimi' or command == 'mcnpx':
+        if command == 'polimi' or command == 'mcnpx' or command == 'mcuned' or command == 'mcuned_polimi':
             procs = 1
         # construct the command
-        if blocking:
+        if blocking or command == 'mcuned':
             cmd = []
         else:
             cmd = ["nohup"]
@@ -63,8 +65,9 @@ class runner:
         cmd.extend(['out=' + filename + '.out'])
         cmd.extend(['run=' + filename + '_runtpe'])
         cmd.extend(['mctal=' + filename + '_tallies.out'])
-        cmd.extend(['meshtal=' + filename + '.meshtal'])
-        if command == 'polimi' or command == 'mcnpx':
+        if command != 'mcuned' and command != 'mcuned_polimi':
+            cmd.extend(['meshtal=' + filename + '.meshtal'])
+        if command == 'polimi' or command == 'mcnpx' or command == 'mcuned' or command == 'mcuned_polimi':
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])
         else:
             cmd.extend(['tasks %d' % procs])

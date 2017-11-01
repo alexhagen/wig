@@ -11,7 +11,7 @@ class source():
         - energy spectrum: use ``spectrum`` and a ``dist`` object
         - intensity distribution:
 
-        :param str particle: one of 'n', 'p', or 'fission'
+        :param str particle: one of 'n', 'p', 'd', 't', 's', 'a', or 'fission'
         :param tup pos: position of the source
         :param float x, y, z: position of the source - alternate method
         :param spectrum: either a distribution or a two-d list to create an
@@ -48,8 +48,8 @@ class source():
         self.dists = []
         self.string = ""
         self.comment = "c --- %s" % id
-        types = {"n": 1, "p": 2, "e": 3, "fission": 1}
-        colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915'}
+        types = {"n": 1, "p": 2, "e": 3, "fission": 1, "d": 31}
+        colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
         if direction == '-z' or direction == 'z-':
