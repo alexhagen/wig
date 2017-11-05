@@ -121,6 +121,7 @@
 <span class="kn">from</span> <span class="nn">renderer</span> <span class="k">import</span> <span class="n">renderer</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">expanduser</span>
 <span class="kn">import</span> <span class="nn">geo</span> <span class="k">as</span> <span class="nn">mcnpg</span>
+<span class="kn">import</span> <span class="nn">matl</span> <span class="k">as</span> <span class="nn">mcnpm</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pyb</span> <span class="k">import</span> <span class="n">pyb</span>
 
@@ -142,12 +143,16 @@
 <span class="sd">        those commands or the runner wont work.</span>
 <span class="sd">    :param bool render: defines whether to render the scene using</span>
 <span class="sd">        ``blender`` before running it</span>
+<span class="sd">    :param list particles: a list of ``&#39;n&#39;, &#39;p&#39;, ...`` for the particles we</span>
+<span class="sd">        should care about</span>
 <span class="sd">    :return: the ``wig`` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">particles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_comment</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="n">particles</span>
         <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">renderer</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -161,6 +166,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;mcnpx&#39;</span>
         <span class="k">elif</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;polimi&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;polimi&#39;</span>
+        <span class="k">elif</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;mcuned&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;mcuned&#39;</span>
+        <span class="k">elif</span> <span class="n">flavor</span> <span class="ow">is</span> <span class="s1">&#39;mcuned_polimi&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;mcuned_polimi&#39;</span>
         <span class="c1"># initialize all of our blocks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">intro_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -232,7 +241,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">auto_universe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">universe_matl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``cell`` adds all the ``wig.cell`` in a list to an input deck.</span>
 
 <span class="sd">            :param list cells: the list of ``wig.cell`` to be added to the</span>
@@ -272,8 +281,14 @@
                         <span class="nb">print</span> <span class="n">plot_cmd</span>
                         <span class="nb">print</span> <span class="n">plot_kwargs</span>
                 <span class="c1"># increment the cell num</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; imp:n=1</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; imp:&quot;</span>
+                <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="n">particle</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;=1</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">+=</span> <span class="mi">10</span>
+        <span class="k">if</span> <span class="n">auto_universe</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_universe</span><span class="p">(</span><span class="n">matl</span><span class="o">=</span><span class="n">universe_matl</span><span class="p">)</span>
         <span class="c1"># add void</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;c --- void&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">     &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">99</span><span class="p">)</span>
@@ -281,6 +296,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1"># now print the density</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;                 &quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">sense</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">geo_num</span><span class="p">)</span>
         <span class="c1"># now search for the universe cell</span>
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -291,7 +307,34 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                     <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;imp:n=0</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+        <span class="c1"># increment the cell num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; imp:&quot;</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="n">particle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;=0</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="wig.make_universe"><a class="viewcode-back" href="../../index.html#wig.wig.wig.make_universe">[docs]</a>    <span class="k">def</span> <span class="nf">make_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">geo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span>
+        <span class="k">if</span> <span class="n">matl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">matl</span> <span class="o">=</span> <span class="n">mcnpm</span><span class="o">.</span><span class="n">air</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">     &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span><span class="p">)</span>
+        <span class="c1"># now print the material number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">matl</span><span class="o">.</span><span class="n">matl_num</span><span class="p">)</span>
+        <span class="c1"># now print the density</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%15.10E</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="o">-</span><span class="n">matl</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span>
+        <span class="c1"># now print the universe surface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">sense</span> <span class="o">*</span> <span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; #</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">cell_num</span><span class="p">)</span>
+        <span class="c1"># increment the cell num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot; imp:&quot;</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="n">particle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">+=</span> <span class="s2">&quot;=1</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">+=</span> <span class="mi">10</span></div>
 
 
 
@@ -346,6 +389,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fmesh</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
                          <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">tally</span><span class="o">.</span><span class="n">tmesh</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;tmesh</span><span class="se">\n</span><span class="s2">  </span><span class="si">%s%d%d%s</span><span class="se">\n</span><span class="s2">endmd</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                        <span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">tmeshtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span>
+                         <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]))</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;f</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>

@@ -149,6 +149,9 @@
       
   <div class="section" id="wig">
 <h1>wig<a class="headerlink" href="#wig" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">wig</span></code> has a couple parts. Click the links below or just read through
+if you’re new here.</p>
+<p><a class="reference external" href="mcnp_compilation">MCNP Compilation Help</a></p>
 <p><a class="reference internal" href="_images/brender_01.png"><img alt="image1" src="_images/brender_01.png" style="height: 320px;" /></a> <a class="reference internal" href="_images/eal_threshold_test_cutaway.png"><img alt="image2" src="_images/eal_threshold_test_cutaway.png" style="width: 320px;" /></a> <a class="reference internal" href="_images/eal_threshold_test_setup.png"><img alt="image3" src="_images/eal_threshold_test_setup.png" style="width: 320px;" /></a></p>
 <p>MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
 for simulation of neutrons, photons, and electrons. I use it extensively
@@ -751,7 +754,7 @@ scene.cell([bullet_cell, wood_cell,
 <h2><code class="docutils literal"><span class="pre">wig.wig</span></code> object<a class="headerlink" href="#wig-wig-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.wig.wig">
-<em class="property">class </em><code class="descclassname">wig.wig.</code><code class="descname">wig</code><span class="sig-paren">(</span><em>comment</em>, <em>filename</em>, <em>flavor=‘6’</em>, <em>render=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.wig.</code><code class="descname">wig</code><span class="sig-paren">(</span><em>comment, filename, flavor=‘6’, render=True, particles=[‘n’]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal"><span class="pre">wig</span></code> object is the base object for an MCNP setup.</p>
 <p>The <code class="docutils literal"><span class="pre">wig</span></code> object is basically the scene in which we create our MCNP
 geometry, cells, materials, physics, tallies, and other data.  I usually
@@ -772,6 +775,8 @@ or ‘polimi’ for <code class="docutils literal"><span class="pre">mcnpx-polim
 those commands or the runner wont work.</li>
 <li><strong>render</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – defines whether to render the scene using
 <code class="docutils literal"><span class="pre">blender</span></code> before running it</li>
+<li><strong>particles</strong> (<em>list</em>) – a list of <code class="docutils literal"><span class="pre">'n',</span> <span class="pre">'p',</span> <span class="pre">...</span></code> for the particles we
+should care about</li>
 </ul>
 </td>
 </tr>
@@ -834,7 +839,7 @@ deck. Make sure this includes a universe</td>
 
 <dl class="method">
 <dt id="wig.wig.wig.cell">
-<code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em>, <em>auto_universe=True</em>, <em>universe_matl=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">cell</span></code> adds all the <code class="docutils literal"><span class="pre">wig.cell</span></code> in a list to an input deck.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -847,6 +852,11 @@ method will make one for you, but you might night like it.</td>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.make_universe">
+<code class="descname">make_universe</code><span class="sig-paren">(</span><em>geo=None</em>, <em>matl=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.make_universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.make_universe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="wig.wig.wig.matl">
@@ -1374,21 +1384,6 @@ repository for materials.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="wig.cell.cell.universe">
-<code class="descname">universe</code><span class="sig-paren">(</span><em>scene</em>, <em>matl=&lt;staticmethod object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.universe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.universe" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">universe</span></code> defines a programatically defined universe around all
-your geometry</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">this is not currently implemented, just a placeholder.</p>
-</div>
-<div class="admonition-todo admonition" id="index-7">
-<p class="first admonition-title">Todo</p>
-<p class="last">implement the universe</p>
-</div>
-</dd></dl>
-
-<dl class="method">
 <dt id="wig.cell.cell.refresh">
 <code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/cell.html#cell.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.cell.cell.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">refresh</span></code> removes all of the blender commands from the cell.
@@ -1494,7 +1489,7 @@ particles through the cells in <code class="docutils literal"><span class="pre">
 <h2>wig.source object<a class="headerlink" href="#wig-source-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.source.source">
-<em class="property">class </em><code class="descclassname">wig.source.</code><code class="descname">source</code><span class="sig-paren">(</span><em>particle=’n’</em>, <em>pos=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>spectrum=None</em>, <em>shape=None</em>, <em>direction=None</em>, <em>id=None</em>, <em>radius=None</em>, <em>cell=None</em>, <em>show=True</em>, <em>spectrum_type=’C’</em>, <em>axis=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/source.html#source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.source.source" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.source.</code><code class="descname">source</code><span class="sig-paren">(</span><em>particle=’n’</em>, <em>pos=None</em>, <em>x=None</em>, <em>y=None</em>, <em>z=None</em>, <em>spectrum=None</em>, <em>shape=None</em>, <em>direction=None</em>, <em>id=None</em>, <em>radius=None</em>, <em>cell=None</em>, <em>show=True</em>, <em>spectrum_type=’C’</em>, <em>axis=None</em>, <em>lx=None</em>, <em>ly=None</em>, <em>lz=None</em>, <em>anisotropic=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/source.html#source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.source.source" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">source</span></code> is an object that defines an MCNP source. Currently there are
 only a few implemented type of sources:</p>
 <ul class="simple">
@@ -1509,7 +1504,7 @@ only a few implemented type of sources:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>particle</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of ‘n’, ‘p’, or ‘fission’</li>
+<li><strong>particle</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of ‘n’, ‘p’, ‘d’, ‘t’, ‘s’, ‘a’, or ‘fission’</li>
 <li><strong>pos</strong> (<em>tup</em>) – position of the source</li>
 <li><strong>x</strong><strong>, </strong><strong>y</strong><strong>, </strong><strong>z</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – position of the source - alternate method</li>
 <li><strong>spectrum</strong> – either a distribution or a two-d list to create an
@@ -1525,7 +1520,7 @@ energy distribution</li>
 </tr>
 </tbody>
 </table>
-<div class="admonition-todo admonition" id="index-8">
+<div class="admonition-todo admonition" id="index-7">
 <p class="first admonition-title">Todo</p>
 <p class="last">implement the whole MCNP Primer of sources</p>
 </div>
@@ -1578,6 +1573,11 @@ for both</li>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="wig.tally.tally.rmesh">
+<code class="descname">rmesh</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/tally.html#tally.rmesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.tally.tally.rmesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="wig.tally.tally.mesh_tally">
@@ -1643,7 +1643,7 @@ dict <code class="docutils literal"><span class="pre">systems</span></code> with
                      <span class="s2">&quot;procs&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}</span>
 </pre></div>
 </div>
-<div class="admonition-todo admonition" id="index-9">
+<div class="admonition-todo admonition" id="index-8">
 <p class="first admonition-title">Todo</p>
 <p class="last">write article/todo on how to setup this</p>
 </div>
@@ -1675,7 +1675,7 @@ Useful if you’ve screwed something up and want to start fresh</li>
 <dl class="class">
 <dt id="wig.mcnpdaemon.mcnpdaemon">
 <em class="property">class </em><code class="descclassname">wig.mcnpdaemon.</code><code class="descname">mcnpdaemon</code><a class="reference internal" href="_modules/wig/mcnpdaemon.html#mcnpdaemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.mcnpdaemon.mcnpdaemon" title="Permalink to this definition">¶</a></dt>
-<dd><div class="admonition-todo admonition" id="index-10">
+<dd><div class="admonition-todo admonition" id="index-9">
 <p class="first admonition-title">Todo</p>
 <p class="last">Make a daemon to watch this, using Flask</p>
 </div>
@@ -1710,7 +1710,7 @@ Useful if you’ve screwed something up and want to start fresh</li>
 the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
 tally file through mcnp.  Tallies printed on the <code class="docutils literal"><span class="pre">.out</span></code> file currently do
 not have support.</p>
-<div class="admonition-todo admonition" id="index-11">
+<div class="admonition-todo admonition" id="index-10">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
 </div>
@@ -1784,7 +1784,7 @@ to MCNP format</td>
 </div>
 <div class="section" id="tests">
 <h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-todo admonition" id="index-12">
+<div class="admonition-todo admonition" id="index-11">
 <p class="first admonition-title">Todo</p>
 <p class="last">write tests</p>
 </div>
@@ -1828,34 +1828,29 @@ to MCNP format</td>
 <p class="todo-source">(The <a class="reference internal" href="#index-6"><em>original entry</em></a> is located in /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.air, line 8.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
-<p class="last">implement the universe</p>
-</div>
-<p class="todo-source">(The <a class="reference internal" href="#index-7"><em>original entry</em></a> is located in /home/ahagen/code/wig/cell.py:docstring of wig.cell.cell.universe, line 6.)</p>
-<div class="admonition-todo admonition">
-<p class="first admonition-title">Todo</p>
 <p class="last">implement the whole MCNP Primer of sources</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-8"><em>original entry</em></a> is located in /home/ahagen/code/wig/source.py:docstring of wig.source.source, line 22.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-7"><em>original entry</em></a> is located in /home/ahagen/code/wig/source.py:docstring of wig.source.source, line 22.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
 <p class="last">write article/todo on how to setup this</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-9"><em>original entry</em></a> is located in /home/ahagen/code/wig/runner.py:docstring of wig.runner.runner, line 18.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-8"><em>original entry</em></a> is located in /home/ahagen/code/wig/runner.py:docstring of wig.runner.runner, line 18.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
 <p class="last">Make a daemon to watch this, using Flask</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-10"><em>original entry</em></a> is located in /home/ahagen/code/wig/mcnpdaemon.py:docstring of wig.mcnpdaemon.mcnpdaemon, line 1.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-9"><em>original entry</em></a> is located in /home/ahagen/code/wig/mcnpdaemon.py:docstring of wig.mcnpdaemon.mcnpdaemon, line 1.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
 <p class="last">Add support for tallies printed in a <code class="docutils literal"><span class="pre">.out</span></code> file.</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-11"><em>original entry</em></a> is located in /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-10"><em>original entry</em></a> is located in /home/ahagen/code/wig/analyze.py:docstring of wig.analyze.analyze, line 8.)</p>
 <div class="admonition-todo admonition">
 <p class="first admonition-title">Todo</p>
 <p class="last">write tests</p>
 </div>
-<p class="todo-source">(The <a class="reference internal" href="#index-12"><em>original entry</em></a> is located in /home/ahagen/code/wig/docs/index.rst, line 25.)</p>
+<p class="todo-source">(The <a class="reference internal" href="#index-11"><em>original entry</em></a> is located in /home/ahagen/code/wig/docs/index.rst, line 25.)</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>

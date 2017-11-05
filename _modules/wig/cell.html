@@ -114,7 +114,6 @@
       
   <h1>Source code for wig.cell</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">matl</span> <span class="k">as</span> <span class="nn">mcnpm</span>
-
 <span class="kn">from</span> <span class="nn">pyb</span> <span class="k">import</span> <span class="n">pyb</span>
 
 <div class="viewcode-block" id="cell"><a class="viewcode-back" href="../../index.html#wig.cell.cell">[docs]</a><span class="k">class</span> <span class="nc">cell</span><span class="p">:</span>
@@ -180,24 +179,6 @@
                                                    <span class="p">(</span><span class="s1">&#39;N-14&#39;</span><span class="p">,</span> <span class="mf">0.784437</span><span class="p">),</span>
                                                    <span class="p">(</span><span class="s1">&#39;O-16&#39;</span><span class="p">,</span> <span class="mf">0.210750</span><span class="p">),</span>
                                                    <span class="p">(</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="mf">0.004671</span><span class="p">)],</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;air&#39;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="cell.universe"><a class="viewcode-back" href="../../index.html#wig.cell.cell.universe">[docs]</a>    <span class="k">def</span> <span class="nf">universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">matl</span><span class="o">=</span><span class="n">air</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; ``universe`` defines a programatically defined universe around all</span>
-<span class="sd">            your geometry</span>
-
-<span class="sd">            .. warning:: this is not currently implemented, just a placeholder.</span>
-
-<span class="sd">            .. todo:: implement the universe</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># get all the geometry added to the scene</span>
-        <span class="c1"># then, iterate through and subtract all the geometry that isnt an</span>
-        <span class="c1"># inner wall</span>
-        <span class="k">for</span> <span class="n">current_geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">current_geo</span><span class="o">.</span><span class="n">inner_wall</span><span class="p">:</span>
-                <span class="n">pg</span> <span class="o">-=</span> <span class="n">current_geo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">geo</span> <span class="o">=</span> <span class="n">pg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">matl</span> <span class="o">=</span> <span class="n">matl</span></div>
 
 <div class="viewcode-block" id="cell.refresh"><a class="viewcode-back" href="../../index.html#wig.cell.cell.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``refresh`` removes all of the blender commands from the cell.</span>

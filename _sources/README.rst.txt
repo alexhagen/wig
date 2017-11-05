@@ -1,6 +1,11 @@
 wig
 ===
 
+``wig`` has a couple parts. Click the links below or just read through
+if you're new here.
+
+`MCNP Compilation Help <mcnp_compilation>`__
+
 |image1| |image2| |image3|
 
 MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
