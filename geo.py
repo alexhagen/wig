@@ -150,6 +150,9 @@ class geo:
             l[2] = z[1] - z[0]
         self.string = "rpp %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
             (x1, x2, y1, y2, z1, z2)
+
+        # add an r parameter to we can use this for sizing our camera
+        self.r = max([x2 - x1, y2 - y1, z2 - z1])
         self.blender_cmd = pyb.pyb.rpp
         self.blender_cmd_args = {"c": c, "l": l, "name": id}
         self.faces = [1, 2, 3, 4, 5, 6]
@@ -321,12 +324,12 @@ class geo:
         elif '-' in dir:
             _h[2] = -h
         if h is None:
-            h = [lx, ly, lz]
+            _h = [lx, ly, lz]
         if r is None:
             r = [r1, r2]
         self.comment = 'c --- %s' % (self.id)
         self.string = "trc %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f %6.4f" % \
-            (c[0], c[1], c[2], h[0], h[1], h[2], r[0], r[1])
+            (c[0], c[1], c[2], _h[0], _h[1], _h[2], r[0], r[1])
         self.surfaces = [1, 2, 3]
         blender_dir = dir.replace('+', '').replace('-', '')
         self.blender_cmd = pyb.pyb.cone
@@ -479,9 +482,10 @@ class group:
         self.string += ")"
         if not self.manual_id:
             self.id += "_u_%s" % (right.id)
-        self.already_unioned = True
-        self.b_cmds.extend(right.b_cmds)
+        left = self
+        self.b_cmds.extend([right.b_cmds])
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
-        self.b_kwargs.extend([{"left": self.id, "right": right.id}])
+        self.b_kwargs.extend([{"left": left.id, "right": right.id}])
+        self.id += "_u_%s" % right.content.geo.id
         return self

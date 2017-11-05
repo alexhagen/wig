@@ -6,6 +6,7 @@ from mcnp_string import mstring
 from renderer import renderer
 from os.path import expanduser
 import geo as mcnpg
+import matl as mcnpm
 import os
 from pyb import pyb
 
@@ -27,12 +28,16 @@ class wig:
         those commands or the runner wont work.
     :param bool render: defines whether to render the scene using
         ``blender`` before running it
+    :param list particles: a list of ``'n', 'p', ...`` for the particles we
+        should care about
     :return: the ``wig`` object.
     """
-    def __init__(self, comment, filename, flavor='6', render=True):
+    def __init__(self, comment, filename, flavor='6', render=True,
+                 particles=['n']):
         self.original_directory = os.getcwd()
         self.set_filename(filename)
         self.set_comment(comment)
+        self._particles = particles
         if render:
             self.renderer = renderer(filename)
         else:
@@ -121,7 +126,7 @@ class wig:
                     self.geo_num += 10
                     self.geo_comments.extend([geo.comment])
 
-    def cell(self, cells=None):
+    def cell(self, cells=None, auto_universe=True, universe_matl=None):
         """ ``cell`` adds all the ``wig.cell`` in a list to an input deck.
 
             :param list cells: the list of ``wig.cell`` to be added to the
@@ -161,8 +166,14 @@ class wig:
                         print plot_cmd
                         print plot_kwargs
                 # increment the cell num
-                self.cell_block += " imp:n=1\n"
+                self.cell_block += " imp:"
+                for particle in self._particles:
+                    self.cell_block += "%s," % particle
+                self.cell_block = self.cell_block[:-1]
+                self.cell_block += "=1\n"
                 self.cell_num += 10
+        if auto_universe:
+            self.make_universe(matl=universe_matl)
         # add void
         self.cell_block += "%s\n" % ('c --- void')
         self.cell_block += "%d     " % (99)
@@ -170,6 +181,7 @@ class wig:
         self.cell_block += "%d " % (0)
         # now print the density
         self.cell_block += "                 "
+        self.cell_block += "%d " % (-self.universe.sense * self.universe.geo_num)
         # now search for the universe cell
         for cell in cells:
             if cell is not None:
@@ -180,7 +192,34 @@ class wig:
                         self.cell_block += "%d " % cell.geo.nums[0][0]
                     elif cell.geo.__class__.__name__ is 'group':
                         self.cell_block += "%d " % cell.geo.content.nums[0][0]
-        self.cell_block += "imp:n=0\n"
+        # increment the cell num
+        self.cell_block += " imp:"
+        for particle in self._particles:
+            self.cell_block += "%s," % particle
+        self.cell_block = self.cell_block[:-1]
+        self.cell_block += "=0\n"
+
+    def make_universe(self, geo=None, matl=None):
+        if geo is None:
+            geo = self.universe
+        if matl is None:
+            matl = mcnpm.air()
+        self.cell_block += "%d     " % (self.cell_num)
+        # now print the material number
+        self.cell_block += "%d " % (matl.matl_num)
+        # now print the density
+        self.cell_block += "%15.10E " % (-matl.rho)
+        # now print the universe surface
+        self.cell_block += "%d" % (geo.sense * geo.geo_num)
+        for cell in self.cells:
+            self.cell_block += " #%d" % (cell.cell_num)
+        # increment the cell num
+        self.cell_block += " imp:"
+        for particle in self._particles:
+            self.cell_block += "%s," % particle
+        self.cell_block = self.cell_block[:-1]
+        self.cell_block += "=1\n"
+        self.cell_num += 10
 
 
 
@@ -235,6 +274,10 @@ class wig:
                     self.tally_block += "fmesh%d%d%s\n" % \
                         (self.tally_nums[str(tally.card)], tally.card,
                          tally.string)
+                elif tally.tmesh:
+                    self.tally_block += "tmesh\n  %s%d%d%s\nendmd\n" % \
+                        (tally.tmeshtype, self.tally_nums[str(tally.card)],
+                         tally.card, tally.string.format(card=tally.card, number=self.tally_nums[str(tally.card)]))
                 else:
                     self.tally_block += "f%d%d%s\n" % \
                         (self.tally_nums[str(tally.card)], tally.card,

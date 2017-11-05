@@ -65,24 +65,6 @@ class cell:
                                                    ('O-16', 0.210750),
                                                    ('Ar', 0.004671)], id='air')
 
-    def universe(self, scene, matl=air):
-        """ ``universe`` defines a programatically defined universe around all
-            your geometry
-
-            .. warning:: this is not currently implemented, just a placeholder.
-
-            .. todo:: implement the universe
-        """
-        # get all the geometry added to the scene
-        # then, iterate through and subtract all the geometry that isnt an
-        # inner wall
-        for current_geo in geos:
-            if not current_geo.inner_wall:
-                pg -= current_geo
-        self.geo = pg
-        self.id = pg.id
-        self.matl = matl
-
     def refresh(self):
         """ ``refresh`` removes all of the blender commands from the cell.
             Useful for if you are changing cells with new geometry or color.

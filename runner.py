@@ -65,7 +65,7 @@ class runner:
         cmd.extend(['out=' + filename + '.out'])
         cmd.extend(['run=' + filename + '_runtpe'])
         cmd.extend(['mctal=' + filename + '_tallies.out'])
-        if command != 'mcuned' and command != 'mcuned_polimi':
+        if command != 'mcuned' and command != 'mcuned_polimi' and command != 'polimi':
             cmd.extend(['meshtal=' + filename + '.meshtal'])
         if command == 'polimi' or command == 'mcnpx' or command == 'mcuned' or command == 'mcuned_polimi':
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])

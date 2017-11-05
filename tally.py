@@ -23,6 +23,7 @@ class tally():
     def __init__(self, **kwargs):
         tally.num = None
         self.mesh = False
+        self.tmesh = False
         self.comment = kwargs["comment"]
         self.multiplier = False
         if "energy" in kwargs:
@@ -68,6 +69,53 @@ class tally():
         self.particle = kwargs["particle"]
         self.string = ":%s %d" % (kwargs["particle"], self.cell)
         return self
+
+    def rmesh(self, **kwargs):
+        self.card = 1
+        self.tmesh = True
+        origin = [0, 0, 0]
+        if 'geom' not in kwargs:
+            if "xmin" in kwargs:
+                origin[0] = kwargs["xmin"]
+            if "ymin" in kwargs:
+                origin[1] = kwargs["ymin"]
+            if "zmin" in kwargs:
+                origin[2] = kwargs["zmin"]
+            if "origin" in kwargs:
+                origin = kwargs["origin"]
+            xmin = origin[0]
+            ymin = origin[1]
+            zmin = origin[2]
+            if "xmax" in kwargs:
+                xmax = kwargs["xmax"]
+            if "ymax" in kwargs:
+                ymax = kwargs["ymax"]
+            if "zmax" in kwargs:
+                zmax = kwargs["zmax"]
+            if "corner" in kwargs:
+                xmax, ymax, zmax = kwargs["corner"]
+            deltax = xmax - xmin
+            deltay = ymax - ymin
+            deltaz = zmax - zmin
+            if "ijk" in kwargs:
+                dx = kwargs["ijk"] + 1
+                dy = kwargs["ijk"] + 1
+                dz = kwargs["ijk"] + 1
+            if "i" in kwargs:
+                dx = kwargs["i"] + 1
+            if "j" in kwargs:
+                dy = kwargs["j"] + 1
+            if "k" in kwargs:
+                dz = kwargs["k"] + 1
+            imesh = np.linspace(xmin, xmax, dx)
+            jmesh = np.linspace(ymin, ymax, dy)
+            kmesh = np.linspace(zmin, zmax, dz)
+            self.tmeshtype = 'rmesh'
+            self.string = ":%s\n" % self.particle
+            self.string += "  cora{number}{card} %6.4f %di %6.4f\n" % (xmin, dx, xmax)
+            self.string += "  corb{number}{card} %6.4f %di %6.4f\n" % (ymin, dy, ymax)
+            self.string += "  corc{number}{card} %6.4f %di %6.4f" % (zmin, dz, zmax)
+            return self
 
     def mesh_tally(self, **kwargs):
         """ ``mesh_tally`` is a tally finding the mesh in many voxels.  Pass
