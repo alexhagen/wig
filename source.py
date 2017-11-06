@@ -48,8 +48,8 @@ class source():
         self.dists = []
         self.string = ""
         self.comment = "c --- %s" % id
-        types = {"n": 1, "p": 2, "e": 3, "fission": 1, "d": 31}
-        colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B"}
+        types = {"n": 1, "p": 2, "e": 3, "fission": 1, "d": 31, "t": 32, "he3": 33, "he4": 34}
+        colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B", 't': "#F8981D"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
         if direction == '-z' or direction == 'z-':
