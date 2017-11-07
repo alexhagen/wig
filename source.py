@@ -52,6 +52,7 @@ class source():
         colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B", 't': "#F8981D"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
+        print color
         if direction == '-z' or direction == 'z-':
             self.string += "vec=0 0 -1 "
             if anisotropic:

@@ -88,13 +88,18 @@ class phys():
             self.string += "nonu\n"
         return self
 
-    def polimi(self, cells):
+    def polimi(self, cells=[], out_src=False):
         """ ``polimi`` is a convenience method to use MCNP-Polimi to transport
             particles through the cells in ``cells``.
 
             :param list cells: list of ``cell`` to use MCNP-Polimi for transport
+            :param list out_src: if you want to output the source
         """
-        self.string += "ipol 0 0 0 0 2J %d " % len(cells)
+        if out_src is True:
+            out_src_int = 54
+        else:
+            out_src_int = 0
+        self.string += "ipol %d 0 0 0 2J %d " % (out_src_int, len(cells))
         for cell in cells:
             if isinstance(cell, int):
                 self.string += "%d " % cell
@@ -103,5 +108,8 @@ class phys():
         self.string = self.string[:-1]
         self.string += "\n"
         self.string += "rpol 1.0e-8 0 0 1 J\n"
-        self.string += "files 21 DUMN1\n"
+        if len(cells)>0 and out_src is False:
+            self.string += "files 21 DUMN1\n"
+        elif len(cells)==0 and out_src is True:
+            self.string += "files 2J 8J 1 {out_src_fname}\n"
         return self

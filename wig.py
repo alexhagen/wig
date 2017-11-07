@@ -254,7 +254,7 @@ class wig:
         # print the comment
         self.phys_block += "%s\n" % (phys.comment)
         # print the physics string
-        self.phys_block += "%s\n" % (phys.string)
+        self.phys_block += "%s\n" % (phys.string.format(out_src_fname=self.filename + "_source.out"))
         # remove the last character (the new line)
         self.phys_block = self.phys_block[:-1]
 
