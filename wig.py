@@ -347,7 +347,8 @@ class wig:
         """
         self.write(**kwargs)
         self._runner = runner(self.filename, self.command, remote, sys,
-                              blocking=blocking, clean=clean)
+                              blocking=blocking, clean=clean,
+                              just_write=kwargs['just_write'])
 
     def write(self, **kwargs):
         """ ``write`` writes the input deck and renders the input deck
@@ -380,7 +381,8 @@ class wig:
             f.write(mstring(self.matl_block).flow())
         self.render(**kwargs)
 
-    def render(self, filename_suffix='', render_target=None, camera_location=None, render=True, **kwargs):
+    def render(self, filename_suffix='', render_target=None, camera_location=None,
+               render=True, **kwargs):
         """ ``render`` passes the input deck to ``pyb``, a simplified renderer
             that uses ``blender`` as the backend
 

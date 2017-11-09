@@ -177,6 +177,8 @@ class geo:
         self.id = id
         self.geo_num = 0
         self.comment = "c --- %s" % (self.id)
+        if a3 is None:
+            a3 = np.cross(a1, a2)
         self.string = ("box %6.4f %6.4f %6.4f  %6.4f %6.4f %6.4f  " +
                        "%6.4f %6.4f %6.4f  %6.4f %6.4f %6.4f") % \
                        (v[0], v[1], v[2], a1[0], a1[1], a1[2],
@@ -188,6 +190,12 @@ class geo:
         a1 = np.array(a1)
         a2 = np.array(a2)
         a3 = np.array(a3)
+        if np.abs(np.dot(a1, a2)) > 1.0E-5:
+            raise ValueError("Vector a1 and a2 are not orthogonal,  their dot product is %f" % np.dot(a1, a2))
+        if np.abs(np.dot(a2, a3)) > 1.0E-5:
+            raise ValueError("Vector a2 and a3 are not orthogonal,  their dot product is %f" % np.dot(a2, a3))
+        if np.abs(np.dot(a1, a3)) > 1.0E-5:
+            raise ValueError("Vector a1 and a3 are not orthogonal,  their dot product is %f" % np.dot(a1, a3))
         verts = [tuple(v), tuple(v + a2), tuple(v + a3), tuple(v + a2 + a3),
                  tuple(v + a1), tuple(v + a1 + a2), tuple(v + a1 + a3),
                  tuple(v + a1 + a2 + a3)]

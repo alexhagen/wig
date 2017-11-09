@@ -39,7 +39,7 @@ class runner:
             Useful if you've screwed something up and want to start fresh
     """
     def __init__(self, filename, command, remote="local", sys='linux',
-                 blocking=False, clean=False):
+                 blocking=False, clean=False, just_write=False):
         systems = {}
         execfile(expanduser('~') + '/.wig/config.py', systems)
         systems = systems['systems']
@@ -76,7 +76,7 @@ class runner:
         if not blocking:
             pass
         print cmd
-        if self.needs_to_run:
+        if self.needs_to_run and not just_write:
             if remote is not 'local' and remote in systems.keys():
                 ssh = paramiko.SSHClient()
                 print "started paramiko"
@@ -102,3 +102,5 @@ class runner:
                 if blocking:
                     self.p.communicate()
                     print "waiting for the process to finish"
+        else:
+            print ' '.join(cmd)
