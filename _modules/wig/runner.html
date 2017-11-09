@@ -154,7 +154,7 @@
 <span class="sd">            Useful if you&#39;ve screwed something up and want to start fresh</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span>
-                 <span class="n">blocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">blocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">just_write</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">systems</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">execfile</span><span class="p">(</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/.wig/config.py&#39;</span><span class="p">,</span> <span class="n">systems</span><span class="p">)</span>
         <span class="n">systems</span> <span class="o">=</span> <span class="n">systems</span><span class="p">[</span><span class="s1">&#39;systems&#39;</span><span class="p">]</span>
@@ -191,7 +191,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">blocking</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="nb">print</span> <span class="n">cmd</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_to_run</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_to_run</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">just_write</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">remote</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;local&#39;</span> <span class="ow">and</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">systems</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">ssh</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">SSHClient</span><span class="p">()</span>
                 <span class="nb">print</span> <span class="s2">&quot;started paramiko&quot;</span>
@@ -216,7 +216,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
-                    <span class="nb">print</span> <span class="s2">&quot;waiting for the process to finish&quot;</span></div>
+                    <span class="nb">print</span> <span class="s2">&quot;waiting for the process to finish&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 </pre></div>
 
     </div>

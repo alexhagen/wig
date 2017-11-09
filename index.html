@@ -839,15 +839,20 @@ deck. Make sure this includes a universe</td>
 
 <dl class="method">
 <dt id="wig.wig.wig.cell">
-<code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em>, <em>auto_universe=True</em>, <em>universe_matl=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em>, <em>auto_universe=True</em>, <em>universe_matl=None</em>, <em>debug_blender=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">cell</span></code> adds all the <code class="docutils literal"><span class="pre">wig.cell</span></code> in a list to an input deck.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cells</strong> (<em>list</em>) – the list of <code class="docutils literal"><span class="pre">wig.cell</span></code> to be added to the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cells</strong> (<em>list</em>) – the list of <code class="docutils literal"><span class="pre">wig.cell</span></code> to be added to the
 input deck.  If you don’t have a cell named <code class="docutils literal"><span class="pre">'universe'</span></code>, this
-method will make one for you, but you might night like it.</td>
+method will make one for you, but you might night like it.</li>
+<li><strong>debug_blender</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – whether or not you want to see the
+commands that will be sent to <code class="docutils literal"><span class="pre">blender</span></code>, default <code class="docutils literal"><span class="pre">False</span></code>.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1631,7 +1636,7 @@ MCNP notation</p>
 <h2>wig.runner object<a class="headerlink" href="#wig-runner-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.runner.runner">
-<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote=’local’</em>, <em>sys=’linux’</em>, <em>blocking=False</em>, <em>clean=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.runner.</code><code class="descname">runner</code><span class="sig-paren">(</span><em>filename</em>, <em>command</em>, <em>remote=’local’</em>, <em>sys=’linux’</em>, <em>blocking=False</em>, <em>clean=False</em>, <em>just_write=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/runner.html#runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.runner.runner" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">runner</span></code> is an object that ssh’s to a remote (or local) system and
 starts a <code class="docutils literal"><span class="pre">wig</span></code> job, assume that it is set up completely and correctly.
 You can define your systems to run this on in ‘~/.wig/config.py’ as the
@@ -1708,7 +1713,7 @@ Useful if you’ve screwed something up and want to start fresh</li>
 <h2>wig.analyze object<a class="headerlink" href="#wig-analyze-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.analyze.analyze">
-<em class="property">class </em><code class="descclassname">wig.analyze.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>filename</em>, <em>nps=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.analyze.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>filename</em>, <em>nps=None</em>, <em>tmesh=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">analyze</span></code> goes through an output file and checks for tallies.</p>
 <p>An <code class="docutils literal"><span class="pre">analyze</span></code> object will hold <code class="docutils literal"><span class="pre">tally</span></code> objects in a list, one for each of
 the printed tallies on the file <code class="docutils literal"><span class="pre">filename</span></code>, if these were generated as a
@@ -1729,6 +1734,11 @@ not have support.</p>
 <dl class="method">
 <dt id="wig.analyze.analyze.import_meshtal_section">
 <code class="descname">import_meshtal_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze.import_meshtal_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze.import_meshtal_section" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="wig.analyze.analyze.import_tmesh_section">
+<code class="descname">import_tmesh_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/analyze.html#analyze.import_tmesh_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.analyze.analyze.import_tmesh_section" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
