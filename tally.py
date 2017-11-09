@@ -103,18 +103,27 @@ class tally():
                 dz = kwargs["ijk"] + 1
             if "i" in kwargs:
                 dx = kwargs["i"] + 1
+                imesh = np.linspace(xmin, xmax, dx)
             if "j" in kwargs:
                 dy = kwargs["j"] + 1
+                jmesh = np.linspace(ymin, ymax, dy)
             if "k" in kwargs:
                 dz = kwargs["k"] + 1
-            imesh = np.linspace(xmin, xmax, dx)
-            jmesh = np.linspace(ymin, ymax, dy)
-            kmesh = np.linspace(zmin, zmax, dz)
+                kmesh = np.linspace(zmin, zmax, dz)
             self.tmeshtype = 'rmesh'
             self.string = ":%s\n" % self.particle
-            self.string += "  cora{number}{card} %6.4f %di %6.4f\n" % (xmin, dx, xmax)
-            self.string += "  corb{number}{card} %6.4f %di %6.4f\n" % (ymin, dy, ymax)
-            self.string += "  corc{number}{card} %6.4f %di %6.4f" % (zmin, dz, zmax)
+            if "i" not in kwargs:
+                self.string += "  cora{number}{card} %6.4f %6.4f\n" % (xmin, xmax)
+            else:
+                self.string += "  cora{number}{card} %6.4f %di %6.4f\n" % (xmin, dx - 1, xmax)
+            if "j" not in kwargs:
+                self.string += "  corb{number}{card} %6.4f %6.4f\n" % (ymin, ymax)
+            else:
+                self.string += "  corb{number}{card} %6.4f %di %6.4f\n" % (ymin, dy - 1, ymax)
+            if "k" not in kwargs:
+                self.string += "  corc{number}{card} %6.4f %6.4f" % (zmin, zmax)
+            else:
+                self.string += "  corc{number}{card} %6.4f %di %6.4f" % (zmin, dz - 1, zmax)
             return self
 
     def mesh_tally(self, **kwargs):

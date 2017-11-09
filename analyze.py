@@ -97,7 +97,7 @@ class analyze(object):
 
     :param str filename: filename of the ``tallies.out`` file
     """
-    def __init__(self, filename, nps=None):
+    def __init__(self, filename, nps=None, tmesh=False):
         orig_filename = filename
         if '_tallies.out' not in filename and 'meshtal' not in filename:
             filename = filename + '_tallies.out'
@@ -121,15 +121,24 @@ class analyze(object):
             self.nps = 1.0e9
         #print "%e" % self.nps
         if '_tallies.out' in filename:
-            for string in strings[1:]:
-                total, u_total, name, e_bins, vals, u_vals = \
-                    self.import_tally_section(string)
-                tallies.extend([tally(total, u_total, name,
-                                      pym.curve(e_bins, vals, u_y=u_vals,
-                                                name=name, data='binned'), nps=self.nps)])
+            if tmesh:
+                for string in strings[1:]:
+                    E_bins, xs, ys, zs, phis, u_phis = \
+                        self.import_tmesh_section(string)
+                    tallies.extend([meshtal(xs, ys, zs, E_bins, phis, u_phis)])
+            else:
+                for string in strings[1:]:
+                    total, u_total, name, e_bins, vals, u_vals = \
+                        self.import_tally_section(string)
+                    tallies.extend([tally(total, u_total, name,
+                                          pym.curve(e_bins, vals, u_y=u_vals,
+                                                    name=name, data='binned'), nps=self.nps)])
         elif 'meshtal' in filename:
             meshtals = list()
             strings = file_string.split('Mesh Tally Number')
+            if len(strings) < 2:
+                strings = file_string.split('tally')
+            print "Length of strings %d" % len(strings)
             for string in strings[1:]:
                 E_bins, xs, ys, zs, phis, u_phis = \
                     self.import_meshtal_section(string)
@@ -177,6 +186,33 @@ class analyze(object):
         u_vals = np.array(u_vals)
         vals.reshape((len(E_bins)-1, len(x_bins)-1, len(y_bins)-1, len(z_bins)-1))
         u_vals.reshape((len(E_bins)-1, len(x_bins)-1, len(y_bins)-1, len(z_bins)-1))
+        return np.array(E_bins), np.array(x_bins), np.array(y_bins), \
+            np.array(z_bins), np.array(vals), np.array(u_vals)
+
+    def import_tmesh_section(self, section):
+        string = section
+        name = string.split('\n')[1].strip()
+        bins_string = find_between(string, '\nf', '\nd')
+        nums_string = find_between(string, '\nf', '\n')
+        nums = nums_string.split()
+        total_bins = int(nums[0])
+        num_ebins = int(nums[1])
+        if num_ebins == 0:
+            E_bins = []
+        num_xbins = int(nums[2])
+        num_ybins = int(nums[3])
+        num_zbins = int(nums[4])
+        bin_edges_string = find_between(string, nums_string, '\nd')
+        bin_edges = bin_edges_string.split()
+        bin_edges = [float(be) for be in bin_edges]
+        x_bins = bin_edges[0:num_xbins+1]
+        y_bins = bin_edges[num_xbins+1:num_xbins+num_ybins+2]
+        z_bins = bin_edges[num_xbins+num_ybins+2:]
+        val_string = find_between(string, "vals")
+        val_string = ' '.join(val_string.split('\n')[1:-1])
+        vals = val_string.split()
+        u_vals = [float(val) for val in vals[1::2]]
+        vals = [float(val) for val in vals[0::2]]
         return np.array(E_bins), np.array(x_bins), np.array(y_bins), \
             np.array(z_bins), np.array(vals), np.array(u_vals)
 
