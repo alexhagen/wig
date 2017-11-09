@@ -126,12 +126,15 @@ class wig:
                     self.geo_num += 10
                     self.geo_comments.extend([geo.comment])
 
-    def cell(self, cells=None, auto_universe=True, universe_matl=None):
+    def cell(self, cells=None, auto_universe=True, universe_matl=None,
+             debug_blender=False):
         """ ``cell`` adds all the ``wig.cell`` in a list to an input deck.
 
             :param list cells: the list of ``wig.cell`` to be added to the
                 input deck.  If you don't have a cell named ``'universe'``, this
                 method will make one for you, but you might night like it.
+            :param bool debug_blender: whether or not you want to see the
+                commands that will be sent to ``blender``, default ``False``.
         """
         # initialize a counter
         self.cell_num = 10
@@ -157,14 +160,17 @@ class wig:
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%s" % (cell.geo.string)
                 if cell.show and self._render:
-                    print cell.id
+                    if debug_blender:
+                        print cell.id
                     for plot_cmd, plot_kwargs in zip(cell.b_cmds, cell.b_kwargs):
                         if isinstance(plot_cmd, list):
                             plot_cmd = plot_cmd[0]
-                            print plot_cmd
+                            if debug_blender:
+                                print plot_cmd
                         plot_cmd(self.bscene, **plot_kwargs)
-                        print plot_cmd
-                        print plot_kwargs
+                        if debug_blender:
+                            print plot_cmd
+                            print plot_kwargs
                 # increment the cell num
                 self.cell_block += " imp:"
                 for particle in self._particles:
@@ -348,7 +354,7 @@ class wig:
         self.write(**kwargs)
         self._runner = runner(self.filename, self.command, remote, sys,
                               blocking=blocking, clean=clean,
-                              just_write=kwargs['just_write'])
+                              **kwargs)
 
     def write(self, **kwargs):
         """ ``write`` writes the input deck and renders the input deck

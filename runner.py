@@ -39,7 +39,7 @@ class runner:
             Useful if you've screwed something up and want to start fresh
     """
     def __init__(self, filename, command, remote="local", sys='linux',
-                 blocking=False, clean=False, just_write=False):
+                 blocking=False, clean=False, just_write=False, **kwargs):
         systems = {}
         execfile(expanduser('~') + '/.wig/config.py', systems)
         systems = systems['systems']
