@@ -220,13 +220,13 @@ class analyze(object):
         string = section
         name = string.split('\n')[2].strip()
         # find the string between et and t
-        e_bins_string = find_between(string, "et", "vals")
+        e_bins_string = find_between(string, '\net', '\nvals')
         # remove first line and last line
         e_bins_string = ' '.join(e_bins_string.split('\n')[1:-2])
         e_bins = e_bins_string.split()
         e_bins = [float(bin) for bin in e_bins]
         # find the string between vals and tfc
-        val_string = find_between(string, "vals", "tfc")
+        val_string = find_between(string, '\nvals', '\ntfc')
         val_string = ' '.join(val_string.split('\n')[1:-1])
         vals = val_string.split()
         u_vals = [float(val) for val in vals[1::2]]

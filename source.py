@@ -48,14 +48,19 @@ class source():
         self.dists = []
         self.string = ""
         self.comment = "c --- %s" % id
-        types = {"n": 1, "p": 2, "e": 3, "fission": 1, "d": 31, "t": 32, "he3": 33, "he4": 34}
+        types = {"n": 'n', "p": 'p', "e": 3, "fission": 1, "d": 31, "t": 32, "he3": 33, "he4": 34}
         colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B", 't': "#F8981D"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
         print color
         if direction == '-z' or direction == 'z-':
-            self.string += "vec=0 0 -1 "
             if anisotropic:
+                self.string += "vec=0 0 -1 "
+                self.string += "dir=1 "
+            self.axis = (0, 0, 1)
+        elif direction == '+z' or direction == 'z+':
+            if anisotropic:
+                self.string += "vec=0 0 1 "
                 self.string += "dir=1 "
             self.axis = (0, 0, 1)
         elif direction == '+x' or direction == 'x+':
@@ -64,12 +69,16 @@ class source():
         elif direction == '+y' or direction == 'y+':
             self.string += "vec=0 1 0 dir=1 "
             self.axis = (0, 1, 0)
+        elif direction == '-y' or direction == 'y-':
+            self.string += "vec=0 -1 0 dir=1 "
+            self.axis = (0, 1, 0)
         if axis is not None:
             if axis == '+z' and lz is not None:
                 direction = 'z'
                 self.string += 'vec=0 0 1 '
                 self.axis = [0, 0, lz]
         if shape == 'disk' and radius is not None:
+            self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
                                     format='d')])
             self.string += "axs=%d %d %d rad=d%d " % (self.axis[0],

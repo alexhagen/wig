@@ -273,40 +273,55 @@ class wig:
         # initialize a counter
         self.tally_nums = {"1": 1, "4": 1, "7": 1, "6": 1}
         self.tally_block = "prdmp j -15 1 4\n"
+        # resort the tallies
+        new_tallies = []
+        new_meshtallies = []
+        new_tmeshtallies = []
         for tally in tallies:
-            if tally is not None:
-                # print the tally type card
-                if tally.mesh:
-                    self.tally_block += "fmesh%d%d%s\n" % \
-                        (self.tally_nums[str(tally.card)], tally.card,
-                         tally.string)
-                elif tally.tmesh:
-                    self.tally_block += "tmesh\n  %s%d%d%s\nendmd\n" % \
-                        (tally.tmeshtype, self.tally_nums[str(tally.card)],
-                         tally.card, tally.string.format(card=tally.card, number=self.tally_nums[str(tally.card)]))
-                else:
-                    self.tally_block += "f%d%d%s\n" % \
-                        (self.tally_nums[str(tally.card)], tally.card,
-                         tally.string)
-                # print the tally energy card
-                if tally.mesh:
-                    pass
-                else:
-                    self.tally_block += "e%d%d %s\n" % \
-                        (self.tally_nums[str(tally.card)], tally.card,
-                         tally.energy_string)
-                # check for multipliers
-                if tally.multiplier:
-                    self.tally_block += "fm%d%d %s\n" % \
-                        (self.tally_nums[str(tally.card)], tally.card,
-                         tally.multiplier_string)
-                # print the comment
-                self.tally_block += "fc%d%d %s\n" % \
-                    (self.tally_nums[str(tally.card)], tally.card, tally.comment)
-                # set that number to the geometry object
-                tally.num = self.tally_nums[str(tally.card)]
-                # increment matl num
-                self.tally_nums[str(tally.card)] += 1
+            if tally.mesh:
+                new_meshtallies.extend([tally])
+            elif tally.tmesh:
+                new_tmeshtallies.extend([tally])
+            else:
+                new_tallies.extend([tally])
+        for tally in new_tallies:
+            self.tally_block += "f%d%d%s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card,
+                 tally.string)
+            self.tally_block += "e%d%d %s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card,
+                 tally.energy_string)
+            if tally.multiplier:
+                self.tally_block += "fm%d%d %s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.multiplier_string)
+            # print the comment
+            self.tally_block += "fc%d%d %s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card, tally.comment)
+            # set that number to the geometry object
+            tally.num = self.tally_nums[str(tally.card)]
+            # increment matl num
+            self.tally_nums[str(tally.card)] += 1
+        if len(new_tmeshtallies) > 0:
+            self.tally_block += "tmesh\n"
+        for tally in new_tmeshtallies:
+            self.tally_block += "  %s%d%d%s\n" % \
+                (tally.tmeshtype, self.tally_nums[str(tally.card)],
+                 tally.card, tally.string.format(card=tally.card, number=self.tally_nums[str(tally.card)]))
+            # set that number to the geometry object
+            tally.num = self.tally_nums[str(tally.card)]
+            # increment matl num
+            self.tally_nums[str(tally.card)] += 1
+        if len(new_tmeshtallies) > 0:
+            self.tally_block += "endmd\n"
+        for tally in new_meshtallies:
+            self.tally_block += "fmesh%d%d%s\n" % \
+                (self.tally_nums[str(tally.card)], tally.card,
+                 tally.string)
+            # set that number to the geometry object
+            tally.num = self.tally_nums[str(tally.card)]
+            # increment matl num
+            self.tally_nums[str(tally.card)] += 1
 
     def source(self, sources=None):
         """ ``source`` adds the ``wig.source`` object to the model
@@ -351,6 +366,9 @@ class wig:
             :param dict kwargs: ``run`` passes the rest of the commands to
                 ``write``
         """
+        if clean:
+            os.system('rm ' + expanduser("~") + '/mcnp/active/' +
+                      self.filename + '*')
         self.write(**kwargs)
         self._runner = runner(self.filename, self.command, remote, sys,
                               blocking=blocking, clean=clean,

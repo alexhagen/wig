@@ -30,8 +30,8 @@ class phys():
         self.comment = "%s" % (self.comment[:-1])
         self.string = "%s\n" % (self.string[:-1])
         if 'p' in particles:
-            self.string += "phys:p %e 0 1 -1 2J 1\n" % (maxE)
-            self.string += "cut:p %e J 0 0\n" % (maxE)
+            self.string += "phys:p %e 1 0 1 0 0 1\n" % (maxE)
+            self.string += "cut:p J %e\n" % (minE)
         if 'n' in particles:
             self.string += "phys:n %e\n" % (maxE)
             self.string += "cut:n j %e\n" % (minE)

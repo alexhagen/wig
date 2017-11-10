@@ -69,6 +69,7 @@ class runner:
             cmd.extend(['meshtal=' + filename + '.meshtal'])
         if command == 'polimi' or command == 'mcnpx' or command == 'mcuned' or command == 'mcuned_polimi':
             cmd.extend(['DUMN1=' + filename + '_polimi.out'])
+            cmd.extend(['mdata=' + filename + '_mdata.out'])
         else:
             cmd.extend(['tasks %d' % procs])
         if remote is not None and remote is not 'local':
