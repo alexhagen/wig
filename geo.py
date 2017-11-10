@@ -5,6 +5,8 @@ from colour import Color
 from transforms3d import euler, axangles
 from pyb import pyb
 import cell as mcnpce
+import psgv.psgv as psgv
+
 
 class geo:
     """ a ``wig.geo`` instance is a single geometric primative for creation of
@@ -16,6 +18,7 @@ class geo:
         self.bstring = ''
         self.b_cmds = []
         self.b_kwargs = []
+        self.deleted = {}
 
     def boolean(self, right, operation):
         """ ``wig.geo`` implements some of the boolean geometry used by MCNP.
@@ -53,6 +56,7 @@ class geo:
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.subtract])
         self.b_kwargs.extend([{"left": left.id, "right": right.id}])
+        self.deleted[right.id] = [right.b_cmds, right.b_kwargs]
         return left - right
 
     def __add__(self, right):
@@ -366,6 +370,7 @@ class pseudogeo:
         self.nums = [(geo.geo_num, geo.sense)]
         self.b_cmds = []
         self.b_kwargs = []
+        self.deleted = {}
         if len(geo.b_cmds) == 0:
             self.b_cmds = [geo.blender_cmd]
             self.b_kwargs = [geo.blender_cmd_args]
@@ -427,12 +432,14 @@ class pseudogeo:
                 self.b_kwargs.extend([_right.b_kwargs])
                 self.b_cmds.extend([pyb.pyb.subtract])
                 self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
+                self.deleted[_right.id] = [_right.b_cmds, _right.b_kwargs]
         else:
             self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
             self.b_cmds.extend(right.b_cmds)
             self.b_kwargs.extend(right.b_kwargs)
             self.b_cmds.extend([pyb.pyb.subtract])
             self.b_kwargs.extend([{"left": self.id, "right": right.id}])
+            self.deleted[right.id] = [right.b_cmds, right.b_kwargs]
             self.id += "_less_%s" % right.geo.id
         return self
 

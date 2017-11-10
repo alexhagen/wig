@@ -13,9 +13,18 @@ class phys():
             using MCNP-Polimi
     """
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
-                 nps=None, ctme=None, polimi=False, polimi_cells=[]):
+                 nps=None, ctme=None, polimi=False, polimi_cells=[],
+                 ipol=[0, 0, 0], rpol=[0, 0, 0]):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
+        if ipol is not None:
+            self.ipol = ipol
+        else:
+            self.ipol = None
+        if rpol is not None:
+            self.rpol = rpol
+        else:
+            self.rpol = None
         self.comment = "c --- default physics for "
         self.string = "mode "
         if maxE is None:
@@ -99,7 +108,10 @@ class phys():
             out_src_int = 54
         else:
             out_src_int = 0
-        self.string += "ipol %d 0 0 0 2J %d " % (out_src_int, len(cells))
+        if self.ipol is not None:
+            self.string += "ipol {ipol[1]} {ipol[2]} {ipol[3]} {ipol[4]} {ipol[5]} {ipol[6]} ".format(ipol=[0] + self.ipol + [len(cells)])
+        else:
+            self.string += "ipol %d 0 0 0 2J %d " % (out_src_int, len(cells))
         for cell in cells:
             if isinstance(cell, int):
                 self.string += "%d " % cell
@@ -107,7 +119,10 @@ class phys():
                 self.string += "%d " % cell.cell_num
         self.string = self.string[:-1]
         self.string += "\n"
-        self.string += "rpol 1.0e-8 0 0 1 J\n"
+        if self.rpol is not None:
+            self.string += "rpol {rpol[1]} {rpol[2]} {rpol[3]} {rpol[4]} {rpol[5]} {rpol[6]} {rpol[7]} {rpol[8]} {rpol[9]}\n".format(rpol=[0]+self.rpol)
+        else:
+            self.string += "rpol 1.0e-8 0 0 1 J\n"
         if len(cells)>0 and out_src is False:
             self.string += "files 21 DUMN1\n"
         elif len(cells)==0 and out_src is True:

@@ -72,6 +72,7 @@ class wig:
         self.geo_comments = []
         self.matl_num = 1
         self.matl_comments = []
+        self.deleted = {}
 
     # --------------------------- File Methods ---------------------------------
 
@@ -126,6 +127,18 @@ class wig:
                     self.geo_num += 10
                     self.geo_comments.extend([geo.comment])
 
+    def redefine(self, name=None):
+        if name in self.deleted:
+            for plot_cmd, plot_kwargs in zip(self.deleted[name].b_cmds, self.deleted[name].b_kwargs):
+                if isinstance(plot_cmd, list):
+                    plot_cmd = plot_cmd[0]
+                    if debug_blender:
+                        print plot_cmd
+                plot_cmd(self.bscene, **plot_kwargs)
+                if debug_blender:
+                    print plot_cmd
+                    print plot_kwargs
+
     def cell(self, cells=None, auto_universe=True, universe_matl=None,
              debug_blender=False):
         """ ``cell`` adds all the ``wig.cell`` in a list to an input deck.
@@ -167,6 +180,8 @@ class wig:
                             plot_cmd = plot_cmd[0]
                             if debug_blender:
                                 print plot_cmd
+                        self.deleted.update(cell.geo.deleted)
+                        #print self.deleted
                         plot_cmd(self.bscene, **plot_kwargs)
                         if debug_blender:
                             print plot_cmd
@@ -334,8 +349,10 @@ class wig:
             self.data_block += "sdef    "
             # print the source string
             self.data_block += "%s\n" % (source.string)
+
             if source.blender_cmd is not None and source.show and self._render:
-                source.blender_cmd(self.bscene, **source.blender_cmd_args)
+                for command, _kwargs in zip(source.blender_cmd, source.blender_cmd_args):
+                    command(self.bscene, **_kwargs)
 
     # --------------------------- Running methods ------------------------------
 
