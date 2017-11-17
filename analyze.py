@@ -123,9 +123,16 @@ class analyze(object):
         if '_tallies.out' in filename:
             if tmesh:
                 for string in strings[1:]:
-                    E_bins, xs, ys, zs, phis, u_phis = \
-                        self.import_tmesh_section(string)
-                    tallies.extend([meshtal(xs, ys, zs, E_bins, phis, u_phis)])
+                    try:
+                        E_bins, xs, ys, zs, phis, u_phis = \
+                            self.import_tmesh_section(string)
+                        tallies.extend([meshtal(xs, ys, zs, E_bins, phis, u_phis)])
+                    except IndexError:
+                        total, u_total, name, e_bins, vals, u_vals = \
+                            self.import_tally_section(string)
+                        tallies.extend([tally(total, u_total, name,
+                                              pym.curve(e_bins, vals, u_y=u_vals,
+                                                        name=name, data='binned'), nps=self.nps)])
             else:
                 for string in strings[1:]:
                     total, u_total, name, e_bins, vals, u_vals = \
