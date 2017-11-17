@@ -126,6 +126,12 @@ class geo:
         self.id = id
         self.geo_num = 0
         self.comment = "c --- %s" % (self.id)
+        if x is not None:
+            x = sorted(x)
+        if y is not None:
+            y = sorted(y)
+        if z is not None:
+            z = sorted(z)
         if x is None:
             x1 = c[0] - abs(l[0] / 2.0)
             x2 = c[0] + abs(l[0] / 2.0)
