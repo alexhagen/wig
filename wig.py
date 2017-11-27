@@ -104,10 +104,10 @@ class wig:
             :param list geos: the ``wig.geo`` objects to be added to the input
                 deck. Make sure this includes a universe
         """
-        # initialize a counter
         self.add_geo(geos=geos)
 
     def add_geo(self, geos=None):
+        self.geos = geos
         for geo in geos:
             if geo is not None:
                 if geo.comment not in self.geo_comments:
@@ -465,12 +465,18 @@ class wig:
             without also refreshing the cells. But I don't know you, live your
             life.
         """
+        for geo in self.geos:
+            geo.geo_num = 0
+        self.geo_comments = []
+        self.geo_num = 10
         self.geo_block = ''
 
     def refresh_cell(self):
         """ ``refresh_cell`` resets the cell block to nothing.  Again, useful
             for changing up cell definitions or materials.
         """
+        for cell in self.cells:
+            cell.cell_num = 0
         self.cell_block = ''
         self.bscene = pyb.pyb()
         self.bscene.sun()
