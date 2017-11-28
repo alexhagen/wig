@@ -39,7 +39,9 @@ class runner:
             Useful if you've screwed something up and want to start fresh
     """
     def __init__(self, filename, command, remote="local", sys='linux',
-                 blocking=False, clean=False, just_write=False, **kwargs):
+                 blocking=False, clean=False, just_write=False,
+                 needs_to_run=True, **kwargs):
+        self.needs_to_run = needs_to_run
         systems = {}
         execfile(expanduser('~') + '/.wig/config.py', systems)
         systems = systems['systems']
@@ -50,9 +52,7 @@ class runner:
             procs = system['procs']
             username = system['username']
             password = system['password']
-        # check in the completed directory, and if there is an out file with
-        # exactly the same infile, then, don't run
-        self.needs_to_run = True
+        # self.needs_to_run = True
         if command == 'polimi' or command == 'mcnpx' or command == 'mcuned' or command == 'mcuned_polimi':
             procs = 1
         # construct the command

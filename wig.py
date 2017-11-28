@@ -9,6 +9,10 @@ import geo as mcnpg
 import matl as mcnpm
 import os
 from pyb import pyb
+import StringIO
+import difflib
+import re
+import subprocess
 
 class wig:
     """ The ``wig`` object is the base object for an MCNP setup.
@@ -73,6 +77,7 @@ class wig:
         self.matl_num = 1
         self.matl_comments = []
         self.deleted = {}
+        self.force = False
 
     # --------------------------- File Methods ---------------------------------
 
@@ -383,44 +388,87 @@ class wig:
             :param dict kwargs: ``run`` passes the rest of the commands to
                 ``write``
         """
-        if clean:
-            os.system('rm ' + expanduser("~") + '/mcnp/active/' +
-                      self.filename + '*')
-        self.write(**kwargs)
-        self._runner = runner(self.filename, self.command, remote, sys,
-                              blocking=blocking, clean=clean,
-                              **kwargs)
+        self._write_string()
+        self.needs_to_run = self._check_match(self.inpstr)
+        if self.needs_to_run:
+            if clean:
+                os.system('rm ' + expanduser("~") + '/mcnp/active/' +
+                          self.filename + '*')
+            self.write(**kwargs)
+            self._runner = runner(self.filename, self.command, remote, sys,
+                                  blocking=blocking, clean=clean,
+                                  needs_to_run=self.needs_to_run, **kwargs)
+        else:
+            print "already ran"
 
-    def write(self, **kwargs):
+    def _write_string(self):
+        # write the blocks as a string
+        inpstr = StringIO.StringIO()
+        # wrap fill and print to the file
+        intro = textwrap.TextWrapper(initial_indent='c ',
+                                     subsequent_indent='c ', width=80)
+        inpstr.write(self.filename + "\n")
+        inpstr.write(intro.fill(self.intro_block))
+        inpstr.write("\n")
+        # write the cells block
+        inpstr.write("c " + " Cells ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.cell_block).flow())
+        inpstr.write("\n")
+        # write the geometry block
+        inpstr.write("c " + " Geometry ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.geo_block).flow())
+        inpstr.write("\n")
+        # write the data block
+        inpstr.write("c " + " Data ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.data_block).flow())
+        inpstr.write("c " + " Physics ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.phys_block).flow())
+        inpstr.write("c " + " Tallies ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.tally_block).flow())
+        inpstr.write("c " + " Materials ".center(78, '-') + "\n")
+        inpstr.write(mstring(self.matl_block).flow())
+        inpstr2 = str(inpstr.getvalue())
+        inpstr.close()
+        inpstr = inpstr2
+        self.inpstr = inpstr
+
+    def write(self, force=False, **kwargs):
         """ ``write`` writes the input deck and renders the input deck
 
             :param dict kwargs: keyword arguments to pass to ``render``
         """
-        with open(self.filename + '.inp', 'w') as f:
-            # wrap fill and print to the file
-            intro = textwrap.TextWrapper(initial_indent='c ',
-                                         subsequent_indent='c ', width=80)
-            f.write(self.filename + "\n")
-            f.write(intro.fill(self.intro_block))
-            f.write("\n")
-            # write the cells block
-            f.write("c " + " Cells ".center(78, '-') + "\n")
-            f.write(mstring(self.cell_block).flow())
-            f.write("\n")
-            # write the geometry block
-            f.write("c " + " Geometry ".center(78, '-') + "\n")
-            f.write(mstring(self.geo_block).flow())
-            f.write("\n")
-            # write the data block
-            f.write("c " + " Data ".center(78, '-') + "\n")
-            f.write(mstring(self.data_block).flow())
-            f.write("c " + " Physics ".center(78, '-') + "\n")
-            f.write(mstring(self.phys_block).flow())
-            f.write("c " + " Tallies ".center(78, '-') + "\n")
-            f.write(mstring(self.tally_block).flow())
-            f.write("c " + " Materials ".center(78, '-') + "\n")
-            f.write(mstring(self.matl_block).flow())
+        with open(self.filename + '.inp', 'w') as inpfile:
+            inpfile.write(self.inpstr)
         self.render(**kwargs)
+
+    def _check_match(self, inpstr, _print=True):
+        print self.filename + '.out'
+        with open(self.filename + '.out', 'r') as f:
+            fstr = f.read()
+        # find all lines with    ####- at the beginning
+        regex = ur"\s[0-9]{1,4}-[\s]{7}(.*)\n"
+        matches = re.findall(regex, fstr)
+        outstr = ''
+        for match in matches:
+            outstr += match + '\n'
+        with open('/home/ahagen/mcnp/active/diff1.txt', 'w') as f:
+            f.write(inpstr)
+        with open('/home/ahagen/mcnp/active/diff2.txt', 'w') as f:
+            f.write(outstr)
+        p = subprocess.Popen(['diff -y -E -Z --suppress-common-lines /home/ahagen/mcnp/active/diff1.txt /home/ahagen/mcnp/active/diff2.txt'], stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, shell=True)
+        out, err = p.communicate()
+        if _print:
+            print out
+            print len(out.split('\n'))
+        if len(out.split('\n')) > 1:
+            print "The differences in between files is :"
+            print out
+            print "So running the MCNP deck"
+            needs_to_run = True
+        else:
+            needs_to_run = False
+        return needs_to_run
 
     def render(self, filename_suffix='', render_target=None, camera_location=None,
                render=True, **kwargs):

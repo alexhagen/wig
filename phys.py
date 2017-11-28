@@ -14,7 +14,7 @@ class phys():
     """
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
                  nps=None, ctme=None, polimi=False, polimi_cells=[],
-                 ipol=[0, 0, 0], rpol=[0, 0, 0]):
+                 ipol=None, rpol=None):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
         if ipol is not None:

@@ -838,6 +838,11 @@ deck. Make sure this includes a universe</td>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="wig.wig.wig.redefine">
+<code class="descname">redefine</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.redefine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.redefine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="wig.wig.wig.cell">
 <code class="descname">cell</code><span class="sig-paren">(</span><em>cells=None</em>, <em>auto_universe=True</em>, <em>universe_matl=None</em>, <em>debug_blender=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.cell" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">cell</span></code> adds all the <code class="docutils literal"><span class="pre">wig.cell</span></code> in a list to an input deck.</p>
@@ -1035,6 +1040,14 @@ for changing up cell definitions or materials.</p>
 <dd><p><code class="docutils literal"><span class="pre">refresh_phys</span></code> resets the physics block to nothing.  This is a
 subset of the <code class="docutils literal"><span class="pre">refresh_data</span></code> method, so use whichever one is more
 useful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="wig.wig.wig.refresh_source">
+<code class="descname">refresh_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/wig.html#wig.refresh_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.wig.wig.refresh_source" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">refresh_source</span></code> resets the soruce block to nothing.  This
+actually just calls refresh_data because the only thing in the data
+block right now is the sources.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1402,7 +1415,7 @@ Useful for if you are changing cells with new geometry or color.</p>
 <h2>wig.phys object<a class="headerlink" href="#wig-phys-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="wig.phys.phys">
-<em class="property">class </em><code class="descclassname">wig.phys.</code><code class="descname">phys</code><span class="sig-paren">(</span><em>particles=None</em>, <em>sources=None</em>, <em>maxE=None</em>, <em>minE=None</em>, <em>nps=None</em>, <em>ctme=None</em>, <em>polimi=False</em>, <em>polimi_cells=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">wig.phys.</code><code class="descname">phys</code><span class="sig-paren">(</span><em>particles=None, sources=None, maxE=None, minE=None, nps=None, ctme=None, polimi=False, polimi_cells=[], ipol=[0, 0, 0], rpol=[0, 0, 0]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wig/phys.html#phys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wig.phys.phys" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">phys</span></code> defines all of the options for physics in the MCNP model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
