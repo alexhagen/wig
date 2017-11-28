@@ -488,6 +488,13 @@ class wig:
         """
         self.phys_block = ''
 
+    def refresh_source(self):
+        """ ``refresh_source`` resets the soruce block to nothing.  This
+            actually just calls refresh_data because the only thing in the data
+            block right now is the sources.
+        """
+        self.refresh_data()
+
     def refresh_tally(self):
         """ ``refresh_tally`` resets the tally block to nothing.  This is
             probably not useful, unless you're changing other things, too. If
