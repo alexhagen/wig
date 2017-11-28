@@ -187,6 +187,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_num</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matl_comments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># --------------------------- File Methods ---------------------------------</span>
 
@@ -218,10 +219,10 @@
 <span class="sd">            :param list geos: the ``wig.geo`` objects to be added to the input</span>
 <span class="sd">                deck. Make sure this includes a universe</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_geo</span><span class="p">(</span><span class="n">geos</span><span class="o">=</span><span class="n">geos</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="wig.add_geo"><a class="viewcode-back" href="../../index.html#wig.wig.wig.add_geo">[docs]</a>    <span class="k">def</span> <span class="nf">add_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geos</span> <span class="o">=</span> <span class="n">geos</span>
         <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="n">geos</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="n">comment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="p">:</span>
@@ -240,6 +241,18 @@
                     <span class="c1"># increment geo num</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">+=</span> <span class="mi">10</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">geo</span><span class="o">.</span><span class="n">comment</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="wig.redefine"><a class="viewcode-back" href="../../index.html#wig.wig.wig.redefine">[docs]</a>    <span class="k">def</span> <span class="nf">redefine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">plot_cmd</span><span class="p">,</span> <span class="n">plot_kwargs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deleted</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">b_cmds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">b_kwargs</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot_cmd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">plot_cmd</span> <span class="o">=</span> <span class="n">plot_cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">debug_blender</span><span class="p">:</span>
+                        <span class="nb">print</span> <span class="n">plot_cmd</span>
+                <span class="n">plot_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">debug_blender</span><span class="p">:</span>
+                    <span class="nb">print</span> <span class="n">plot_cmd</span>
+                    <span class="nb">print</span> <span class="n">plot_kwargs</span></div>
 
 <div class="viewcode-block" id="wig.cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.cell">[docs]</a>    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">auto_universe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">universe_matl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">debug_blender</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -282,6 +295,8 @@
                             <span class="n">plot_cmd</span> <span class="o">=</span> <span class="n">plot_cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                             <span class="k">if</span> <span class="n">debug_blender</span><span class="p">:</span>
                                 <span class="nb">print</span> <span class="n">plot_cmd</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">deleted</span><span class="p">)</span>
+                        <span class="c1">#print self.deleted</span>
                         <span class="n">plot_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">debug_blender</span><span class="p">:</span>
                             <span class="nb">print</span> <span class="n">plot_cmd</span>
@@ -388,40 +403,55 @@
         <span class="c1"># initialize a counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">=</span> <span class="s2">&quot;prdmp j -15 1 4</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="c1"># resort the tallies</span>
+        <span class="n">new_tallies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_meshtallies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_tmeshtallies</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">tallies</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">tally</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># print the tally type card</span>
-                <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">mesh</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fmesh</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
-                         <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">tally</span><span class="o">.</span><span class="n">tmesh</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;tmesh</span><span class="se">\n</span><span class="s2">  </span><span class="si">%s%d%d%s</span><span class="se">\n</span><span class="s2">endmd</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                        <span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">tmeshtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span>
-                         <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]))</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;f</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
-                         <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-                <span class="c1"># print the tally energy card</span>
-                <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">mesh</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;e</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
-                         <span class="n">tally</span><span class="o">.</span><span class="n">energy_string</span><span class="p">)</span>
-                <span class="c1"># check for multipliers</span>
-                <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">multiplier</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fm</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
-                         <span class="n">tally</span><span class="o">.</span><span class="n">multiplier_string</span><span class="p">)</span>
-                <span class="c1"># print the comment</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fc</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">tally</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
-                <span class="c1"># set that number to the geometry object</span>
-                <span class="n">tally</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span>
-                <span class="c1"># increment matl num</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div>
+            <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">mesh</span><span class="p">:</span>
+                <span class="n">new_meshtallies</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">tally</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">tally</span><span class="o">.</span><span class="n">tmesh</span><span class="p">:</span>
+                <span class="n">new_tmeshtallies</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">tally</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_tallies</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">tally</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">new_tallies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;f</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
+                 <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;e</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
+                 <span class="n">tally</span><span class="o">.</span><span class="n">energy_string</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tally</span><span class="o">.</span><span class="n">multiplier</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fm</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
+                     <span class="n">tally</span><span class="o">.</span><span class="n">multiplier_string</span><span class="p">)</span>
+            <span class="c1"># print the comment</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fc</span><span class="si">%d%d</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">tally</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+            <span class="c1"># set that number to the geometry object</span>
+            <span class="n">tally</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span>
+            <span class="c1"># increment matl num</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_tmeshtallies</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;tmesh</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">new_tmeshtallies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;  </span><span class="si">%s%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">tmeshtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span>
+                 <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">card</span><span class="o">=</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]))</span>
+            <span class="c1"># set that number to the geometry object</span>
+            <span class="n">tally</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span>
+            <span class="c1"># increment matl num</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_tmeshtallies</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;endmd</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">tally</span> <span class="ow">in</span> <span class="n">new_meshtallies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_block</span> <span class="o">+=</span> <span class="s2">&quot;fmesh</span><span class="si">%d%d%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)],</span> <span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">,</span>
+                 <span class="n">tally</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="c1"># set that number to the geometry object</span>
+            <span class="n">tally</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span>
+            <span class="c1"># increment matl num</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tally_nums</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tally</span><span class="o">.</span><span class="n">card</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="wig.source"><a class="viewcode-back" href="../../index.html#wig.wig.wig.source">[docs]</a>    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``source`` adds the ``wig.source`` object to the model</span>
@@ -434,8 +464,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;sdef    &quot;</span>
             <span class="c1"># print the source string</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">show</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">:</span>
-                <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">)</span></div>
+                <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">_kwargs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">blender_cmd</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">blender_cmd_args</span><span class="p">):</span>
+                    <span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">)</span></div>
 
     <span class="c1"># --------------------------- Running methods ------------------------------</span>
 
@@ -466,6 +498,9 @@
 <span class="sd">            :param dict kwargs: ``run`` passes the rest of the commands to</span>
 <span class="sd">                ``write``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm &#39;</span> <span class="o">+</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/mcnp/active/&#39;</span> <span class="o">+</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span>
                               <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span>
@@ -545,12 +580,18 @@
 <span class="sd">            without also refreshing the cells. But I don&#39;t know you, live your</span>
 <span class="sd">            life.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">geo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geos</span><span class="p">:</span>
+            <span class="n">geo</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo_comments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geo_num</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geo_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
 <div class="viewcode-block" id="wig.refresh_cell"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_cell">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``refresh_cell`` resets the cell block to nothing.  Again, useful</span>
 <span class="sd">            for changing up cell definitions or materials.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="n">cell</span><span class="o">.</span><span class="n">cell_num</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span> <span class="o">=</span> <span class="n">pyb</span><span class="o">.</span><span class="n">pyb</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bscene</span><span class="o">.</span><span class="n">sun</span><span class="p">()</span></div>
@@ -561,6 +602,13 @@
 <span class="sd">            useful.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phys_block</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="wig.refresh_source"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_source">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ``refresh_source`` resets the soruce block to nothing.  This</span>
+<span class="sd">            actually just calls refresh_data because the only thing in the data</span>
+<span class="sd">            block right now is the sources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_data</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="wig.refresh_tally"><a class="viewcode-back" href="../../index.html#wig.wig.wig.refresh_tally">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_tally</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ``refresh_tally`` resets the tally block to nothing.  This is</span>
