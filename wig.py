@@ -271,7 +271,7 @@ class wig:
                 self.matl_num += 1
                 self.matl_comments.extend([matl.comment])
 
-    def phys(self, phys=None):
+    def phys(self, phys=None, src_fname=None):
         """ ``phys`` adds all ``wig.phys`` blocks to the model
 
             :param wig.phys phys: the ``wig.phys`` block to be added to the
@@ -280,7 +280,9 @@ class wig:
         # print the comment
         self.phys_block += "%s\n" % (phys.comment)
         # print the physics string
-        self.phys_block += "%s\n" % (phys.string.format(out_src_fname=self.filename + "_source.out"))
+        if src_fname is None:
+            src_fname = self.filename + "_source.out"
+        self.phys_block += "%s\n" % (phys.string.format(out_src_fname=src_fname))
         # remove the last character (the new line)
         self.phys_block = self.phys_block[:-1]
 
@@ -442,32 +444,34 @@ class wig:
         self.render(**kwargs)
 
     def _check_match(self, inpstr, _print=True):
-        print self.filename + '.out'
-        with open(self.filename + '.out', 'r') as f:
-            fstr = f.read()
-        # find all lines with    ####- at the beginning
-        regex = ur"\s[0-9]{1,4}-[\s]{7}(.*)\n"
-        matches = re.findall(regex, fstr)
-        outstr = ''
-        for match in matches:
-            outstr += match + '\n'
-        with open('/home/ahagen/mcnp/active/diff1.txt', 'w') as f:
-            f.write(inpstr)
-        with open('/home/ahagen/mcnp/active/diff2.txt', 'w') as f:
-            f.write(outstr)
-        p = subprocess.Popen(['diff -y -E -Z --suppress-common-lines /home/ahagen/mcnp/active/diff1.txt /home/ahagen/mcnp/active/diff2.txt'], stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, shell=True)
-        out, err = p.communicate()
-        if _print:
-            print out
-            print len(out.split('\n'))
-        if len(out.split('\n')) > 1:
-            print "The differences in between files is :"
-            print out
-            print "So running the MCNP deck"
+        try:
+            with open(self.filename + '.out', 'r') as f:
+                fstr = f.read()
+            # find all lines with    ####- at the beginning
+            regex = ur"\s[0-9]{1,4}-[\s]{7}(.*)\n"
+            matches = re.findall(regex, fstr)
+            outstr = ''
+            for match in matches:
+                outstr += match + '\n'
+            with open('/home/ahagen/mcnp/active/diff1.txt', 'w') as f:
+                f.write(inpstr)
+            with open('/home/ahagen/mcnp/active/diff2.txt', 'w') as f:
+                f.write(outstr)
+            p = subprocess.Popen(['diff -y -E -Z --suppress-common-lines /home/ahagen/mcnp/active/diff1.txt /home/ahagen/mcnp/active/diff2.txt'], stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE, shell=True)
+            out, err = p.communicate()
+            if _print:
+                print out
+                print len(out.split('\n'))
+            if len(out.split('\n')) > 1:
+                print "The differences in between files is :"
+                print out
+                print "So running the MCNP deck"
+                needs_to_run = True
+            else:
+                needs_to_run = False
+        except IOError:
             needs_to_run = True
-        else:
-            needs_to_run = False
         return needs_to_run
 
     def render(self, filename_suffix='', render_target=None, camera_location=None,
