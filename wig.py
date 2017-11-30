@@ -555,6 +555,9 @@ class wig:
         """
         self.tally_block = ''
 
+    def refresh_tallies(self):
+        self.refresh_tally()
+
     def refresh_matl(self):
         """ ``refresh_matl`` resets the materials block to nothing. Super useful
             if you're messing around with shielding, or reactions.
