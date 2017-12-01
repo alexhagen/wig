@@ -14,6 +14,8 @@ import difflib
 import re
 import subprocess
 
+zero = 1.0E-6
+
 class wig:
     """ The ``wig`` object is the base object for an MCNP setup.
 
