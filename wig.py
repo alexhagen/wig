@@ -521,6 +521,7 @@ class wig:
         """
         for geo in self.geos:
             geo.geo_num = 0
+            geo.num = 0
         self.geo_comments = []
         self.geo_num = 10
         self.geo_block = ''
@@ -534,6 +535,7 @@ class wig:
         self.cell_block = ''
         self.bscene = pyb.pyb()
         self.bscene.sun()
+        self.cell_num = 10
 
     def refresh_phys(self):
         """ ``refresh_phys`` resets the physics block to nothing.  This is a
