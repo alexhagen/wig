@@ -562,6 +562,8 @@ class wig:
         """ ``refresh_matl`` resets the materials block to nothing. Super useful
             if you're messing around with shielding, or reactions.
         """
+        self.matl_num = 1
+        self.matl_comments = []
         self.matl_block = ''
 
     # ---------------------------- Convenience Methods -------------------------
