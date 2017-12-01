@@ -14,7 +14,7 @@ class phys():
     """
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
                  nps=None, ctme=None, polimi=False, polimi_cells=[],
-                 ipol=None, rpol=None):
+                 ipol=None, rpol=None, maxEs={}, minEs={}):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
         if ipol is not None:
@@ -39,15 +39,31 @@ class phys():
         self.comment = "%s" % (self.comment[:-1])
         self.string = "%s\n" % (self.string[:-1])
         if 'p' in particles:
+            if 'p' in maxEs:
+                maxE = maxEs['p']
+            if 'p' in minEs:
+                minE = minEs['p']
             self.string += "phys:p %e 0 0 1 0 0 1\n" % (maxE)
             self.string += "cut:p J %e\n" % (minE)
         if 'n' in particles:
+            if 'n' in maxEs:
+                maxE = maxEs['n']
+            if 'n' in minEs:
+                minE = minEs['n']
             self.string += "phys:n %e\n" % (maxE)
             self.string += "cut:n j %e\n" % (minE)
         if 'd' in particles:
+            if 'd' in maxEs:
+                maxE = maxEs['d']
+            if 'd' in minEs:
+                minE = minEs['d']
             self.string += "phys:d %e\n" % (maxE)
             self.string += "cut:d j %e\n" % (minE)
         if 't' in particles:
+            if 't' in maxEs:
+                maxE = maxEs['t']
+            if 't' in minEs:
+                minE = minEs['t']
             self.string += "phys:t %e\n" % (maxE)
             self.string += "cut:t j %e\n" % (minE)
         if 'h' in particles:
@@ -104,7 +120,9 @@ class phys():
             :param list cells: list of ``cell`` to use MCNP-Polimi for transport
             :param list out_src: if you want to output the source
         """
-        if out_src is True:
+        if out_src is True and in_src is True:
+            out_src_int = 56
+        elif out_src is True and in_src is False:
             out_src_int = 54
         elif in_src is True:
             out_src_int = 55
