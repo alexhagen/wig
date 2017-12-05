@@ -43,7 +43,7 @@ class phys():
                 maxE = maxEs['p']
             if 'p' in minEs:
                 minE = minEs['p']
-            self.string += "phys:p %e 0 0 1 0 0 1\n" % (maxE)
+            self.string += "phys:p %e 1 0 -1 0 0 1\n" % (maxE)
             self.string += "cut:p J %e\n" % (minE)
         if 'n' in particles:
             if 'n' in maxEs:
@@ -131,11 +131,12 @@ class phys():
         if self.ipol is not None:
             self.string += "ipol {ipol[1]} {ipol[2]} {ipol[3]} {ipol[4]} {ipol[5]} {ipol[6]} ".format(ipol=[0] + self.ipol + [len(cells)])
         else:
-            self.string += "ipol %d 0 0 0 2J %d " % (out_src_int, len(cells))
+            self.string += "ipol %d 1 1 1 2J %d " % (out_src_int, len(cells))
         for cell in cells:
             if isinstance(cell, int):
                 self.string += "%d " % cell
             elif cell.__class__.__name__ is 'cell':
+                print "polimi cell is \#%s: %s" % (cell.cell_num, cell.comment)
                 self.string += "%d " % cell.cell_num
         self.string = self.string[:-1]
         self.string += "\n"
