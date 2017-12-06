@@ -62,7 +62,7 @@ class matl:
         .. todo:: define an asset based materials import system
     """
     def __init__(self, rho, atom_perc=None, mass_perc=None, id=None,
-                 color=None, alpha=1.0):
+                 color=None, alpha=1.0, pnlib=None, nlib=None, plib=None):
         self.bstring = ''
         self.string = ''
         self.matl_num = 0
@@ -112,6 +112,8 @@ class matl:
                 perc = -mass[1] / mass_sum
                 self.string += "%6s %15.10e\n" % (zaid, perc)
         self.string = self.string[:-1]
+        if pnlib is not None:
+            self.string += " pnlib=%s\n" % pnlib
         matl_string = textwrap.TextWrapper(initial_indent='',
                                      subsequent_indent=' '*6, width=73)
         self.string = matl_string.fill(self.string)

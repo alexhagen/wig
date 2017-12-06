@@ -43,7 +43,8 @@ class phys():
                 maxE = maxEs['p']
             if 'p' in minEs:
                 minE = minEs['p']
-            self.string += "phys:p %e 1 0 -1 0 0 1\n" % (maxE)
+            self.string += "phys:p %e 1 0 -1 0" % (maxE)
+            self.string += " 0 1\n"
             self.string += "cut:p J %e\n" % (minE)
         if 'n' in particles:
             if 'n' in maxEs:
