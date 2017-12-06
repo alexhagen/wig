@@ -51,6 +51,7 @@ class phys():
                 maxE = maxEs['n']
             if 'n' in minEs:
                 minE = minEs['n']
+            fism = 1
             self.string += "phys:n %e\n" % (maxE)
             self.string += "cut:n j %e\n" % (minE)
         if 'd' in particles:
@@ -112,6 +113,10 @@ class phys():
         """
         if cells is None:
             self.string += "nonu\n"
+        return self
+
+    def act(self, fission='ALL', nonfiss='ALL', dn='LIBRARY', dg='NONE'):
+        self.string += "ACT FISSON={fission} NONFISS={nonfiss} DN={dn} DG={dg}\n".format(fission=fission, nonfiss=nonfiss, dn=dn, dg=dg)
         return self
 
     def polimi(self, cells=[], out_src=False, in_src=False):
