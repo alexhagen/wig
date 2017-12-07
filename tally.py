@@ -26,6 +26,7 @@ class tally():
         self.tmesh = False
         self.comment = kwargs["comment"]
         self.multiplier = False
+        self.time = False
         if "energy" in kwargs:
             self.process_energy(**kwargs)
             self.energies = True
@@ -197,6 +198,19 @@ class tally():
         else:
             self.C = 1
         self.multiplier_string = "(%d %d %d) T" % (self.C, self.mat, self.mt)
+        return self
+
+    def time_tally(self, ts=None, t_end=None, n_t=None):
+        self.time = True
+        self.time_string = ""
+        if ts is not None:
+            for t in ts:
+                self.time_string += " %e" % t
+        else:
+            t = 0.
+            while t <= t_end:
+                self.time_string += " %e" % t
+                t+= t_end / float(n_t)
         return self
 
     def current_tally(self, **kwargs):

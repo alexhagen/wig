@@ -16,7 +16,7 @@ import subprocess
 
 zero = 1.0E-6
 
-class wig:
+class wig(object):
     """ The ``wig`` object is the base object for an MCNP setup.
 
     The ``wig`` object is basically the scene in which we create our MCNP
@@ -319,6 +319,10 @@ class wig:
                 self.tally_block += "fm%d%d %s\n" % \
                     (self.tally_nums[str(tally.card)], tally.card,
                      tally.multiplier_string)
+            if tally.time:
+                self.tally_block += 't%d%d %s\n' % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.time_string)
             # print the comment
             self.tally_block += "fc%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card, tally.comment)
