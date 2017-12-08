@@ -11,6 +11,9 @@ def get_ioloop():
 ioloop = get_ioloop()
 thread_safe = True
 def work(filename):
+    # before file has been created phase: look for file, poll until exists
+
+    # file exists phase and process is running, poll file while it runs
     for i in range(10):
         def update_progress(i=i):
             #print "calling from thread", threading.currentThread()
@@ -21,6 +24,7 @@ def work(filename):
             get_ioloop().add_callback(update_progress)
         else:
             update_progress()
+    # file exists now, but process is done, go ahead and chain on an analysis
 #print "we are in thread", threading.currentThread()
 def tail_out_file(self, filename):
     thread = threading.Thread(target=work, args=(filename,))

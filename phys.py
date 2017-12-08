@@ -14,7 +14,8 @@ class phys():
     """
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
                  nps=None, ctme=None, polimi=False, polimi_cells=[],
-                 ipol=None, rpol=None, maxEs={}, minEs={}):
+                 ipol=None, rpol=None, maxEs={}, minEs={}, dnb=True,
+                 seed=None):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
         if ipol is not None:
@@ -54,6 +55,8 @@ class phys():
             fism = 1
             self.string += "phys:n %e\n" % (maxE)
             self.string += "cut:n j %e\n" % (minE)
+            if dnb is False:
+                self.string += "act dn=prompt \n"
         if 'd' in particles:
             if 'd' in maxEs:
                 maxE = maxEs['d']
@@ -81,6 +84,8 @@ class phys():
             self.nps(nps)
         if ctme is not None:
             self.ctme(ctme)
+        if seed is not None:
+            self.string += "rand seed=%d\n" % seed
         if polimi:
             self.polimi(cells=polimi_cells)
 

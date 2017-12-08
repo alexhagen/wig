@@ -95,10 +95,10 @@ class source():
         color = '#2EAFA4'
         if positioned and shape != 'disk':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
-            self.blender_cmd = pyb.pyb.sph
-            self.blender_cmd_args = {"c": (self.x, self.y, self.z), "r": 1.0,
+            self.blender_cmd = [pyb.pyb.sph]
+            self.blender_cmd_args = [{"c": (self.x, self.y, self.z), "r": 1.0,
                                      "name": id, "color": color,
-                                     "alpha": 1.0, "emis": True}
+                                     "alpha": 1.0, "emis": True}]
         elif cell is not None:
             self.string += "cel=%d " % (cell.cell_num)
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
