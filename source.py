@@ -1,5 +1,6 @@
 from colour import Color
 from pyb import pyb
+import numpy as np
 
 class source():
     """ ``source`` is an object that defines an MCNP source. Currently there are
@@ -27,8 +28,9 @@ class source():
     """
     def __init__(self, particle='n', pos=None, x=None, y=None, z=None,
                  spectrum=None, shape=None, direction=None, id=None,
-                 radius=None, cell=None, show=True, spectrum_type='C',
-                 axis=None, lx=None, ly=None, lz=None, anisotropic=False):
+                 radius=None, cell=None, show=True, dist_type='C',
+                 axis=None, lx=None, ly=None, lz=None, anisotropic=False,
+                 half_angle=None):
         self.show = show
         self.blender_cmd = None
         self.blender_cmd_args = {}
@@ -58,16 +60,29 @@ class source():
         colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B", 't': "#F8981D"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
-        print color
+        if 'cone' in direction:
+            # extract cone from the direction
+            self.coned = True
+            anisotropic = True
+            direction = direction.replace('cone:', '').replace('cone', '')
+            # extract angle spread from the direction keyword
+            half_angle = float(direction.split(':')[1])
+            direction = direction.split(':')[0]
         if direction == '-z' or direction == 'z-':
             if anisotropic:
                 self.string += "vec=0 0 -1 "
-                self.string += "dir=1 "
+                if not self.coned:
+                    self.string += "dir=1 "
+                else:
+                    self.string += "dir=d%d " % self.dist_num
             self.axis = (0, 0, lz)
         elif direction == '+z' or direction == 'z+':
             if anisotropic:
                 self.string += "vec=0 0 1 "
-                self.string += "dir=1 "
+                if not self.coned:
+                    self.string += "dir=1 "
+                else:
+                    self.string += "dir=d%d " % self.dist_num
             self.axis = (0, 0, lz)
         elif direction == '+x' or direction == 'x+':
             self.string += "vec=1 0 0 dir=1 "
@@ -78,6 +93,10 @@ class source():
         elif direction == '-y' or direction == 'y-':
             self.string += "vec=0 -1 0 dir=1 "
             self.axis = (0, 1, ly)
+        if self.coned:
+            self.string += "wgt=%e " % (1.0 / 2.0 * np.pi * (1.0 - np.cos(np.radians(x[0])))/(4.0 * np.pi))
+            self.dists.extend([dist([half_angle], [], self.dist_num, dist_type='ipb')])
+            self.dist_num += 1
         if shape == 'disk' and radius is not None:
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
@@ -110,11 +129,11 @@ class source():
                 self.blender_cmd_args = cell.b_kwargs
         if type(spectrum) is type([]):
             self.dists.extend([dist(spectrum[0], spectrum[1], self.dist_num,
-                               spectrum_type=spectrum_type)])
+                               dist_type=dist_type)])
             self.string += 'erg=d%d ' % self.dist_num
             self.dist_num += 1
         elif particle == "fission":
-            self.dists.extend([dist(spectrum_type='Watt', dist_num=self.dist_num)])
+            self.dists.extend([dist(dist_type='Watt', dist_num=self.dist_num)])
             self.string +=  'erg=d%d ' % self.dist_num
             self.dist_num += 1
         elif isinstance(spectrum, float):
@@ -134,19 +153,19 @@ class dist():
         :param list y: the dependent variable values of the distribution
         :param int dist_num: the identifying number, usually assigned
             automatically by ``wig.source``
-        :param str spectrum_type: can be ``'C'``, ``'Maxwellian'``, ``'Watt'``
+        :param str dist_type: can be ``'C'``, ``'Maxwellian'``, ``'Watt'``
         :param str format: currently can be ``'d'`` to use only integers in the
             distribution
 
         .. todo:: implement more distribution types
         .. todo:: make semantic names for the distribution types
     """
-    def __init__(self, x=None, y=None, dist_num=None, spectrum_type=None,
+    def __init__(self, x=None, y=None, dist_num=None, dist_type=None,
                  format=None):
         self.dist_num = dist_num
         self.dist_string = ''
-        if spectrum_type is None or len(spectrum_type) == 1:
-            if spectrum_type is None:
+        if dist_type is None or len(dist_type) == 1:
+            if dist_type is None:
                 self.dist_string += 'si%d ' % (self.dist_num)
             else:
                 self.dist_string += 'si%d ' % (self.dist_num)
@@ -161,11 +180,15 @@ class dist():
                 elif format == 'd':
                     self.dist_string += '%d ' % (_y)
             self.dist_string = self.dist_string[:-1]
-        elif spectrum_type is "Maxwellian":
+        elif dist_type is "Maxwellian":
             self.dist_string += 'sp%d -2 %f' % (self.dist_num, a)
-        elif spectrum_type is "Watt":
+        elif dist_type is "Watt":
             # A and B for U-235 induced fission
             a = 0.988
             b = 2.249
             self.dist_string += 'sp%d -3 %e %e' % (self.dist_num, a, b)
+        elif dist_type is "ipb":
+            self.dist_string += 'si%d -1.0 %e 1.0\n' % (self.dist_num, np.cos(np.radians(x[0])))
+            self.dist_string += 'sp%d 0.0 %e %e\n' % (self.dist_num, 2.0 * np.pi * (1.0 - np.cos(np.pi - np.radians(x[0])))/(4.0 * np.pi), 2.0 * np.pi * (1.0 - np.cos(np.radians(x[0])))/(4.0 * np.pi))
+            self.dist_string += 'sb%d 0.0 0.0 1.0\n' % (self.dist_num)
         self.dist_string += '\n'
