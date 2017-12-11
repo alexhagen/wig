@@ -94,7 +94,7 @@ class source():
             self.string += "vec=0 -1 0 dir=1 "
             self.axis = (0, 1, ly)
         if self.coned:
-            self.string += "wgt=%e " % (1.0 / 2.0 * np.pi * (1.0 - np.cos(np.radians(x[0])))/(4.0 * np.pi))
+            self.string += "wgt=%e " % (1.0 / 2.0 * np.pi * (1.0 - np.cos(np.radians(half_angle)))/(4.0 * np.pi))
             self.dists.extend([dist([half_angle], [], self.dist_num, dist_type='ipb')])
             self.dist_num += 1
         if shape == 'disk' and radius is not None:
@@ -190,5 +190,5 @@ class dist():
         elif dist_type is "ipb":
             self.dist_string += 'si%d -1.0 %e 1.0\n' % (self.dist_num, np.cos(np.radians(x[0])))
             self.dist_string += 'sp%d 0.0 %e %e\n' % (self.dist_num, 2.0 * np.pi * (1.0 - np.cos(np.pi - np.radians(x[0])))/(4.0 * np.pi), 2.0 * np.pi * (1.0 - np.cos(np.radians(x[0])))/(4.0 * np.pi))
-            self.dist_string += 'sb%d 0.0 0.0 1.0\n' % (self.dist_num)
+            self.dist_string += 'sb%d 0.0 0.0 1.0' % (self.dist_num)
         self.dist_string += '\n'
