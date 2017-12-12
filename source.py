@@ -34,6 +34,7 @@ class source():
         self.show = show
         self.blender_cmd = None
         self.blender_cmd_args = {}
+        self.coned = False
         if cell is not None:
             positioned = False
         else:
@@ -94,7 +95,7 @@ class source():
             self.string += "vec=0 -1 0 dir=1 "
             self.axis = (0, 1, ly)
         if self.coned:
-            self.string += "wgt=%e " % (1.0 / 2.0 * np.pi * (1.0 - np.cos(np.radians(half_angle)))/(4.0 * np.pi))
+            #self.string += "wgt=%e " % (1.0 / 2.0 * np.pi * (1.0 - np.cos(np.radians(half_angle)))/(4.0 * np.pi))
             self.dists.extend([dist([half_angle], [], self.dist_num, dist_type='ipb')])
             self.dist_num += 1
         if shape == 'disk' and radius is not None:
