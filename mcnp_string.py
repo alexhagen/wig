@@ -1,18 +1,33 @@
+"""``mstring`` is a private class that formats the input deck.
+
+MCNP can only handle old school styled strings, so ``mstring`` formats the
+string passed to it to only acceptable columns.
+"""
+
 import textwrap
-class mstring:
-    """ ``mstring`` are strings that can be printed in MCNP files.  MCNP is so
-        finicky, and same with Python (with respect to indentation), that it's
-        easier to just remove all newlines and split everything into 80
-        character blocks.
+
+
+class mstring(object):
+    """``mstring`` are strings that can be printed in MCNP files.
+
+    MCNP is so finicky, and same with Python (with respect to indentation),
+    that it's easier to just remove all newlines and split everything into 80
+    character blocks.
+
+    :param str string: a string, formatted however, that will be converted
+        to MCNP format
+    """
+
+    def __init__(self, string):
+        """``mstring.__init__`` starts the object with the string given.
 
         :param str string: a string, formatted however, that will be converted
             to MCNP format
-    """
-    def __init__(self, string):
+        """
         self.string = string
 
     def flow(self):
-        """ ``flow`` actually converts the string to MCNP format.
+        """``flow`` actually converts the string to MCNP format.
 
         :return str string: a string with newlines in 80 character blocks
         """
