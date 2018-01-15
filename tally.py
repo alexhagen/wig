@@ -256,7 +256,10 @@ class tally():
             MCNP notation
         """
         if "energy" not in kwargs:
-            self.energy_string = '1e-8 99i 20'
+            if "all_energies" in kwargs:
+                self.energy_string = ''
+            else:
+                self.energy_string = '1e-8 99i 20'
         else:
             self.energy_string = '%e 99i %e' % (np.min(kwargs["energy"]),
                                                 np.max(kwargs["energy"]))

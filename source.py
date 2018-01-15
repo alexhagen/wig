@@ -61,6 +61,8 @@ class source():
         colors = {"n": '#7299C6', "p": "#E3AE24", "fission": '#B95915', 'd': "#5C6F7B", 't': "#F8981D"}
         self.string += "par=%s " % (types[particle])
         color = colors[particle]
+        if direction is None:
+            direction = 'isotropic'
         if 'cone' in direction:
             # extract cone from the direction
             self.coned = True
@@ -112,6 +114,21 @@ class source():
                                      "r": radius, "h": 0.1, "name": id,
                                      "color": color, "direction": direction.replace('-', '').replace('+', ''),
                                      "alpha": 1.0, "emis": True}]
+        if shape == 'rect':
+            self.dists.extend([dist([lx[0], lx[1]], [0, 1], self.dist_num,
+                                    format='d')])
+            self.string += "X=d%d " % self.dist_num
+            self.dist_num += 1
+            self.dists.extend([dist([ly[0], ly[1]], [0, 1], self.dist_num,
+                                    format='d')])
+            self.string += "Y=d%d " % self.dist_num
+            self.dist_num += 1
+            self.dists.extend([dist([lz[0], lz[1]], [0, 1], self.dist_num,
+                                    format='d')])
+            self.string += "Z=d%d " % self.dist_num
+            self.dist_num += 1
+            self.blender_cmd = []
+            self.blender_cmd_args = [{}]
         color = '#2EAFA4'
         if positioned and shape != 'disk':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
@@ -121,10 +138,11 @@ class source():
                                      "alpha": 1.0, "emis": True}]
         elif cell is not None:
             self.string += "cel=%d " % (cell.cell_num)
-            self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
-            self.dists.extend([dist([0, radius], [-21, 1], self.dist_num, format='d')])
-            self.string += 'rad=d%d ' % (self.dist_num)
-            self.dist_num += 1
+            if self.x is not None:
+                self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
+                self.dists.extend([dist([0, radius], [-21, 1], self.dist_num, format='d')])
+                self.string += 'rad=d%d ' % (self.dist_num)
+                self.dist_num += 1
             if self.show:
                 self.blender_cmd = cell.b_cmds
                 self.blender_cmd_args = cell.b_kwargs
