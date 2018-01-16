@@ -129,8 +129,44 @@ class source():
             self.dist_num += 1
             self.blender_cmd = []
             self.blender_cmd_args = [{}]
+        if shape == 'plane':
+            if len(lx) > 1:
+                self.dists.extend([dist([lx[0], lx[1]], [0, 1], self.dist_num,
+                                        format='d')])
+                self.string += "X=d%d " % self.dist_num
+                self.dist_num += 1
+            else:
+                self.string += "X=%f " % lx[0]
+                lx = [lx[0] - 0.01, lx[0] + 0.01]
+            if len(ly) > 1:
+                self.dists.extend([dist([ly[0], ly[1]], [0, 1], self.dist_num,
+                                        format='d')])
+                self.string += "Y=d%d " % self.dist_num
+                self.dist_num += 1
+            else:
+                self.string += "Y=%f " % ly[0]
+                ly = [ly[0] - 0.01, ly[0] + 0.01]
+            if len(lz) > 1:
+                self.dists.extend([dist([lz[0], lz[1]], [0, 1], self.dist_num,
+                                        format='d')])
+                self.string += "Z=d%d " % self.dist_num
+                self.dist_num += 1
+            else:
+                self.string += "Z=%f " % lz[0]
+                lz = [lz[0] - 0.01, lz[0] + 0.01]
+            c = [0., 0., 0.]
+            l = [0., 0., 0.]
+            c[0] = (lx[1] - lx[0]) / 2.0 + lx[0]
+            l[0] = lx[1] - lx[0]
+            c[1] = (ly[1] - ly[0]) / 2.0 + ly[0]
+            l[1] = ly[1] - ly[0]
+            c[2] = (lz[1] - lz[0]) / 2.0 + lz[0]
+            l[2] = lz[1] - lz[0]
+            self.blender_cmd = [pyb.pyb.rpp]
+            self.blender_cmd_args = [{"c": c, "l": l, "name": id, "color": color,
+                                      "alpha": 0.1, "emis": True}]
         color = '#2EAFA4'
-        if positioned and shape != 'disk':
+        if positioned and shape != 'disk' and shape != 'plane' and shape != 'rect':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.blender_cmd = [pyb.pyb.sph]
             self.blender_cmd_args = [{"c": (self.x, self.y, self.z), "r": 1.0,

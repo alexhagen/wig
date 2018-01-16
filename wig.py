@@ -445,6 +445,10 @@ class wig(object):
 
             :param dict kwargs: keyword arguments to pass to ``render``
         """
+        try:
+            self.inpstr
+        except AttributeError:
+            self._write_string()
         with open(self.filename + '.inp', 'w') as inpfile:
             inpfile.write(self.inpstr)
         self.render(**kwargs)

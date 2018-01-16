@@ -66,8 +66,12 @@ class matl:
         self.bstring = ''
         self.string = ''
         self.matl_num = 0
-        self.color = color
-        self.alpha = alpha
+        if color is None:
+            self.color = '#ffffff'
+            self.alpha = 0.0
+        else:
+            self.color = color
+            self.alpha = alpha
         self.id = id
         self.comment = "c --- %s" % (id)
         self.rho = float(rho)
