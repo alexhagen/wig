@@ -467,6 +467,7 @@ class group:
     def __init__(self, content, id=None):
         self.suffix = ""
         self.string = ""
+        self.deleted = {}
         if content.__class__.__name__ is 'geo':
             content = pseudogeo(content)
         if type(content) is type(list()):
