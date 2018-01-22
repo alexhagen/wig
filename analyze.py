@@ -40,13 +40,13 @@ class tally(object):
             i = 0
             for E in Es:
                 key = r'$E_{n} < %.2f\unit{MeV}$' % E
-                vals = self.vals[i*len(self.ts):(i+1)*len(self.ts)]
+                vals = self.vals[i*len(self.ts)+i:(i+1)*len(self.ts)+i]
                 print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
-                self.signals[key] = pym.curve(self.ts, vals, key)
+                self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts), vals, key, data='binned')
                 i += 1
-            vals = self.vals[i*len(self.ts):(i+1)*len(self.ts)]
-            print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
-            self.signals['total'] = pym.curve(self.ts, vals, 'total')
+            vals = self.vals[i*len(self.ts)+i:]
+            print "len ts: %d, len vals: %d" % (len(self.ts[:-i]), len(vals))
+            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-i]), vals, 'total', data='binned')
 
         def set_loc(self, loc):
             """ Set the location of the current tally.
