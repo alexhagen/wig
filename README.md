@@ -1,5 +1,9 @@
 # wig
 
+> ``wig`` is for use with ``MCNP`` provided by ``RSICC`` only. Any use of
+> ``MCNP`` through ``wig`` is subject to the requirements and regulations
+> imposed by ``RSICC``.
+
 ``wig`` has a couple parts.  Click the links below or just read through if
 you're new here.
 

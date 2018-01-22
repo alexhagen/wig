@@ -19,7 +19,7 @@ class cell:
             0.0 to 1.0, Default: ``1.0``
     """
     def __init__(self, geo=None, matl=None, comment=None,
-                 color=None, alpha=1.0, show=True):
+                 color=None, alpha=1.0, show=True, fission=True):
         self.show = show
         if comment is None:
             self.comment = "c --- %s" % (geo.id)
@@ -28,6 +28,7 @@ class cell:
         self.matl = matl
         self.geo = geo
         self.id = geo.id
+        self.fission = fission
         if show:
             if len(geo.b_cmds) == 0:
                 self.b_cmds = [geo.blender_cmd]

@@ -230,9 +230,7 @@ class tally():
                 elif surface.__class__.__name__ is 'geo':
                     self.surfaces.extend(float(surface.geo_num) +
                                          0.1 * np.array(surface.faces))
-        print kwargs["surfaces"]
-        print self.surfaces
-        self.string = (":%s (" % kwargs["particle"] +
+        self.string = (":%s (" % self.particle +
                        ' '.join("%.1f" % s for s in self.surfaces) +
                        ")")
         return self
@@ -255,11 +253,22 @@ class tally():
         """ ``process_energy`` prints the energies in keyword ``energy`` into
             MCNP notation
         """
+        if "numE" in kwargs:
+            numE = kwargs["numE"]
+        elif "energy" in kwargs:
+            numE = len(kwargs["energy"]) - 1
         if "energy" not in kwargs:
             if "all_energies" in kwargs:
                 self.energy_string = ''
             else:
                 self.energy_string = '1e-8 99i 20'
         else:
-            self.energy_string = '%e 99i %e' % (np.min(kwargs["energy"]),
+            if type(kwargs["energy"]) is str:
+                self.energy_string = kwargs["energy"]
+            elif numE > 1:
+                self.energy_string = '%e %di %e' % (np.min(kwargs["energy"]),
+                                                    numE,
+                                                    np.max(kwargs["energy"]))
+            else:
+                self.energy_string = '%e %e' % (np.min(kwargs["energy"]),
                                                 np.max(kwargs["energy"]))

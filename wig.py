@@ -194,6 +194,8 @@ class wig(object):
                             print plot_cmd
                             print plot_kwargs
                 # increment the cell num
+                if not cell.fission:
+                    self.cell_block += " nonu=2"
                 self.cell_block += " imp:"
                 for particle in self._particles:
                     self.cell_block += "%s," % particle

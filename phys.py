@@ -15,7 +15,7 @@ class phys():
     def __init__(self, particles=None, sources=None, maxE=None, minE=None,
                  nps=None, ctme=None, polimi=False, polimi_cells=[],
                  ipol=None, rpol=None, maxEs={}, minEs={}, dnb=True,
-                 seed=None):
+                 seed=None, comment=None):
         # if we've defined nothing, then we're going to just go ahead and make
         # some default physics
         if ipol is not None:
@@ -26,7 +26,10 @@ class phys():
             self.rpol = rpol
         else:
             self.rpol = None
-        self.comment = "c --- default physics for "
+        if comment is None:
+            self.comment = "c --- default physics for "
+        else:
+            self.comment = "c --- " + comment
         self.string = "mode "
         if maxE is None:
             maxE = 20.0
@@ -117,7 +120,11 @@ class phys():
             :param list cells: list of ``cell`` in which to remove fission
         """
         if cells is None:
-            self.string += "nonu\n"
+            self.string += "nonu=2\n"
+        else:
+            self.string += "nonu "
+            self.string += "%s" % cells
+            self.string += "\n"
         return self
 
     def act(self, fission='ALL', nonfiss='ALL', dn='LIBRARY', dg='NONE'):

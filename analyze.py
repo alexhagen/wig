@@ -21,14 +21,32 @@ class tally(object):
         particles going through the volume.  ``spectrum.y`` and ``spectrum.x``
         hold the bin height and bin left edges, respectively.
     """
-    def __init__(self, y, u_y, name=None, spectrum=None, nps=None):
+    def __init__(self, y, u_y, name=None, spectrum=None, nps=None, ts=None,
+                 Es=None, vals=None, u_vals=None):
         self.y = y
         self.u_y = u_y
         self.nps = nps
+        self.ts = ts
+        self.Es = Es
+        self.vals = vals
+        self.u_vals = u_vals
+        self.signals = {}
         if name is not None:
             self.name = name
         if spectrum is not None:
             self.spectrum = spectrum
+        print self.y
+        if ts is not None:
+            i = 0
+            for E in Es:
+                key = r'$E_{n} < %.2f\unit{MeV}$' % E
+                vals = self.vals[i*len(self.ts):(i+1)*len(self.ts)]
+                print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
+                self.signals[key] = pym.curve(self.ts, vals, key)
+                i += 1
+            vals = self.vals[i*len(self.ts):(i+1)*len(self.ts)]
+            print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
+            self.signals['total'] = pym.curve(self.ts, vals, 'total')
 
         def set_loc(self, loc):
             """ Set the location of the current tally.
@@ -128,18 +146,31 @@ class analyze(object):
                             self.import_tmesh_section(string)
                         tallies.extend([meshtal(xs, ys, zs, E_bins, phis, u_phis)])
                     except IndexError:
-                        total, u_total, name, e_bins, vals, u_vals = \
+                        total, u_total, name, e_bins, vals, u_vals, t_bins = \
                             self.import_tally_section(string)
-                        tallies.extend([tally(total, u_total, name,
-                                              pym.curve(e_bins, vals, u_y=u_vals,
-                                                        name=name, data='binned'), nps=self.nps)])
+                        if len(t_bins) > 1:
+                            spect = pym.curve([], [], u_y=[], name=name,
+                                              data='binned')
+                        else:
+                            spect = pym.curve(e_bins, vals, u_y=u_vals,
+                                              name=name, data='binned')
+                        tallies.extend([tally(total, u_total, name, spect,
+                                              nps=self.nps, ts=t_bins,
+                                              Es=e_bins, vals=vals,
+                                              u_vals=u_vals)])
             else:
                 for string in strings[1:]:
-                    total, u_total, name, e_bins, vals, u_vals = \
+                    total, u_total, name, e_bins, vals, u_vals, t_bins = \
                         self.import_tally_section(string)
-                    tallies.extend([tally(total, u_total, name,
-                                          pym.curve(e_bins, vals, u_y=u_vals,
-                                                    name=name, data='binned'), nps=self.nps)])
+                    if len(t_bins) > 1:
+                        spect = pym.curve([], [], u_y=[], name=name,
+                                          data='binned')
+                    else:
+                        spect = pym.curve(e_bins, vals, u_y=u_vals,
+                                          name=name, data='binned')
+                    tallies.extend([tally(total, u_total, name, spect,
+                                          nps=self.nps, ts=t_bins, Es=e_bins,
+                                          vals=vals, u_vals=u_vals)])
         elif 'meshtal' in filename:
             meshtals = list()
             strings = file_string.split('Mesh Tally Number')
@@ -227,9 +258,18 @@ class analyze(object):
         string = section
         name = string.split('\n')[2].strip()
         # find the string between et and t
-        e_bins_string = find_between(string, '\net', '\nvals')
+        if '\ntt' in string:
+            e_bins_string = find_between(string, '\net', '\ntt')
+            t_bins_string = find_between(string, '\ntt', '\nvals')
+            t_bins_string = ' '.join(t_bins_string.split('\n')[1:])
+            t_bins = t_bins_string.split()
+            t_bins = [float(_bin) for _bin in t_bins]
+        else:
+            e_bins_string = find_between(string, '\net', '\nvals')
+            t_bins = []
         # remove first line and last line
-        e_bins_string = ' '.join(e_bins_string.split('\n')[1:-2])
+        e_bins_string = ' '.join(e_bins_string.split('\n')[1:])
+        print e_bins_string
         e_bins = e_bins_string.split()
         e_bins = [float(bin) for bin in e_bins]
         # find the string between vals and tfc
@@ -242,8 +282,9 @@ class analyze(object):
         #print vals
         total = vals[-1]
         u_total = u_vals[-1]
-        u_vals = u_vals[:-1]
-        vals = vals[:-1]
+        if '\ntt' not in string:
+            u_vals = u_vals[:-1]
+            vals = vals[:-1]
         u_vals = np.multiply(vals, u_vals)
         u_total = total * u_total
-        return total, u_total, name, e_bins, vals, u_vals
+        return total, u_total, name, e_bins, vals, u_vals, t_bins

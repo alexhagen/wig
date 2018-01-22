@@ -1,3 +1,5 @@
+from .wig import wig as wig
+from .wig import zero as zero
 from .geo import geo as g
 from .matl import matl as m
 from .cell import cell as c
