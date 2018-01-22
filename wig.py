@@ -269,6 +269,8 @@ class wig(object):
                 self.matl_block += "m%d   " % (self.matl_num)
                 # print the matl string
                 self.matl_block += "%s\n" % (matl.string)
+                if matl.sablib is not None:
+                    self.matl_block += "mt%d %s\n" % (self.matl_num, matl.sablib)
                 # set that number to the geometry object
                 matl.matl_num = self.matl_num
                 # increment matl num

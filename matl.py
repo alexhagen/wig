@@ -62,10 +62,12 @@ class matl:
         .. todo:: define an asset based materials import system
     """
     def __init__(self, rho, atom_perc=None, mass_perc=None, id=None,
-                 color=None, alpha=1.0, pnlib=None, nlib=None, plib=None):
+                 color=None, alpha=1.0, pnlib=None, nlib=None, plib=None,
+                 sablib=None):
         self.bstring = ''
         self.string = ''
         self.matl_num = 0
+        self.sablib = None
         if color is None:
             self.color = '#ffffff'
             self.alpha = 0.0
