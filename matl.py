@@ -67,7 +67,7 @@ class matl:
         self.bstring = ''
         self.string = ''
         self.matl_num = 0
-        self.sablib = None
+        self.sablib = sablib
         if color is None:
             self.color = '#ffffff'
             self.alpha = 0.0

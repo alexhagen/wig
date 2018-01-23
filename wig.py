@@ -327,6 +327,10 @@ class wig(object):
                 self.tally_block += 't%d%d %s\n' % \
                     (self.tally_nums[str(tally.card)], tally.card,
                      tally.time_string)
+            if tally.cosine:
+                self.tally_block += 'C%d%d %s\n' % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.cosine_string)
             # print the comment
             self.tally_block += "fc%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card, tally.comment)

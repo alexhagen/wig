@@ -27,6 +27,7 @@ class tally():
         self.comment = kwargs["comment"]
         self.multiplier = False
         self.time = False
+        self.cosine = False
         if "energy" in kwargs:
             self.process_energy(**kwargs)
             self.energies = True
@@ -211,6 +212,15 @@ class tally():
             while t <= t_end:
                 self.time_string += " %e" % t
                 t+= t_end / float(n_t)
+        return self
+
+    def cosine_tally(self, angles=None):
+        self.cosine = True
+        self.cosine_string = ""
+        if angles is not None:
+            for angle in angles:
+                self.cosine_string += " %e" % np.cos(np.radians(angle))
+            self.cosine_string += " %e" % (1.0)
         return self
 
     def current_tally(self, **kwargs):
