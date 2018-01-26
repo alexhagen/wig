@@ -41,7 +41,7 @@ class tally(object):
             for j in range(2):
                 for E in Es:
                     key = r'$E_{n} < %.2f\unit{MeV}$' % E
-                    vals = self.vals[i*len(self.ts)+i:(i+1)*len(self.ts)+i]
+                    vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1))]
                     print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
                     self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts), vals, key, data='binned')
                     i += 1
@@ -168,6 +168,8 @@ class analyze(object):
                         spect = pym.curve([], [], u_y=[], name=name,
                                           data='binned')
                     else:
+                        print len(e_bins)
+                        print len(vals)
                         spect = pym.curve(e_bins, vals, u_y=u_vals,
                                           name=name, data='binned')
                     tallies.extend([tally(total, u_total, name, spect,
@@ -270,14 +272,22 @@ class analyze(object):
             e_bins_string = find_between(string, '\net', '\nvals')
             t_bins = []
         # remove first line and last line
-        e_bins_string = ' '.join(e_bins_string.split('\n')[1:])
-        print e_bins_string
-        e_bins = e_bins_string.split()
-        e_bins = [float(bin) for bin in e_bins]
+        try:
+            e_bins_string = ' '.join(e_bins_string.split('\n')[1:])
+            e_bins = e_bins_string.split()
+            e_bins = [float(bin) for bin in e_bins]
+        except ValueError:
+            e_bins_string = find_between(string, '\net', '\nt')
+            t_bins = []
+            e_bins_string = ' '.join(e_bins_string.split('\n')[1:])
+            e_bins = e_bins_string.split()
+            e_bins = [float(bin) for bin in e_bins]
         # find the string between vals and tfc
         val_string = find_between(string, '\nvals', '\ntfc')
-        val_string = ' '.join(val_string.split('\n')[1:-1])
+        if val_string.count('\n') > 1:
+            val_string = ' '.join(val_string.split('\n')[1:])
         vals = val_string.split()
+        #print val_string
         u_vals = [float(val) for val in vals[1::2]]
         vals = [float(val) for val in vals[0::2]]
         #print name
