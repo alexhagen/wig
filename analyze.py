@@ -5,6 +5,7 @@ from pyg.threed import pyg3d
 from pyg.colors import pu as puc
 import os
 import pandas as pd
+import logging
 
 class tally(object):
     """ A ``tally`` object holds data from a tally.
@@ -35,20 +36,33 @@ class tally(object):
             self.name = name
         if spectrum is not None:
             self.spectrum = spectrum
-        print self.y
+        logging.debug(self.y)
+        i = 0
         if ts is not None:
-            i = 0
-            for j in range(2):
-                for E in Es:
-                    key = r'$E_{n} < %.2f\unit{MeV}$' % E
-                    vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1))]
-                    print "len ts: %d, len vals: %d" % (len(self.ts), len(vals))
-                    self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts), vals, key, data='binned')
-                    i += 1
-                vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1))]
-                print "len ts: %d, len vals: %d" % (len(self.ts[:-(i/(j+1))]), len(vals))
+            pos_cos_data = vals[::2]
+            pos_cos_data = vals[len(vals)/2:]
+            for E in Es:
+                key = r'$E_{n} < %.2f\unit{MeV}$' % E
+                vals = pos_cos_data[i*len(self.ts)+i:(i+1) * len(self.ts) + i - 1]
+                logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
+                self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, key, data='binned')
                 i += 1
-            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-i]), vals, 'total', data='binned')
+            vals = pos_cos_data[i*len(self.ts) + i:(i+1)*len(self.ts) + i - 1]
+            logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
+            i += 1
+            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')
+        '''if ts is not None:
+            for E in Es:
+                for j in range(2):
+                    key = r'$E_{n} < %.2f\unit{MeV}$' % E
+                    vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1)) - 1]
+                    logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
+                    self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, key, data='binned')
+                i += 1
+            vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1)) - 1]
+            logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
+            i += 1
+            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')'''
 
         def set_loc(self, loc):
             """ Set the location of the current tally.
@@ -168,8 +182,8 @@ class analyze(object):
                         spect = pym.curve([], [], u_y=[], name=name,
                                           data='binned')
                     else:
-                        print len(e_bins)
-                        print len(vals)
+                        logging.debug(len(e_bins))
+                        logging.debug(len(vals))
                         spect = pym.curve(e_bins, vals, u_y=u_vals,
                                           name=name, data='binned')
                     tallies.extend([tally(total, u_total, name, spect,
@@ -180,7 +194,7 @@ class analyze(object):
             strings = file_string.split('Mesh Tally Number')
             if len(strings) < 2:
                 strings = file_string.split('tally')
-            print "Length of strings %d" % len(strings)
+            logging.debug("Length of strings %d" % len(strings))
             for string in strings[1:]:
                 E_bins, xs, ys, zs, phis, u_phis = \
                     self.import_meshtal_section(string)
@@ -284,12 +298,14 @@ class analyze(object):
             e_bins = [float(bin) for bin in e_bins]
         # find the string between vals and tfc
         val_string = find_between(string, '\nvals', '\ntfc')
+        logging.debug(val_string)
         if val_string.count('\n') > 1:
             val_string = ' '.join(val_string.split('\n')[1:])
         vals = val_string.split()
         #print val_string
         u_vals = [float(val) for val in vals[1::2]]
         vals = [float(val) for val in vals[0::2]]
+        logging.debug(vals)
         #print name
         #print vals
         total = vals[-1]

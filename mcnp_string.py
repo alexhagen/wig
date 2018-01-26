@@ -5,6 +5,7 @@ string passed to it to only acceptable columns.
 """
 
 import textwrap
+import logging
 
 
 class mstring(object):
@@ -50,6 +51,6 @@ class mstring(object):
             else:
                 newstr += "%s\n" % line
             if newstr[-2] is "&":
-                print "ampersand"
+                logging.debug("ampersand")
                 newstr = "%s\n" % newstr[:-2]
         return newstr

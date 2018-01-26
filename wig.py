@@ -13,6 +13,7 @@ import StringIO
 import difflib
 import re
 import subprocess
+import logging
 
 zero = 1.0E-6
 
@@ -139,12 +140,11 @@ class wig(object):
             for plot_cmd, plot_kwargs in zip(self.deleted[name].b_cmds, self.deleted[name].b_kwargs):
                 if isinstance(plot_cmd, list):
                     plot_cmd = plot_cmd[0]
-                    if debug_blender:
-                        print plot_cmd
+                    logging.debug(plot_cmd)
                 plot_cmd(self.bscene, **plot_kwargs)
                 if debug_blender:
-                    print plot_cmd
-                    print plot_kwargs
+                    logging.debug(plot_cmd)
+                    logging.debug(plot_kwargs)
 
     def cell(self, cells=None, auto_universe=True, universe_matl=None,
              debug_blender=False):
@@ -180,19 +180,16 @@ class wig(object):
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%s" % (cell.geo.string)
                 if cell.show and self._render:
-                    if debug_blender:
-                        print cell.id
+                    logging.debug(cell.id)
                     for plot_cmd, plot_kwargs in zip(cell.b_cmds, cell.b_kwargs):
                         if isinstance(plot_cmd, list):
                             plot_cmd = plot_cmd[0]
-                            if debug_blender:
-                                print plot_cmd
+                            logging.debug(plot_cmd)
                         self.deleted.update(cell.geo.deleted)
                         #print self.deleted
                         plot_cmd(self.bscene, **plot_kwargs)
-                        if debug_blender:
-                            print plot_cmd
-                            print plot_kwargs
+                        logging.debug(plot_cmd)
+                        logging.debug(plot_kwargs)
                 # increment the cell num
                 if not cell.fission:
                     self.cell_block += " nonu=2"
@@ -415,7 +412,7 @@ class wig(object):
                                   blocking=blocking, clean=clean,
                                   needs_to_run=self.needs_to_run, **kwargs)
         else:
-            print "already ran"
+            logging.debug("already ran")
 
     def _write_string(self):
         # write the blocks as a string
