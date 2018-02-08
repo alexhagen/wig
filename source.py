@@ -114,6 +114,17 @@ class source():
                                      "r": radius, "h": 0.1, "name": id,
                                      "color": color, "direction": direction.replace('-', '').replace('+', ''),
                                      "alpha": 1.0, "emis": True}]
+        if shape == 'sphere' and radius is not None:
+            self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
+            self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
+                                    format='d')])
+            self.string += "rad=d%d " % (self.dist_num)
+            self.dist_num += 1
+            self.blender_cmd = [pyb.pyb.sph]
+            self.blender_cmd_args = [{"c": (self.x, self.y, self.z),
+                                     "r": radius, "name": id,
+                                     "color": color, "alpha": 0.1,
+                                     "emis": True}]
         if shape == 'rect':
             self.dists.extend([dist([lx[0], lx[1]], [0, 1], self.dist_num,
                                     format='d')])
