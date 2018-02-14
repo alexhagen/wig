@@ -116,7 +116,7 @@ class source():
                                      "alpha": 1.0, "emis": True}]
         if shape == 'sphere' and radius is not None:
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
-            self.dists.extend([dist([0, radius], [-21, 1], self.dist_num,
+            self.dists.extend([dist([0, radius], [-21, 2], self.dist_num,
                                     format='d')])
             self.string += "rad=d%d " % (self.dist_num)
             self.dist_num += 1
@@ -177,7 +177,7 @@ class source():
             self.blender_cmd_args = [{"c": c, "l": l, "name": id, "color": color,
                                       "alpha": 0.1, "emis": True}]
         color = '#2EAFA4'
-        if positioned and shape != 'disk' and shape != 'plane' and shape != 'rect':
+        if positioned and shape != 'disk' and shape != 'plane' and shape != 'rect' and shape != 'sphere':
             self.string += "pos=%6.4f %6.4f %6.4f " % (self.x, self.y, self.z)
             self.blender_cmd = [pyb.pyb.sph]
             self.blender_cmd_args = [{"c": (self.x, self.y, self.z), "r": 1.0,

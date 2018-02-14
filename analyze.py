@@ -37,20 +37,28 @@ class tally(object):
         if spectrum is not None:
             self.spectrum = spectrum
         logging.debug(self.y)
+        logging.debug("vals: %d, ts: %d, Es: %d" % (len(self.vals), len(self.ts), len(self.Es)))
+        #self.ts = np.array([0.] + list(self.ts))
+        #self.Es = np.array([0.] + list(self.Es))
+        #logging.debug("vals: %d, ts: %d, Es: %d, ts*Es: %d" % (len(self.vals), len(self.ts), len(self.Es), len(self.Es) * len(self.ts)))
         i = 0
         if ts is not None:
-            pos_cos_data = vals[::2]
-            pos_cos_data = vals[len(vals)/2:]
+            pos_cos_data = vals
+            #pos_cos_data = vals[::2]
+            #pos_cos_data = vals[len(vals)/2:]
             for E in Es:
                 key = r'$E_{n} < %.2f\unit{MeV}$' % E
                 vals = pos_cos_data[i*len(self.ts)+i:(i+1) * len(self.ts) + i - 1]
                 logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
                 self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, key, data='binned')
                 i += 1
-            vals = pos_cos_data[i*len(self.ts) + i:(i+1)*len(self.ts) + i - 1]
-            logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
-            i += 1
-            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')
+            try:
+                vals = pos_cos_data[i*len(self.ts) + i:(i+1)*len(self.ts) + i - 1]
+                logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
+                i += 1
+                self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')
+            except IndexError:
+                pass
         '''if ts is not None:
             for E in Es:
                 for j in range(2):
@@ -131,7 +139,7 @@ class analyze(object):
 
     :param str filename: filename of the ``tallies.out`` file
     """
-    def __init__(self, filename, nps=None, tmesh=False):
+    def __init__(self, filename, nps=None, tmesh=False, times=True):
         orig_filename = filename
         if '_tallies.out' not in filename and 'meshtal' not in filename:
             filename = filename + '_tallies.out'
@@ -164,6 +172,9 @@ class analyze(object):
                     except IndexError:
                         total, u_total, name, e_bins, vals, u_vals, t_bins = \
                             self.import_tally_section(string)
+                        self.ts = t_bins
+                        self.Es = e_bins
+                        self.vals = vals
                         if len(t_bins) > 1:
                             spect = pym.curve([], [], u_y=[], name=name,
                                               data='binned')
@@ -178,6 +189,9 @@ class analyze(object):
                 for string in strings[1:]:
                     total, u_total, name, e_bins, vals, u_vals, t_bins = \
                         self.import_tally_section(string)
+                    self.ts = t_bins
+                    self.Es = e_bins
+                    self.vals = vals
                     if len(t_bins) > 1:
                         spect = pym.curve([], [], u_y=[], name=name,
                                           data='binned')

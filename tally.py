@@ -279,6 +279,9 @@ class tally():
                 self.energy_string = '%e %di %e' % (np.min(kwargs["energy"]),
                                                     numE,
                                                     np.max(kwargs["energy"]))
+                self.energy_string = ''
+                for _E in kwargs["energy"]:
+                    self.energy_string += " %e" % _E
             else:
                 self.energy_string = '%e %e' % (np.min(kwargs["energy"]),
                                                 np.max(kwargs["energy"]))
