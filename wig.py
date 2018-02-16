@@ -17,8 +17,9 @@ import logging
 
 zero = 1.0E-6
 
+
 class wig(object):
-    """ The ``wig`` object is the base object for an MCNP setup.
+    """The ``wig`` object is the base object for an MCNP setup.
 
     The ``wig`` object is basically the scene in which we create our MCNP
     geometry, cells, materials, physics, tallies, and other data.  I usually
@@ -39,6 +40,7 @@ class wig(object):
         should care about
     :return: the ``wig`` object.
     """
+
     def __init__(self, comment, filename, flavor='6', render=True,
                  particles=['n']):
         self.original_directory = os.getcwd()
@@ -82,25 +84,22 @@ class wig(object):
         self.deleted = {}
         self.force = False
 
-    # --------------------------- File Methods ---------------------------------
-
     def set_filename(self, filename):
-        """ ``set_filename`` sets the base of the filenames that will be created
+        """Set the base of the filenames that will be created.
 
-            :param str filename: the base of the filename
+        :param str filename: the base of the filename
         """
         path = expanduser("~") + '/mcnp/active/'
         os.chdir(path)
         self.filename = filename
 
     def set_comment(self, comment):
-        """ ``set_comment`` writes the first line of the ``mcnp`` file, which is
-            a comment describing the file. Be descriptive but not too long.
+        """Write the first line of the ``mcnp`` file, which is a comment.
 
-            :param str comment: the first line of the ``mcnp`` file - limit is
-                80 characters.  ``wig`` manually strips newlines, so feel free
-                to make this a triple quoted (``'''``) string with as many
-                returns as you like.
+        :param str comment: the first line of the ``mcnp`` file - limit is 80
+            characters.  ``wig`` manually strips newlines, so feel free to make
+            this a triple quoted (``'''``) string with as many returns as you
+            like.
         """
         self.comment = ' '.join(comment.split())
 
