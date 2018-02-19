@@ -330,7 +330,7 @@ class wig(object):
             # print the comment
             self.tally_block += "fc%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card, tally.comment)
-            # set that number to the geometry object
+            # set that number to the geometry objects
             tally.num = self.tally_nums[str(tally.card)]
             # increment matl num
             self.tally_nums[str(tally.card)] += 1
