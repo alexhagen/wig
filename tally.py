@@ -44,11 +44,11 @@ class tally():
         if not self.energies:
             self.process_energy(**kwargs)
         if isinstance(kwargs["cell"], cell.cell):
-            self.cell = kwargs["cell"].cell_num
+            self.cell = kwargs["cell"]
         else:
             self.cell = kwargs["cell"]
         self.particle = kwargs["particle"]
-        self.string = ":%s %d" % (kwargs["particle"], self.cell)
+        self.string = ":%s {cell}" % (kwargs["particle"])
         return self
 
     def energy_tally(self, **kwargs):

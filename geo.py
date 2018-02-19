@@ -373,7 +373,7 @@ class pseudogeo:
             geo = geo.geo
         self.id = geo.id
         self.geo = geo
-        self.nums = [(geo.geo_num, geo.sense)]
+        self.nums = [(geo, geo.sense)]
         self.b_cmds = []
         self.b_kwargs = []
         self.deleted = {}
@@ -409,14 +409,14 @@ class pseudogeo:
         if type(right) is type(list()):
             for _right in right:
                 __right = pseudogeo(_right)
-                self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
+                self.nums.extend([(__right.geo, -__right.geo.sense)])
                 self.id += "_inter_%s" % __right.geo.id
                 self.b_cmds.extend(_right.b_cmds)
                 self.b_kwargs.extend([_right.b_kwargs])
                 self.b_cmds.extend([pyb.pyb.intersect])
                 self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
         else:
-            self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
+            self.nums.extend([(right.geo, -right.geo.sense)])
             self.b_cmds.extend(right.b_cmds)
             self.b_kwargs.extend(right.b_kwargs)
             self.b_cmds.extend([pyb.pyb.intersect])
@@ -432,7 +432,7 @@ class pseudogeo:
         if type(right) is type(list()):
             for _right in right:
                 __right = pseudogeo(_right)
-                self.nums.extend([(__right.geo.geo_num, -__right.geo.sense)])
+                self.nums.extend([(__right.geo, -__right.geo.sense)])
                 self.id += "_less_%s" % __right.geo.id
                 self.b_cmds.extend(_right.b_cmds)
                 self.b_kwargs.extend([_right.b_kwargs])
@@ -440,7 +440,7 @@ class pseudogeo:
                 self.b_kwargs.extend([{"left": self.id, "right": _right.id}])
                 self.deleted[_right.id] = [_right.b_cmds, _right.b_kwargs]
         else:
-            self.nums.extend([(right.geo.geo_num, -right.geo.sense)])
+            self.nums.extend([(right.geo, -right.geo.sense)])
             self.b_cmds.extend(right.b_cmds)
             self.b_kwargs.extend(right.b_kwargs)
             self.b_cmds.extend([pyb.pyb.subtract])
@@ -454,7 +454,7 @@ class pseudogeo:
             return self
         if right.__class__.__name__ is 'geo':
             right = pseudogeo(right)
-        self.nums.extend([(right.geo.geo_num, right.geo.sense)])
+        self.nums.extend([(right.geo, right.geo.sense)])
         self.b_cmds.extend(right.b_cmds)
         self.b_kwargs.extend(right.b_kwargs)
         self.b_cmds.extend([pyb.pyb.union])
@@ -486,7 +486,7 @@ class group:
             self.manual_id = True
         self.string = ""
         for num in self.content.nums:
-            self.string += "%d " % (num[0] * num[1])
+            self.string += "%d " % (num[0].geo_num * num[1])
         self.already_unioned = False
 
     def __or__(self, right):
@@ -495,12 +495,12 @@ class group:
         if not self.already_unioned:
             self.string = "("
             for num in self.content.nums:
-                self.string += "%d " % (num[0] * num[1])
+                self.string += "%d " % (num[0].geo_num * num[1])
             self.string += "):("
         else:
             self.string += ":("
         for num in right.content.nums:
-            self.string += "%d " % (num[0] * num[1])
+            self.string += "%d " % (num[0].geo_num * num[1])
         self.string += ")"
         if not self.manual_id:
             self.id += "_u_%s" % (right.id)

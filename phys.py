@@ -150,12 +150,13 @@ class phys():
             self.string += "ipol {ipol[1]} {ipol[2]} {ipol[3]} {ipol[4]} {ipol[5]} {ipol[6]} ".format(ipol=[0] + self.ipol + [len(cells)])
         else:
             self.string += "ipol %d 1 1 1 2J %d " % (out_src_int, len(cells))
-        for cell in cells:
+        self.polimi_cells = cells
+        for i, cell in enumerate(cells):
             if isinstance(cell, int):
                 self.string += "%d " % cell
             elif cell.__class__.__name__ is 'cell':
                 print "polimi cell is \#%s: %s" % (cell.cell_num, cell.comment)
-                self.string += "%d " % cell.cell_num
+                self.string += "{cellnums[%d]} " % i
         self.string = self.string[:-1]
         self.string += "\n"
         if self.rpol is not None:

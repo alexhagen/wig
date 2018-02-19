@@ -174,7 +174,7 @@ class wig(object):
                     self.cell_block += "%d" % (cell.geo.sense * cell.geo.geo_num)
                 elif cell.geo.__class__.__name__ is 'pseudogeo':
                     for num in cell.geo.nums:
-                        self.cell_block += "%d " % (num[0] * num[1])
+                        self.cell_block += "%d " % (num[0].geo_num * num[1])
                     self.cell_block = self.cell_block[:-1]
                 elif cell.geo.__class__.__name__ is 'group':
                     self.cell_block += "%s" % (cell.geo.string)
@@ -215,7 +215,7 @@ class wig(object):
                     if cell.geo.__class__.__name__ is 'geo':
                         self.cell_block += "%d " % (abs(cell.geo.geo_num))
                     elif cell.geo.__class__.__name__ is 'pseudogeo':
-                        self.cell_block += "%d " % cell.geo.nums[0][0]
+                        self.cell_block += "%d " % cell.geo.nums[0][0].geo_num
                     elif cell.geo.__class__.__name__ is 'group':
                         self.cell_block += "%d " % cell.geo.content.nums[0][0]
         # increment the cell num
@@ -284,12 +284,12 @@ class wig(object):
         # print the physics string
         if src_fname is None:
             src_fname = self.filename + "_source.out"
-        self.phys_block += "%s\n" % (phys.string.format(out_src_fname=src_fname))
+        self.phys_block += "%s\n" % (phys.string.format(out_src_fname=src_fname, cellnums=[cell.cell_num for cell in phys.polimi_cells]))
         # remove the last character (the new line)
         self.phys_block = self.phys_block[:-1]
 
     def tally(self, tallies=None):
-        """ ``tally`` adds all ``wig.tally`` b'ocks to the model
+        """ ``tally`` adds all ``wig.tally`` blocks to the model
 
             :param list tallies: the ``wig.tally`` blocks to be added to the
                 model.
@@ -311,7 +311,7 @@ class wig(object):
         for tally in new_tallies:
             self.tally_block += "f%d%d%s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card,
-                 tally.string)
+                 tally.string.format(cell=tally.cell.cell_num))
             self.tally_block += "e%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card,
                  tally.energy_string)
@@ -339,7 +339,9 @@ class wig(object):
         for tally in new_tmeshtallies:
             self.tally_block += "  %s%d%d%s\n" % \
                 (tally.tmeshtype, self.tally_nums[str(tally.card)],
-                 tally.card, tally.string.format(card=tally.card, number=self.tally_nums[str(tally.card)]))
+                 tally.card,
+                 tally.string.format(card=tally.card,
+                                     number=self.tally_nums[str(tally.card)]))
             # set that number to the geometry object
             tally.num = self.tally_nums[str(tally.card)]
             # increment matl num
