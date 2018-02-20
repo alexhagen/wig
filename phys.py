@@ -42,6 +42,7 @@ class phys():
             self.string += "%s " % (particle)
         self.comment = "%s" % (self.comment[:-1])
         self.string = "%s\n" % (self.string[:-1])
+        self.polimi_cells = polimi_cells
         if 'p' in particles:
             if 'p' in maxEs:
                 maxE = maxEs['p']
