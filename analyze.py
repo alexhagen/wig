@@ -149,7 +149,7 @@ class src_analysis(object):
         self.Es = np.linspace(0., np.max(E), 25)
         grid = GridSearchCV(KernelDensity(),
                             {'bandwidth': np.linspace(0.1, 1.0, 30)},
-                            cv=np.max([len(E), 20]))
+                            cv=np.min([len(E), 20]))
         grid.fit(E[:, None])
         kde = grid.best_estimator_
         pdf = np.exp(kde.score_samples(self.Es[:, None]))
