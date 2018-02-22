@@ -476,10 +476,16 @@ class wig(object):
             p = subprocess.Popen(['diff -y -E -Z --suppress-common-lines /home/ahagen/mcnp/active/diff1.txt /home/ahagen/mcnp/active/diff2.txt'], stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE, shell=True)
             out, err = p.communicate()
+
+            diff_out = out.split('\n')
+            out = []
+            for i, line in enumerate(diff_out):
+                if not line.startswith('dbcn') and line is not '':
+                    out.extend([line])
             if _print:
                 print out
-                print len(out.split('\n'))
-            if len(out.split('\n')) > 1:
+                print len(out)
+            if len(out) > 0:
                 print "The differences in between files is :"
                 print out
                 print "So running the MCNP deck"

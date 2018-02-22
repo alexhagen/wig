@@ -1,11 +1,11 @@
 import os
 import subprocess
 from subprocess import PIPE
-# import notify2 as n
 from os.path import expanduser
 from time import sleep
 import paramiko
 import os
+import os.path
 
 class runner:
     """ ``runner`` is an object that ssh's to a remote (or local) system and
@@ -89,8 +89,13 @@ class runner:
                     _, out, err = ssh.exec_command("cd mcnp/active; rm -f *")
                     status = out.channel.recv_exit_status()
                 sftp_client = ssh.open_sftp()
-                sftp_client.chdir('~/mcnp/active')
-                sftp_client.put(expanduser("~") + '/mcnp/active/' + filename + '.inp', filename + '.inp')
+                print os.path.join(expanduser("~"), 'mcnp/active')
+                print os.path.join(expanduser("~"), 'mcnp/active/',
+                                             filename + '.inp')
+                sftp_client.chdir(os.path.join('/home/', username, 'mcnp/active'))
+                sftp_client.put(os.path.join(expanduser("~"), 'mcnp/active/',
+                                             filename + '.inp'),
+                                filename + '.inp')
                 sshcommand = ' '.join(cmd)
                 sshcommand = "nohup bash -c 'source .profile; cd mcnp/active/; %s'" % sshcommand
                 print sshcommand

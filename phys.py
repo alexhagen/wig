@@ -89,7 +89,8 @@ class phys():
         if ctme is not None:
             self.ctme(ctme)
         if seed is not None:
-            self.string += "rand seed=%d\n" % seed
+            self.string += "dbcn %d\n" % seed
+            #self.string += "rand seed=%d\n" % seed
         if polimi:
             self.polimi(cells=polimi_cells)
 
