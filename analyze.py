@@ -4,8 +4,11 @@ from pym import func as pym
 from pyg.threed import pyg3d
 from pyg.colors import pu as puc
 import os
+import os.path
 import pandas as pd
 import logging
+from sklearn.neighbors import KernelDensity
+from sklearn.grid_search import GridSearchCV
 
 class tally(object):
     """ A ``tally`` object holds data from a tally.
@@ -116,6 +119,61 @@ class pos_ref_array(object):
         self.zs = np.unique(zs)
 
 
+class src_analysis(object):
+    """An object holding analysis of the pn source from MCNP
+    """
+    def __init__(self, fname):
+        """Initialize and read all the data from the source file."""
+        with open(fname, 'r') as f:
+            data = []
+            fstring = f.read()
+            lines_iter = iter(fstring.splitlines())
+            for result in zip(lines_iter, lines_iter, lines_iter):
+                datstring = " ".join(result)
+                dat = [float(_x) for _x in datstring.split()[1:]]
+                data.extend([dat])
+            data = np.array(data)
+            E = data[:, 11]
+            x = data[:, 4]
+            y = data[:, 5]
+            z = data[:, 6]
+            zaid = data[:, 2]
+            mt = data[:, 1]
+            self.events = {'E': E, 'x': x, 'y': y, 'z': z, 'zaid': zaid,
+                           'mt': mt}
+            self.find_n_spectrum()
+
+    def find_n_spectrum(self):
+        """Determine the neutron output spectrum."""
+        E = self.events['E']
+        self.Es = np.linspace(0., np.max(E), 25)
+        grid = GridSearchCV(KernelDensity(),
+                            {'bandwidth': np.linspace(0.1, 1.0, 30)},
+                            cv=len(E)) # 20-fold cross-validation
+        grid.fit(E[:, None])
+        kde = grid.best_estimator_
+        pdf = np.exp(kde.score_samples(self.Es[:, None]))
+        self.frq = pdf
+        self.frqh, self.Esh = np.histogram(E, bins=self.Es)
+        self.pn_spect = pym.curve(self.Es, self.frq, name='Gaussian KDE')
+        self.pn_specth = \
+            pym.curve(self.Esh, np.append(self.frqh,[0.]) /
+                      (np.max(self.frqh)/np.max(self.frq)),
+                      data='binned', name='Histogram')
+        self.plot = \
+            self.pn_spect.plot(linestyle='-',
+                               linecolor=puc.pu_colors['newgold'])
+        self.plot = \
+            self.pn_specth.plot(linestyle='-',
+                                linecolor=puc.pu_colors['lightgray'],
+                                addto=self.plot)
+        self.plot.xlabel(r'Neutron Energy ($E_{n}$) [$\unit{MeV}$]')
+        self.plot.xlim(0.0, 1.1 * np.max(E))
+        self.plot.ylabel(r'Probability ($P$) [ ]')
+        ymax = 1.1 * np.max([np.max(self.frq), np.max(self.pn_specth.y)])
+        print ymax
+        self.plot.ylim(0.0, ymax)
+
 def find_between( s, first, last=None):
     try:
         start = s.index( first ) + len( first )
@@ -141,10 +199,21 @@ class analyze(object):
     """
     def __init__(self, filename, nps=None, tmesh=False, times=True):
         orig_filename = filename
+        # check for tallies file
+        # check for meshtal file
+        # check for source file
+        self.src_fname = filename + '_source.out'
         if '_tallies.out' not in filename and 'meshtal' not in filename:
             filename = filename + '_tallies.out'
         with open(filename, 'r') as f:
             file_string = f.read()
+
+        # check if source file exists
+        self.source = None
+        print self.src_fname
+        if os.path.isfile(self.src_fname):
+            print "checking source file"
+            self.source = src_analysis(self.src_fname)
 
         tallies = list()
         strings = file_string.split('tally')
