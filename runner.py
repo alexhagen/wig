@@ -86,7 +86,7 @@ class runner:
                             password=password, port=port)
                 print "connected"
                 if clean:
-                    _, out, err = ssh.exec_command("cd mcnp/active; rm -f *")
+                    _, out, err = ssh.exec_command("cd mcnp/active; rm -f %s*" % filename)
                     status = out.channel.recv_exit_status()
                 sftp_client = ssh.open_sftp()
                 print os.path.join(expanduser("~"), 'mcnp/active')
