@@ -309,9 +309,14 @@ class wig(object):
             else:
                 new_tallies.extend([tally])
         for tally in new_tallies:
-            self.tally_block += "f%d%d%s\n" % \
-                (self.tally_nums[str(tally.card)], tally.card,
-                 tally.string.format(cell=tally.cell.cell_num))
+            try:
+                self.tally_block += "f%d%d%s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.string.format(cell=tally.cell.cell_num))
+            except:
+                self.tally_block += "f%d%d%s\n" % \
+                    (self.tally_nums[str(tally.card)], tally.card,
+                     tally.string)
             self.tally_block += "e%d%d %s\n" % \
                 (self.tally_nums[str(tally.card)], tally.card,
                  tally.energy_string)
