@@ -229,12 +229,16 @@ class wig(object):
         if geo is None:
             geo = self.universe
         if matl is None:
-            matl = mcnpm.air()
+            matl = mcnpm.void()
         self.cell_block += "%d     " % (self.cell_num)
-        # now print the material number
-        self.cell_block += "%d " % (matl.matl_num)
-        # now print the density
-        self.cell_block += "%15.10E " % (-matl.rho)
+        if matl.rho == 0.0:
+            self.cell_block += "0 "
+            self.cell_block += " "*15
+        else:
+            # now print the material number
+            self.cell_block += "%d " % (matl.matl_num)
+            # now print the density
+            self.cell_block += "%15.10E " % (-matl.rho)
         # now print the universe surface
         self.cell_block += "%d" % (geo.sense * geo.geo_num)
         for cell in self.cells:
