@@ -3,7 +3,7 @@ import textwrap
 from runner import runner
 from pyg import threed
 from mcnp_string import mstring
-from renderer import renderer
+#from renderer import renderer
 from os.path import expanduser
 import geo as mcnpg
 import matl as mcnpm
@@ -47,10 +47,10 @@ class wig(object):
         self.set_filename(filename)
         self.set_comment(comment)
         self._particles = particles
-        if render:
-            self.renderer = renderer(filename)
-        else:
-            self.renderer = None
+        #if render:
+        #    self.renderer = renderer(filename)
+        #else:
+        #    self.renderer = None
         self._render = render
         if flavor is '6':
             self.command = 'mcnp6'
