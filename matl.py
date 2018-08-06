@@ -50,6 +50,11 @@ periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
                   "Uut": 113, "Fl": 114, "Uup": 115, "Lv": 116, "Uus": 117,
                   "Uuo": 118}
 
+def invert_dict(d):
+    return dict([(v, k) for k, v in d.iteritems()])
+
+ipt = invert_dict(periodic_table)
+
 class matl:
     r""" ``matl`` defines a material for the MCNP format with definitions in
         either mass or atom percent.  The list passed to ``atom_perc`` or
