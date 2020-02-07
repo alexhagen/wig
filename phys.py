@@ -157,7 +157,7 @@ class phys():
             if isinstance(cell, int):
                 self.string += "%d " % cell
             elif cell.__class__.__name__ is 'cell':
-                print "polimi cell is \#%s: %s" % (cell.cell_num, cell.comment)
+                print("polimi cell is \#%s: %s" % (cell.cell_num, cell.comment))
                 self.string += "{cellnums[%d]} " % i
         self.string = self.string[:-1]
         self.string += "\n"

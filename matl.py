@@ -51,7 +51,7 @@ periodic_table = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7,
                   "Uuo": 118}
 
 def invert_dict(d):
-    return dict([(v, k) for k, v in d.iteritems()])
+    return dict([(v, k) for k, v in d.items()])
 
 ipt = invert_dict(periodic_table)
 

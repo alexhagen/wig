@@ -5,3 +5,7 @@ pyg
 os
 textwrap
 pyb
+scikit-learn
+transforms3d
+peakutils
+bibtexparser

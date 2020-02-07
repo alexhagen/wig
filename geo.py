@@ -4,7 +4,7 @@ import numpy as np
 from colour import Color
 from transforms3d import euler, axangles
 from pyb import pyb
-import cell as mcnpce
+from . import cell as mcnpce
 import psgv.psgv as psgv
 
 

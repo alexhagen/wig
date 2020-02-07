@@ -1,15 +1,16 @@
+from __future__ import print_function
 import numpy as np
 import textwrap
-from runner import runner
+from .runner import runner
 from pyg import threed
-from mcnp_string import mstring
+from .mcnp_string import mstring
 #from renderer import renderer
 from os.path import expanduser
-import geo as mcnpg
-import matl as mcnpm
+from . import geo as mcnpg
+from . import matl as mcnpm
 import os
 from pyb import pyb
-import StringIO
+import io as StringIO
 import difflib
 import re
 import subprocess
@@ -473,7 +474,7 @@ class wig(object):
             with open(self.filename + '.out', 'r') as f:
                 fstr = f.read()
             # find all lines with    ####- at the beginning
-            regex = ur"\s[0-9]{1,4}-[\s]{7}(.*)\n"
+            regex = r"\s[0-9]{1,4}-[\s]{7}(.*)\n"
             matches = re.findall(regex, fstr)
             outstr = ''
             for match in matches:
@@ -492,12 +493,12 @@ class wig(object):
                 if not line.startswith('dbcn') and line is not '':
                     out.extend([line])
             if _print:
-                print out
-                print len(out)
+                print(out)
+                print(len(out))
             if len(out) > 0:
-                print "The differences in between files is :"
-                print out
-                print "So running the MCNP deck"
+                print("The differences in between files is :")
+                print(out)
+                print("So running the MCNP deck")
                 needs_to_run = True
             else:
                 needs_to_run = False

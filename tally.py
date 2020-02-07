@@ -1,6 +1,6 @@
 import numpy as np
-import geo
-import cell
+from . import geo
+from . import cell
 
 
 class tally():

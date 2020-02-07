@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import subprocess
 from subprocess import PIPE
@@ -76,29 +77,29 @@ class runner:
             cmd.extend(['> %s' % (filename + '.nohup')])
         if not blocking:
             pass
-        print cmd
+        print(cmd)
         if self.needs_to_run and not just_write:
             if remote is not 'local' and remote in systems.keys():
                 ssh = paramiko.SSHClient()
-                print "started paramiko"
+                print("started paramiko")
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 ssh.connect(hostname=ip, username=username,
                             password=password, port=port)
-                print "connected"
+                print("connected")
                 if clean:
                     _, out, err = ssh.exec_command("cd mcnp/active; rm -f %s*" % filename)
                     status = out.channel.recv_exit_status()
                 sftp_client = ssh.open_sftp()
-                print os.path.join(expanduser("~"), 'mcnp/active')
-                print os.path.join(expanduser("~"), 'mcnp/active/',
-                                             filename + '.inp')
+                print(os.path.join(expanduser("~"), 'mcnp/active'))
+                print(os.path.join(expanduser("~"), 'mcnp/active/',
+                                             filename + '.inp'))
                 sftp_client.chdir(os.path.join('/home/', username, 'mcnp/active'))
                 sftp_client.put(os.path.join(expanduser("~"), 'mcnp/active/',
                                              filename + '.inp'),
                                 filename + '.inp')
                 sshcommand = ' '.join(cmd)
                 sshcommand = "nohup bash -c 'source .profile; cd mcnp/active/; %s'" % sshcommand
-                print sshcommand
+                print(sshcommand)
                 _, out, err = ssh.exec_command(sshcommand, timeout=0.0)
                 sleep(10)
                 sftp_client.close()
@@ -107,6 +108,6 @@ class runner:
                 self.p = subprocess.Popen(cmd, stdin=PIPE)
                 if blocking:
                     self.p.communicate()
-                    print "waiting for the process to finish"
+                    print("waiting for the process to finish")
         else:
-            print ' '.join(cmd)
+            print(' '.join(cmd))

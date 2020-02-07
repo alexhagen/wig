@@ -1,3 +1,4 @@
+from __future__ import print_function
 import copy
 import numpy as np
 from pym import func as pym
@@ -8,7 +9,7 @@ import os.path
 import pandas as pd
 import logging
 from sklearn.neighbors import KernelDensity
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV
 
 class tally(object):
     """ A ``tally`` object holds data from a tally.
@@ -62,18 +63,6 @@ class tally(object):
                 self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')
             except IndexError:
                 pass
-        '''if ts is not None:
-            for E in Es:
-                for j in range(2):
-                    key = r'$E_{n} < %.2f\unit{MeV}$' % E
-                    vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1)) - 1]
-                    logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
-                    self.signals[key] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, key, data='binned')
-                i += 1
-            vals = self.vals[i*len(self.ts)+(i/(j+1)):(i+1)*len(self.ts)+(i/(j+1)) - 1]
-            logging.debug("len ts: %d, len vals: %d" % (len(self.ts[:-1]), len(vals)))
-            i += 1
-            self.signals['total'] = pym.curve(1.0E-8 * np.array(self.ts[:-1]), vals, 'total', data='binned')'''
 
         def set_loc(self, loc):
             """ Set the location of the current tally.
@@ -171,7 +160,7 @@ class src_analysis(object):
         self.plot.xlim(0.0, 1.1 * np.max(E))
         self.plot.ylabel(r'Probability ($P$) [ ]')
         ymax = 1.1 * np.max([np.max(self.frq), np.max(self.pn_specth.y)])
-        print ymax
+        print(ymax)
         self.plot.ylim(0.0, ymax)
 
 def find_between( s, first, last=None):
@@ -210,9 +199,9 @@ class analyze(object):
 
         # check if source file exists
         self.source = None
-        print self.src_fname
+        print(self.src_fname)
         if os.path.isfile(self.src_fname):
-            print "checking source file"
+            print("checking source file")
             self.source = src_analysis(self.src_fname)
 
         tallies = list()
@@ -224,7 +213,7 @@ class analyze(object):
                     self.nps = float(strings[0].split()[5])
                 except ValueError:
                     self.nps = 1.0
-                    print "could not get nps, defaulting to 1.0"
+                    print("could not get nps, defaulting to 1.0")
             else:
                 self.nps = nps
         elif 'meshtal' in filename:
