@@ -2,32 +2,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>wig &#8212; wig 0.0.1a documentation</title>
-    
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap.css" type="text/css" />
-    <link rel="stylesheet" href="_static/extra.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.0.1a',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="_static/extra.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,8 +24,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 
 
@@ -117,7 +104,12 @@
       
   <div class="section" id="wig">
 <h1>wig<a class="headerlink" href="#wig" title="Permalink to this headline">¶</a></h1>
-<p><code class="docutils literal"><span class="pre">wig</span></code> has a couple parts. Click the links below or just read through
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">wig</span></code> is for use with <code class="docutils literal notranslate"><span class="pre">MCNP</span></code> provided by <code class="docutils literal notranslate"><span class="pre">RSICC</span></code> only. Any use
+of <code class="docutils literal notranslate"><span class="pre">MCNP</span></code> through <code class="docutils literal notranslate"><span class="pre">wig</span></code> is subject to the requirements and
+regulations imposed by <code class="docutils literal notranslate"><span class="pre">RSICC</span></code>.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">wig</span></code> has a couple parts. Click the links below or just read through
 if you’re new here.</p>
 <p><a class="reference external" href="mcnp_compilation">MCNP Compilation Help</a></p>
 <p><a class="reference internal" href="_images/brender_01.png"><img alt="image1" src="_images/brender_01.png" style="height: 320px;" /></a> <a class="reference internal" href="_images/eal_threshold_test_cutaway.png"><img alt="image2" src="_images/eal_threshold_test_cutaway.png" style="width: 320px;" /></a> <a class="reference internal" href="_images/eal_threshold_test_setup.png"><img alt="image3" src="_images/eal_threshold_test_setup.png" style="width: 320px;" /></a></p>
@@ -128,24 +120,24 @@ Unfortunately, it’s a nightmare to use. Basically uncompilable by real
 humans, finicky about input decks and spaces, and almost completely text
 only (even though Vis-Ed has gotten steadily better), there are lots of
 improvements that could be made.</p>
-<p>I’ll be honest here, I’m writing <code class="docutils literal"><span class="pre">wig</span></code> to scratch my own itch. I need
+<p>I’ll be honest here, I’m writing <code class="docutils literal notranslate"><span class="pre">wig</span></code> to scratch my own itch. I need
 a way to:</p>
 <ul class="simple">
-<li>create repeatable input decks</li>
-<li>automatically create publication worthy figures</li>
-<li>save geometry and materials as <em>assets</em> somewhere accessible and
-reusable</li>
-<li>add some sort of semantic meaning to the syntax of mcnp</li>
-<li>cite sources in input decks to remember where I got numbers and
-materials</li>
-<li>enable easy sending of input decks to be run on “clusters” through
-<code class="docutils literal"><span class="pre">ssh</span></code></li>
+<li><p>create repeatable input decks</p></li>
+<li><p>automatically create publication worthy figures</p></li>
+<li><p>save geometry and materials as <em>assets</em> somewhere accessible and
+reusable</p></li>
+<li><p>add some sort of semantic meaning to the syntax of mcnp</p></li>
+<li><p>cite sources in input decks to remember where I got numbers and
+materials</p></li>
+<li><p>enable easy sending of input decks to be run on “clusters” through
+<code class="docutils literal notranslate"><span class="pre">ssh</span></code></p></li>
 </ul>
 <p>The name is a nod to Eugene Wigner, particularly his contributions to
 nuclear structure and quantum mechanics, where he <strong>made use of the
 random matrix</strong> to describe cross-section structure. MCNP makes use of
 random numbers to help us experimenters know what’s physically going on,
-and I want <code class="docutils literal"><span class="pre">wig</span></code> to make use of the “random” syntax of MCNP for ease
+and I want <code class="docutils literal notranslate"><span class="pre">wig</span></code> to make use of the “random” syntax of MCNP for ease
 of use. So it’s pronounced <em>vig</em>.</p>
 <p>As of now, this package is in a really-really-really alpha stage. I
 think only I can use it because of it’s finickiness. But, it allows for
@@ -153,13 +145,13 @@ quick (and semantic) development of MCNP decks using a <strong>pipeline</strong>
 method. The <strong>pipeline</strong> method will be familiar to those that use MCNP
 a lot. The steps in the pipeline are:</p>
 <ol class="arabic simple">
-<li>Geometry (create <code class="docutils literal"><span class="pre">geo</span></code>s)</li>
-<li>Materials (create <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
-<li>Cells (combine <code class="docutils literal"><span class="pre">geo</span></code>s as needed and apply <code class="docutils literal"><span class="pre">matl</span></code>s)</li>
-<li>Physics (there’s a pretty hands off way to define the common physics)</li>
-<li>Sources (create <code class="docutils literal"><span class="pre">source</span></code>)</li>
-<li>Tallies (there’s pretty hands off way for some tally specs now)</li>
-<li>Run</li>
+<li><p>Geometry (create <code class="docutils literal notranslate"><span class="pre">geo</span></code>s)</p></li>
+<li><p>Materials (create <code class="docutils literal notranslate"><span class="pre">matl</span></code>s)</p></li>
+<li><p>Cells (combine <code class="docutils literal notranslate"><span class="pre">geo</span></code>s as needed and apply <code class="docutils literal notranslate"><span class="pre">matl</span></code>s)</p></li>
+<li><p>Physics (there’s a pretty hands off way to define the common physics)</p></li>
+<li><p>Sources (create <code class="docutils literal notranslate"><span class="pre">source</span></code>)</p></li>
+<li><p>Tallies (there’s pretty hands off way for some tally specs now)</p></li>
+<li><p>Run</p></li>
 </ol>
 <p>The pipeline method means that this package is very semantic, so instead
 of just typing in numbers separated by spaces, you actually assign
@@ -183,7 +175,7 @@ simulation.</p>
     </p>
     <p>
         &copy; Copyright 2016, Alex Hagen.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>
