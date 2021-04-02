@@ -12,7 +12,7 @@ if you’re new here.
 
 |image1| |image2| |image3|
 
-MCNP (Monte Carlo N Particle) software, from LLNL, is an incredible tool
+MCNP (Monte Carlo N Particle) software, from LANL, is an incredible tool
 for simulation of neutrons, photons, and electrons. I use it extensively
 for my research, and it does a great job at a very complex task.
 Unfortunately, it’s a nightmare to use. Basically uncompilable by real
